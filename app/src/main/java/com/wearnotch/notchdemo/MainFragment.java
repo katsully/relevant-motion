@@ -606,7 +606,7 @@ Cancellable c;
 //                        + mRealTimeData.getPos(b,currentFrame));
                 mSocket.emit("newmessage","0"+b.getName() + " "
                         // Orientation (quaternion)
-                       // + mRealTimeData.getQ(b,currentFrame) + " "
+                       + mRealTimeData.getQ(b,currentFrame) + " "
                         // Position of the bone (end of vector)
                         + mRealTimeData.getPos(b,currentFrame));
             }
