@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+def Properties properties = new Properties() properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
 buildscript {
     repositories {
         jcenter()
@@ -19,8 +21,8 @@ allprojects {
             url 'https://wearnotch.com/maven/notch/'
             credentials {
                 //input your own username & password
-                username 'sandboxapplication-130'
-                password 'tMWzjZCd1Loc'
+                username properties.notchUsername
+                password properties.notchPassword
             }
         }
     }
