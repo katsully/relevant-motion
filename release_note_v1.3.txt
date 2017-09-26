@@ -1,0 +1,18 @@
+- SDK update to v1.1.247
+- Introducing remote capture
+- Post-download
+- Changing channels
+- Minor UI changes (countdown before capture, showing channel and firmware version in device list)
+
+REMOTE CAPTURE: 
+Active Bluetooth connection to the Notch network is required at the end of the measurement for regular capture or timed capture modes. When using Remote Capture mode no Bluetooth connection is required once the capture has been initiated. Thereby Remote Capture allows to download measurements later on, whenever Bluetooth connection with notches is re-established. The measurement is saved for post-download to the ‘notch_tutorial’ library after starting the remote capture has been initiated.
+
+POST-DOWNLOAD:
+When a measurement is saved for post-download, a ‘.notch’ file is created in the ‘notch_library’ folder and can be downloaded at any time. When this file is selected in the pop-up dialog, the data will be downloaded and processed. Once the download is finished, a ‘.zip’ file ready for visualization is created in the ‘notch_library’ folder.
+Measurements are saved for post-download whenever remote capture is enabled, or if a regular capture has failed fails during download phase.  
+Remote capture and real-time capture modes are mutually exclusive. 
+
+CHANGING CHANNELS
+This feature allows to create several smaller networks from one set of notches under same license (user). 
+When the app is connected to a network of notches user can change their channel to split the initial notch network into multiple independent networks comprised of less notches. Note that all the notches connected at the time of change channel command will change their channels, so make sure to turn on those notches, that you want to split into a new network. 
+Before initiating a new capture/calibration you can specify the channel that you want to work with (SELECTED CHANNEL). In this case the app will search only for notches from that network even if there other notch networks, configured to a different channel, are turned on. 

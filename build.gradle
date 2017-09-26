@@ -18,7 +18,6 @@ allprojects {
         maven {
             url 'https://wearnotch.com/maven/notch/'
             credentials {
-                //input your own username & password
                 username properties.notchUsername
                 password properties.notchPassword
             }
