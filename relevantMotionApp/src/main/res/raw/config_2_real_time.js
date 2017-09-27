@@ -2,21 +2,21 @@
     "real_time": true,
     "bones": [
         {
-            "name": "LeftForeArm",
+            "name": "RightUpperArm",
             "color1": "Green",
             "color2": "Green",
-            "frequency": 20
+            "frequency": 100
         },
         {
             "name": "RightForeArm",
             "color1": "Blue",
             "color2": "Blue",
-            "frequency": 20
+            "frequency": 100
         }
     ],
-    "master_bone": "LeftForeArm",
+    "master_bone": "RightUpperArm",
     "special": {
-        "bone": "LeftForeArm",
+        "bone": "RightUpperArm",
         "orientation": "Front"
     },
     "constraints": [

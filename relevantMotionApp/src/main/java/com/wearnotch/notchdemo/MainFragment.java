@@ -643,8 +643,8 @@ public class MainFragment extends BaseFragment {
     Cancellable c;
     long mUpdateStartTime;
     long mRefreshTime   = 20;
-    Object[] leftHand   = new Object[8];
-    Object[] rightHand  = new Object[8];
+    Object[] rightUpperArm   = new Object[8];
+    Object[] rightForeArm  = new Object[8];
 
     @OnClick(R.id.btn_capture)
     void capture() {
@@ -716,41 +716,46 @@ public class MainFragment extends BaseFragment {
             if (currentFrame > mRealTimeData.getFrameCount() - 1) currentFrame = mRealTimeData.getFrameCount() - 1;
 
             // Logging data for measured bones
-            Log.d("REALTIME", "Current frame:" + currentFrame);
+//            Log.d("REALTIME", "Current frame:" + currentFrame);
 
             for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
 
+                /*
+                // android monitor log it...
                 Log.d("REALTIME", b.getName() + " "
                 // Orientation (quaternion)
                 + mRealTimeData.getQ(b,currentFrame) + " "
                 // Position of the bone (end of vector)
                 + mRealTimeData.getPos(b,currentFrame));
+                */
+
 
                 String boneName = b.getName();
 
-                if ( boneName.equals("LeftForeArm") ) {
-                    leftHand[0] = b.getName();                                  // bone name
-                    leftHand[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    leftHand[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    leftHand[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    leftHand[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
-                    leftHand[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
-                    leftHand[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
-                    leftHand[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+                if ( boneName.equals("RightUpperArm") ) {
+                    rightUpperArm[0] = b.getName();                                  // bone name
+                    rightUpperArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
+                    rightUpperArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
+                    rightUpperArm[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
+                    rightUpperArm[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
+                    rightUpperArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
+                    rightUpperArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
+                    rightUpperArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
                 }
 
                 if ( boneName.equals("RightForeArm") ) {
-                    rightHand[0] = b.getName();                                  // bone name
-                    rightHand[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    rightHand[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    rightHand[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    rightHand[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
-                    rightHand[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
-                    rightHand[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
-                    rightHand[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+                    rightForeArm[0] = b.getName();                                  // bone name
+                    rightForeArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
+                    rightForeArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
+                    rightForeArm[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
+                    rightForeArm[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
+                    rightForeArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
+                    rightForeArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
+                    rightForeArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
                 }
 
                 /*
+                // tried to be clever with it, but it didn't work 
                 someBone[0] = b.getName();                                  // bone name
                 someBone[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
                 someBone[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
@@ -1231,7 +1236,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "172.17.73.174"; // this needs to be the IP of the computer sending to...
+    private String myIP = "172.16.244.95"; // this needs to be the IP of the computer sending to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 20; // interval for sending OSC data
@@ -1262,43 +1267,43 @@ public class MainFragment extends BaseFragment {
                 if (oscPortOut != null) {
 
                     // left hand positions [X, Y, Z]
-                    OSCMessage leftHandPosX = new OSCMessage("/notch/"+ leftHand[0] +"/pos/x", Arrays.asList(leftHand[1]));
-                    OSCMessage leftHandPosY = new OSCMessage("/notch/"+ leftHand[0] +"/pos/y", Arrays.asList(leftHand[2]));
-                    OSCMessage leftHandPosZ = new OSCMessage("/notch/"+ leftHand[0] +"/pos/z", Arrays.asList(leftHand[3]));
+                    OSCMessage rightUpperArmPosX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/x", Arrays.asList(rightUpperArm[1]));
+                    OSCMessage rightUpperArmPosY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/y", Arrays.asList(rightUpperArm[2]));
+                    OSCMessage rightUpperArmPosZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/z", Arrays.asList(rightUpperArm[3]));
                     // left hand orientations [W, X, Y, Z] (quaternion)
-                    OSCMessage leftHandOriW = new OSCMessage("/notch/"+ leftHand[0] +"/ori/w", Arrays.asList(leftHand[4]));
-                    OSCMessage leftHandOriX = new OSCMessage("/notch/"+ leftHand[0] +"/ori/x", Arrays.asList(leftHand[5]));
-                    OSCMessage leftHandOriY = new OSCMessage("/notch/"+ leftHand[0] +"/ori/y", Arrays.asList(leftHand[6]));
-                    OSCMessage leftHandOriZ = new OSCMessage("/notch/"+ leftHand[0] +"/ori/z", Arrays.asList(leftHand[7]));
+                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[4]));
+                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[5]));
+                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[6]));
+                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[7]));
 
                     // right hand positions [X, Y, Z]
-                    OSCMessage rightHandPosX = new OSCMessage("/notch/"+ rightHand[0] +"/pos/x", Arrays.asList(rightHand[1]));
-                    OSCMessage rightHandPosY = new OSCMessage("/notch/"+ rightHand[0] +"/pos/y", Arrays.asList(rightHand[2]));
-                    OSCMessage rightHandPosZ = new OSCMessage("/notch/"+ rightHand[0] +"/pos/z", Arrays.asList(rightHand[3]));
+                    OSCMessage rightForeArmPosX = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/x", Arrays.asList(rightForeArm[1]));
+                    OSCMessage rightForeArmPosY = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/y", Arrays.asList(rightForeArm[2]));
+                    OSCMessage rightForeArmPosZ = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/z", Arrays.asList(rightForeArm[3]));
                     // right hand orientations [W, X, Y, Z] (quaternion)
-                    OSCMessage rightHandOriW = new OSCMessage("/notch/"+ rightHand[0] +"/ori/w", Arrays.asList(rightHand[4]));
-                    OSCMessage rightHandOriX = new OSCMessage("/notch/"+ rightHand[0] +"/ori/x", Arrays.asList(rightHand[5]));
-                    OSCMessage rightHandOriY = new OSCMessage("/notch/"+ rightHand[0] +"/ori/y", Arrays.asList(rightHand[6]));
-                    OSCMessage rightHandOriZ = new OSCMessage("/notch/"+ rightHand[0] +"/ori/z", Arrays.asList(rightHand[7]));
+                    OSCMessage rightForeArmOriW = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/w", Arrays.asList(rightForeArm[4]));
+                    OSCMessage rightForeArmOriX = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/x", Arrays.asList(rightForeArm[5]));
+                    OSCMessage rightForeArmOriY = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/y", Arrays.asList(rightForeArm[6]));
+                    OSCMessage rightForeArmOriZ = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/z", Arrays.asList(rightForeArm[7]));
 
 
                     try {
                         // Send the messages
-                        oscPortOut.send(leftHandPosX);
-                        oscPortOut.send(leftHandPosY);
-                        oscPortOut.send(leftHandPosZ);
-                        oscPortOut.send(leftHandOriW);
-                        oscPortOut.send(leftHandOriX);
-                        oscPortOut.send(leftHandOriY);
-                        oscPortOut.send(leftHandOriZ);
+                        oscPortOut.send(rightUpperArmPosX);
+                        oscPortOut.send(rightUpperArmPosY);
+                        oscPortOut.send(rightUpperArmPosZ);
+                        oscPortOut.send(rightUpperArmOriW);
+                        oscPortOut.send(rightUpperArmOriX);
+                        oscPortOut.send(rightUpperArmOriY);
+                        oscPortOut.send(rightUpperArmOriZ);
 
-                        oscPortOut.send(rightHandPosX);
-                        oscPortOut.send(rightHandPosY);
-                        oscPortOut.send(rightHandPosZ);
-                        oscPortOut.send(rightHandOriW);
-                        oscPortOut.send(rightHandOriX);
-                        oscPortOut.send(rightHandOriY);
-                        oscPortOut.send(rightHandOriZ);
+                        oscPortOut.send(rightForeArmPosX);
+                        oscPortOut.send(rightForeArmPosY);
+                        oscPortOut.send(rightForeArmPosZ);
+                        oscPortOut.send(rightForeArmOriW);
+                        oscPortOut.send(rightForeArmOriX);
+                        oscPortOut.send(rightForeArmOriY);
+                        oscPortOut.send(rightForeArmOriZ);
 
                         // Pause for half a second
                         sleep(OSCdelay);

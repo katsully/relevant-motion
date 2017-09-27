@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RelevantMotion.iml" filepath="$PROJECT_DIR$/RelevantMotion.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/relevant-motion.iml" filepath="$PROJECT_DIR$/relevant-motion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/relevantMotionApp/relevantMotionApp.iml" filepath="$PROJECT_DIR$/relevantMotionApp/relevantMotionApp.iml" />
     </modules>
   </component>
 </project>
