@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.illposed.osc.utility.OSCPacketDispatcher;
 import com.wearnotch.db.model.Device;
 import com.wearnotch.db.NotchDataBase;
 import com.wearnotch.framework.ActionDevice;
@@ -66,6 +67,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+// OSC imports
+import java.net.*;
+import java.util.*;
+import com.illposed.osc.*;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -240,6 +246,9 @@ public class MainFragment extends BaseFragment {
         if(!hasPermissions(mActivity, PERMISSIONS)){
             requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION);
         }
+
+        // Start the thread that sends messages
+        oscThread.start();
     }
 
     @Override
@@ -496,8 +505,8 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-//                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_2_real_time))));
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_12_real_time))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_2_real_time))));
+//                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_12_real_time))));
 
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
@@ -572,13 +581,159 @@ public class MainFragment extends BaseFragment {
     }
 
     Cancellable c;
+    long mUpdateStartTime;
+    long mRefreshTime   = 20;
+    Object[] rightUpperArm   = new Object[8];
+    Object[] rightForeArm  = new Object[8];
+
+    @OnClick(R.id.btn_capture)
+    void capture() {
+        mVisualiserActivity = null;
+        if (mRealTime) {
+            inProgress();
+            c = mNotchService.capture(new NotchCallback<Void>() {
+                @Override
+                public void onProgress(NotchProgress progress) {
+                    if (progress.getState() == NotchProgress.State.REALTIME_UPDATE) {
+                        mRealTimeData = (VisualiserData) progress.getObject();
+                        updateRealTime();
+                        mUpdateStartTime = System.currentTimeMillis();
+                        mHandler.removeCallbacks(mLogRealTimeData);
+                        mHandler.post(mLogRealTimeData);
+                    }
+                }
+
+                @Override
+                public void onSuccess(Void nothing) {
+                    clearText();
+                    Log.d("onSuccessRealtime", "realtime called");
+                }
+
+                @Override
+                public void onFailure(NotchError notchError) {
+                    Util.showNotification(Util.getNotchErrorStr(notchError));
+                    clearText();
+                    mHandler.removeCallbacks(mLogRealTimeData);
+                    Log.d("onFailure", "realtime failed");
+                }
+
+                @Override
+                public void onCancelled() {
+                    Util.showNotification("Real-time measurement stopped!");
+                    clearText();
+                    mHandler.removeCallbacks(mLogRealTimeData);
+                    Log.d("onCancelled", "realtime cancelled");
+                }
+            });
+        }
+        else {
+            mNotchService.timedCapture(new EmptyCallback<Measurement>() {
+                @Override
+                public void onSuccess(Measurement measurement) {
+                    mCurrentMeasurement = measurement;
+                    Util.showNotification("Capture finished");
+                    clearText();
+                }
+            });
+        }
+    }
+
+    Runnable mLogRealTimeData = new Runnable() {
+        @Override
+        public void run() {
+            // Index of first new frame in the last update
+            int startingFrame = mRealTimeData.getStartingFrame();
+            // Elapsed time since the last update
+            long millisSinceUpdate = System.currentTimeMillis() - mUpdateStartTime;
+            // Recording frequency
+            float frequency = mRealTimeData.getFrequency();
+            // Milliseconds per frame
+            float millisPerFrame = 1000.f / frequency;
+            // Select the current frame from the last update
+            int currentFrame = startingFrame + (int)(millisSinceUpdate / millisPerFrame);
+
+            // Show the last frame until a new update comes
+            if (currentFrame > mRealTimeData.getFrameCount() - 1) currentFrame = mRealTimeData.getFrameCount() - 1;
+
+            // Logging data for measured bones
+//            Log.d("REALTIME", "Current frame:" + currentFrame);
+
+            for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
+
+                /*
+                // android monitor log it...
+                Log.d("REALTIME", b.getName() + " "
+                // Orientation (quaternion)
+                + mRealTimeData.getQ(b,currentFrame) + " "
+                // Position of the bone (end of vector)
+                + mRealTimeData.getPos(b,currentFrame));
+                */
+
+
+                String boneName = b.getName();
+
+                if ( boneName.equals("RightUpperArm") ) {
+                    rightUpperArm[0] = b.getName();                                  // bone name
+//                    rightUpperArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
+//                    rightUpperArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
+//                    rightUpperArm[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
+                    rightUpperArm[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
+                    rightUpperArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
+                    rightUpperArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
+                    rightUpperArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+                }
+
+//                if ( boneName.equals("RightForeArm") ) {
+//                    rightForeArm[0] = b.getName();                                  // bone name
+//                    rightForeArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
+//                    rightForeArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
+//                    rightForeArm[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
+//                    rightForeArm[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
+//                    rightForeArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
+//                    rightForeArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
+//                    rightForeArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+//                }
+
+
+
+                /*
+                // tried to be clever with it, but it didn't work
+                someBone[0] = b.getName();                                  // bone name
+                someBone[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
+                someBone[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
+                someBone[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
+                someBone[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // w
+                someBone[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
+                someBone[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
+                someBone[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+//                bonePosX = new OSCMessage("/notch/"+ someBone[0] +"/pos/x", Arrays.asList(someBone[1]));
+//                OSCMessage bonePosX = new OSCMessage("/notch/"+ someBone[0] +"/pos/x", Arrays.asList(someBone[1]));
+                */
+
+
+            }
+
+            mHandler.postDelayed(mLogRealTimeData,mRefreshTime);
+        }
+    };
+
+     /*  --- unused Yao code: ----
+        //fvec3 a=mRealTimeData.getPos(b,currentFrame);
+
+     */
+
+
+
+
+    // Original Notch Realtime Code w/out OSC
+    /*
+    Cancellable c;
 
     @OnClick(R.id.btn_capture)
     void cptr() {
         mState = State.CAPTURE;
         mCountDown.start();
     }
-
 
     void capture() {
         mVisualiserActivity = null;
@@ -635,6 +790,9 @@ public class MainFragment extends BaseFragment {
             }
         }
     }
+    */
+
+
 
     @OnClick(R.id.btn_download)
     void download() {
@@ -1108,5 +1266,117 @@ public class MainFragment extends BaseFragment {
         }
         return true;
     }
+
+
+
+    /* ---- OSC SECTION ----
+     * These two variables hold the IP address and port number.
+     * You should change them to the appropriate address and port.
+     */
+    private String myIP = "172.17.76.171"; // this needs to be the IP of the computer sending to...
+    private int myPort = 8000;
+    public OSCPortOut oscPortOut;  // This is used to send messages
+    private int OSCdelay = 40; // interval for sending OSC data
+
+    private OSCPacketDispatcher dispatcher = new OSCPacketDispatcher(); // doesn't work
+
+
+    // This thread will contain all the code that pertains to OSC
+    private Thread oscThread = new Thread() {
+        @Override
+        public void run() {
+            /* The first part of the run() method initializes the OSCPortOut for sending messages.
+             *
+             * For more advanced apps, where you want to change the address during runtime, you will want
+             * to have this section in a different thread, but since we won't be changing addresses here,
+             * we only have to initialize the address once.
+             */
+
+            try {
+                // Connect to some IP address and port
+                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+            } catch(UnknownHostException e) {
+                // Error handling when your IP isn't found
+                return;
+            } catch(Exception e) {
+                // Error handling for any other errors
+                return;
+            }
+
+            while (true) {
+                if (oscPortOut != null) {
+
+                    // left hand positions [X, Y, Z]
+//                    OSCMessage rightUpperArmPosX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/x", Arrays.asList(rightUpperArm[1]));
+//                    OSCMessage rightUpperArmPosY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/y", Arrays.asList(rightUpperArm[2]));
+//                    OSCMessage rightUpperArmPosZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/z", Arrays.asList(rightUpperArm[3]));
+                    // left hand orientations [W, X, Y, Z] (quaternion)
+                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[4]));
+                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[5]));
+                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[6]));
+                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[7]));
+
+                    /*
+                    // right hand positions [X, Y, Z]
+                    OSCMessage rightForeArmPosX = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/x", Arrays.asList(rightForeArm[1]));
+                    OSCMessage rightForeArmPosY = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/y", Arrays.asList(rightForeArm[2]));
+                    OSCMessage rightForeArmPosZ = new OSCMessage("/notch/"+ rightForeArm[0] +"/pos/z", Arrays.asList(rightForeArm[3]));
+                    // right hand orientations [W, X, Y, Z] (quaternion)
+                    OSCMessage rightForeArmOriW = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/w", Arrays.asList(rightForeArm[4]));
+                    OSCMessage rightForeArmOriX = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/x", Arrays.asList(rightForeArm[5]));
+                    OSCMessage rightForeArmOriY = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/y", Arrays.asList(rightForeArm[6]));
+                    OSCMessage rightForeArmOriZ = new OSCMessage("/notch/"+ rightForeArm[0] +"/ori/z", Arrays.asList(rightForeArm[7]));
+                    */
+
+                    try {
+                        // Send the messages
+
+
+
+                        OSCBundle bundle = new OSCBundle();
+                        bundle.addPacket(new OSCMessage("/listener1"));
+                        bundle.addPacket(new OSCMessage("/listener2"));
+                        dispatcher.dispatchPacket(bundle); // doesn't work
+                        oscPortOut.send(bundle); // WORKS !
+
+
+//                        oscPortOut.send(rightUpperArmPosX);
+//                        oscPortOut.send(rightUpperArmPosY);
+//                        oscPortOut.send(rightUpperArmPosZ);
+//                        oscPortOut.send(rightUpperArmOriW);
+//                        oscPortOut.send(rightUpperArmOriX);
+//                        oscPortOut.send(rightUpperArmOriY);
+//                        oscPortOut.send(rightUpperArmOriZ);
+
+//                        oscPortOut.send(rightForeArmPosX);
+//                        oscPortOut.send(rightForeArmPosY);
+//                        oscPortOut.send(rightForeArmPosZ);
+//                        oscPortOut.send(rightForeArmOriW);
+//                        oscPortOut.send(rightForeArmOriX);
+//                        oscPortOut.send(rightForeArmOriY);
+//                        oscPortOut.send(rightForeArmOriZ);
+
+                        // Pause for half a second
+                        sleep(OSCdelay);
+                    } catch (Exception e) {
+                        // Error handling for some error
+                    }
+
+
+                     /*
+                    ArrayList<Object> moreThingsToSend = new ArrayList<Object>();
+                    moreThingsToSend.add("Hello World2");
+                    moreThingsToSend.add(123456);
+                    moreThingsToSend.add(12.345);
+                    moreThingsToSend.add(12.345);
+
+                    OSCMessage message2 = new OSCMessage("/test", moreThingsToSend);
+                    //OSCMessage message2 = new OSCMessage(myIP, moreThingsToSend.toArray()); // downloadable version of API
+                    */
+                }
+            }
+        }
+    };
+
 
 }
