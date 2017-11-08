@@ -13,14 +13,20 @@ buildscript {
     }
 }
 
+// reading username and password from local.properties
+def Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+def user = properties.getProperty("username");
+def pass = properties.getProperty("password");
+
 allprojects {
     repositories {
         jcenter()
         maven {
             url 'https://wearnotch.com/maven/notch/'
             credentials {
-                username ''
-                password ''
+                username user
+                password pass
             }
         }
         google()

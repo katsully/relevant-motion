@@ -80,7 +80,9 @@ import butterknife.OnClick;
 
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
-    private static final String DEFAULT_USER_LICENSE = "";
+
+    // reading from local.properties
+    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
