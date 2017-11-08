@@ -1,0 +1,2 @@
+- SDK update to v1.1.262
+- Refactor in VisualserActivity in accordance to SDK v1.1.262
