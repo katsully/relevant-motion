@@ -82,7 +82,8 @@ public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     // reading from local.properties
-    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
+//    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
+
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
@@ -328,6 +329,7 @@ public class MainFragment extends BaseFragment {
         public void run() {
             setActionBarTitle(R.string.app_name);
             if (mNotchService != null && mUser == null) {
+                System.out.println(DEFAULT_USER_LICENSE);
                 mUser = DEFAULT_USER_LICENSE;
                 if (DEFAULT_USER_LICENSE.length() > 0) {
                     updateUser(mUser);
@@ -660,6 +662,7 @@ public class MainFragment extends BaseFragment {
             // Logging data for measured bones
 //            Log.d("REALTIME", "Current frame:" + currentFrame);
 
+
             for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
 
                 /*
@@ -674,7 +677,7 @@ public class MainFragment extends BaseFragment {
 
                 String boneName = b.getName();
 
-                if ( boneName.equals("RightUpperArm") ) {
+                if ( boneName.equals("ChestBottom") ) {
                     rightUpperArm[0] = b.getName();                                  // bone name
 //                    rightUpperArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
 //                    rightUpperArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
@@ -683,6 +686,8 @@ public class MainFragment extends BaseFragment {
                     rightUpperArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
                     rightUpperArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
                     rightUpperArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
+
+                    System.out.println(rightUpperArm[4]);
                 }
 
 //                if ( boneName.equals("RightForeArm") ) {
@@ -1275,7 +1280,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "172.17.76.171"; // this needs to be the IP of the computer sending to...
+    private String myIP = "172.16.248.184"; // this needs to be the IP of the computer sending to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
@@ -1313,10 +1318,10 @@ public class MainFragment extends BaseFragment {
 //                    OSCMessage rightUpperArmPosY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/y", Arrays.asList(rightUpperArm[2]));
 //                    OSCMessage rightUpperArmPosZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/z", Arrays.asList(rightUpperArm[3]));
                     // left hand orientations [W, X, Y, Z] (quaternion)
-                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[4]));
-                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[5]));
-                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[6]));
-                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[7]));
+                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[4]));
+                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[5]));
+                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[6]));
+                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[7]));
 
                     /*
                     // right hand positions [X, Y, Z]
@@ -1338,6 +1343,12 @@ public class MainFragment extends BaseFragment {
                         OSCBundle bundle = new OSCBundle();
                         bundle.addPacket(new OSCMessage("/listener1"));
                         bundle.addPacket(new OSCMessage("/listener2"));
+                        bundle.addPacket(rightUpperArmOriX);
+                        bundle.addPacket(rightUpperArmOriY);
+                        bundle.addPacket(rightUpperArmOriZ);
+                        bundle.addPacket(rightUpperArmOriW);
+
+
                         dispatcher.dispatchPacket(bundle); // doesn't work
                         oscPortOut.send(bundle); // WORKS !
 
