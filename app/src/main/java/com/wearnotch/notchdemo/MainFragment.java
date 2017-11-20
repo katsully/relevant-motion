@@ -687,7 +687,9 @@ public class MainFragment extends BaseFragment {
                     rightUpperArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
                     rightUpperArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
 
-                    System.out.println(rightUpperArm[4]);
+//                    OSCMessage
+
+//                    System.out.println(rightUpperArm[4]);
                 }
 
 //                if ( boneName.equals("RightForeArm") ) {
@@ -1339,20 +1341,27 @@ public class MainFragment extends BaseFragment {
                         // Send the messages
 
 
+                        String stringTime = String.valueOf( System.currentTimeMillis() );
+//                        OSCMessage time = new OSCMessage("/time/before", Arrays.asList( stringTime ) );
+                        OSCMessage time = new OSCMessage("/time/after" );
+                        time.addArgument(stringTime);
+
 
                         OSCBundle bundle = new OSCBundle();
-                        bundle.addPacket(new OSCMessage("/listener1"));
-                        bundle.addPacket(new OSCMessage("/listener2"));
+//                        bundle.addPacket(new OSCMessage("/listener1"));
+//                        bundle.addPacket(new OSCMessage("/listener2"));
                         bundle.addPacket(rightUpperArmOriX);
                         bundle.addPacket(rightUpperArmOriY);
                         bundle.addPacket(rightUpperArmOriZ);
                         bundle.addPacket(rightUpperArmOriW);
-
-
                         dispatcher.dispatchPacket(bundle); // doesn't work
                         oscPortOut.send(bundle); // WORKS !
 
 
+                        oscPortOut.send(time);
+
+
+                        // old code
 //                        oscPortOut.send(rightUpperArmPosX);
 //                        oscPortOut.send(rightUpperArmPosY);
 //                        oscPortOut.send(rightUpperArmPosZ);
@@ -1369,13 +1378,14 @@ public class MainFragment extends BaseFragment {
 //                        oscPortOut.send(rightForeArmOriY);
 //                        oscPortOut.send(rightForeArmOriZ);
 
-                        // Pause for half a second
+                        // Pause
                         sleep(OSCdelay);
                     } catch (Exception e) {
                         // Error handling for some error
                     }
 
 
+                    // old example code unused
                      /*
                     ArrayList<Object> moreThingsToSend = new ArrayList<Object>();
                     moreThingsToSend.add("Hello World2");
