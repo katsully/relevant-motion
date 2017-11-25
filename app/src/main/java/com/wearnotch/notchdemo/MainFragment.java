@@ -82,9 +82,7 @@ public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     // reading from local.properties
-//    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
-    private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
-
+    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
@@ -1320,7 +1318,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "172.16.44.155"; // the IP of the computer sending OSC to...
+    private String myIP = "localhost"; // the IP of the computer sending OSC to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
@@ -1387,8 +1385,10 @@ public class MainFragment extends BaseFragment {
                         bundle.addPacket(rightUpperArmOriY);
                         bundle.addPacket(rightUpperArmOriZ);
                         bundle.addPacket(rightUpperArmOriW);
-//                        OSCMessage test = new OSCMessage("/notch", Arrays.asList(rightUpperArm[7]));
-//                        bundle.addPacket(test);
+
+                        OSCMessage test = new OSCMessage("/notch", Arrays.asList(rightUpperArm[7]));
+                        bundle.addPacket(test);
+
                         oscPortOut.send(bundle); // WORKS !
 
 
