@@ -100,7 +100,7 @@ public class MainFragment extends BaseFragment {
     private Measurement mCurrentMeasurement;
     private File mCurrentOutput;
     private String mUser;
-    private boolean mRealTime, mRemote, mChangingChannel, mOSC;
+    private boolean mRealTime, mRemote, mChangingChannel;
     private VisualiserData mRealTimeData;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private SimpleDateFormat mSDF;
@@ -146,9 +146,6 @@ public class MainFragment extends BaseFragment {
 
     @InjectView(R.id.chk_remote)
     CheckBox mRemoteBox;
-
-    @InjectView(R.id.chk_OSC)
-    CheckBox mOSCBox;
 
     // Buttons
     @InjectView(R.id.btn_set_user)
@@ -198,6 +195,7 @@ public class MainFragment extends BaseFragment {
 
     @InjectView(R.id.btn_steady)
     Button mButtonSteady;
+
 
     @InjectView(R.id.btn_get_steady)
     Button mButtonGetSteadyData;
@@ -312,7 +310,6 @@ public class MainFragment extends BaseFragment {
 
         mCounterText.setTypeface(tfLight);
         mRealTimeBox.setTypeface(tfLight);
-        mOSCBox.setTypeface(tfLight);
         mRemoteBox.setTypeface(tfLight);
 
 
@@ -341,7 +338,6 @@ public class MainFragment extends BaseFragment {
         public void run() {
             setActionBarTitle(R.string.app_name);
             if (mNotchService != null && mUser == null) {
-                System.out.println(DEFAULT_USER_LICENSE);
                 mUser = DEFAULT_USER_LICENSE;
                 if (DEFAULT_USER_LICENSE.length() > 0) {
                     updateUser(mUser);
@@ -377,14 +373,6 @@ public class MainFragment extends BaseFragment {
     void checkRemote() {
         mRemote = mRemoteBox.isChecked();
         mRealTimeBox.setEnabled(!mRemote);
-    }
-
-    // ReMo OSC Button
-    @OnCheckedChanged(R.id.chk_OSC)
-    void OSCtoggle() {
-        mOSC = mOSCBox.isChecked();
-        mOSCBox.setChecked(mOSC);
-//        System.out.println(mOSC);
     }
 
     @OnClick(R.id.btn_set_user)
@@ -605,6 +593,10 @@ public class MainFragment extends BaseFragment {
     }
 
     Cancellable c;
+    long mUpdateStartTime;
+    long mRefreshTime   = 20;
+    Object[] rightUpperArm   = new Object[8];
+    Object[] rightForeArm  = new Object[8];
 
     @OnClick(R.id.btn_capture)
     void capture() {
@@ -658,18 +650,6 @@ public class MainFragment extends BaseFragment {
         }
     }
 
-    // realtime vars
-    long mUpdateStartTime;
-    long mRefreshTime = 20;
-    // Bone Object format: [0]=name, [1]=posX, [2]=posY, [3]=posZ, [4]=oriX, [5]=oriY, [6]=oriZ, [7]=oriW
-    Object[] rightUpperArm  = new Object[8];
-    Object[] bone02  = new Object[8];
-//    ArrayList<Object> bone02  = new ArrayList<Object>();
-
-
-    OSCBundle bone02bundle = new OSCBundle();
-
-
     Runnable mLogRealTimeData = new Runnable() {
         @Override
         public void run() {
@@ -683,47 +663,28 @@ public class MainFragment extends BaseFragment {
             float millisPerFrame = 1000.f / frequency;
             // Select the current frame from the last update
             int currentFrame = startingFrame + (int)(millisSinceUpdate / millisPerFrame);
+
             // Show the last frame until a new update comes
-            if (currentFrame > mRealTimeData.getFrameCount() - 1) {
-                currentFrame = mRealTimeData.getFrameCount() - 1;
-            }
+            if (currentFrame > mRealTimeData.getFrameCount() - 1) currentFrame = mRealTimeData.getFrameCount() - 1;
+
             // Logging data for measured bones
 //            Log.d("REALTIME", "Current frame:" + currentFrame);
 
-
-
             for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
 
-//                System.out.println(b);
+                /*
+                // android monitor log it...
+                Log.d("REALTIME", b.getName() + " "
+                // Orientation (quaternion)
+                + mRealTimeData.getQ(b,currentFrame) + " "
+                // Position of the bone (end of vector)
+                + mRealTimeData.getPos(b,currentFrame));
+                */
+
+
                 String boneName = b.getName();
 
-
-                if ( boneName.equals("Hip") ) {
-                    bone02[0] = b.getName();                                  // bone name
-                    bone02[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    bone02[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    bone02[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // x
-                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // y
-                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // z
-                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // w
-                    //  bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // w
-//                    bone02.add(mRealTimeData.getQ(b,currentFrame).get(3));    // w
-
-
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/x", Arrays.asList(bone02[1]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/y", Arrays.asList(bone02[2]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/z", Arrays.asList(bone02[3]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/x", Arrays.asList(bone02[4]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/y", Arrays.asList(bone02[5]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/z", Arrays.asList(bone02[6]) ));
-                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/w", Arrays.asList(bone02[7]) ));
-
-                }
-
-
-
-                if ( boneName.equals("ChestBottom") ) {
+                if ( boneName.equals("RightUpperArm") ) {
                     rightUpperArm[0] = b.getName();                                  // bone name
 //                    rightUpperArm[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
 //                    rightUpperArm[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
@@ -732,10 +693,6 @@ public class MainFragment extends BaseFragment {
                     rightUpperArm[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // x
                     rightUpperArm[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // y
                     rightUpperArm[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // z
-
-//                    OSCMessage
-
-//                    System.out.println(rightUpperArm[4]);
                 }
 
 //                if ( boneName.equals("RightForeArm") ) {
@@ -768,7 +725,7 @@ public class MainFragment extends BaseFragment {
 
             }
 
-            mHandler.postDelayed(mLogRealTimeData, mRefreshTime);
+            mHandler.postDelayed(mLogRealTimeData,mRefreshTime);
         }
     };
 
@@ -1328,10 +1285,13 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "localhost"; // the IP of the computer sending OSC to...
+    private String myIP = "172.17.76.171"; // this needs to be the IP of the computer sending to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
+
+    private OSCPacketDispatcher dispatcher = new OSCPacketDispatcher(); // doesn't work
+
 
     // This thread will contain all the code that pertains to OSC
     private Thread oscThread = new Thread() {
@@ -1355,7 +1315,6 @@ public class MainFragment extends BaseFragment {
                 return;
             }
 
-            // TODO make this toggle-able w OSC checkbox
             while (true) {
                 if (oscPortOut != null) {
 
@@ -1363,16 +1322,11 @@ public class MainFragment extends BaseFragment {
 //                    OSCMessage rightUpperArmPosX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/x", Arrays.asList(rightUpperArm[1]));
 //                    OSCMessage rightUpperArmPosY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/y", Arrays.asList(rightUpperArm[2]));
 //                    OSCMessage rightUpperArmPosZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/pos/z", Arrays.asList(rightUpperArm[3]));
-//                     left hand orientations [W, X, Y, Z] (quaternion)
-
-
-                    // temp comment out
-                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[4]));
-                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[5]));
-                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[6]));
-                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[7]));
-
-
+                    // left hand orientations [W, X, Y, Z] (quaternion)
+                    OSCMessage rightUpperArmOriW = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/w", Arrays.asList(rightUpperArm[4]));
+                    OSCMessage rightUpperArmOriX = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/x", Arrays.asList(rightUpperArm[5]));
+                    OSCMessage rightUpperArmOriY = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/y", Arrays.asList(rightUpperArm[6]));
+                    OSCMessage rightUpperArmOriZ = new OSCMessage("/notch/"+ rightUpperArm[0] +"/ori/z", Arrays.asList(rightUpperArm[7]));
 
                     /*
                     // right hand positions [X, Y, Z]
@@ -1390,31 +1344,37 @@ public class MainFragment extends BaseFragment {
                         // Send the messages
 
 
+
                         OSCBundle bundle = new OSCBundle();
-                        bundle.addPacket(rightUpperArmOriX);
-                        bundle.addPacket(rightUpperArmOriY);
-                        bundle.addPacket(rightUpperArmOriZ);
-                        bundle.addPacket(rightUpperArmOriW);
-
-                        OSCMessage test = new OSCMessage("/notch", Arrays.asList(rightUpperArm[7]));
-                        bundle.addPacket(test);
-
+                        bundle.addPacket(new OSCMessage("/listener1"));
+                        bundle.addPacket(new OSCMessage("/listener2"));
+                        dispatcher.dispatchPacket(bundle); // doesn't work
                         oscPortOut.send(bundle); // WORKS !
 
 
+//                        oscPortOut.send(rightUpperArmPosX);
+//                        oscPortOut.send(rightUpperArmPosY);
+//                        oscPortOut.send(rightUpperArmPosZ);
+//                        oscPortOut.send(rightUpperArmOriW);
+//                        oscPortOut.send(rightUpperArmOriX);
+//                        oscPortOut.send(rightUpperArmOriY);
+//                        oscPortOut.send(rightUpperArmOriZ);
 
-                        oscPortOut.send(bone02bundle); // WORKS !
+//                        oscPortOut.send(rightForeArmPosX);
+//                        oscPortOut.send(rightForeArmPosY);
+//                        oscPortOut.send(rightForeArmPosZ);
+//                        oscPortOut.send(rightForeArmOriW);
+//                        oscPortOut.send(rightForeArmOriX);
+//                        oscPortOut.send(rightForeArmOriY);
+//                        oscPortOut.send(rightForeArmOriZ);
 
-
-
-                        sleep(OSCdelay); // pause so it's not sending LOADS of OSC
-
+                        // Pause for half a second
+                        sleep(OSCdelay);
                     } catch (Exception e) {
                         // Error handling for some error
                     }
 
 
-                    // old example code unused
                      /*
                     ArrayList<Object> moreThingsToSend = new ArrayList<Object>();
                     moreThingsToSend.add("Hello World2");

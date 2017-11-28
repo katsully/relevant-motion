@@ -331,17 +331,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <CheckBox
-                android:id="@+id/chk_OSC"
-                android:checked="false"
-                android:text="OSC"
-                android:textSize="16dp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <Button
                 android:id="@+id/btn_init_3_capture"
                 android:layout_width="wrap_content"
