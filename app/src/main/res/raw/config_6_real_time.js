@@ -8,7 +8,7 @@
             "frequency": 20
         },
         {
-            "name": "Hip",
+            "name": "Head",
             "color1": "Cyan",
             "color2": "Cyan",
             "frequency": 20
