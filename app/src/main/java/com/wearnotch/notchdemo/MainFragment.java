@@ -244,7 +244,6 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-<<<<<<< HEAD
         // load in license
 //        Properties properties = new Properties();
 //        InputStream inputStream =
@@ -255,9 +254,6 @@ public class MainFragment extends BaseFragment {
 //            e.printStackTrace();
 //        }
 //        DEFAULT_USER_LICENSE=properties.getProperty("license");
-
-=======
->>>>>>> 0b3ac833a231ac3ba26180a8026209afe3d07573
         super.onCreate(savedInstanceState);
         mApplicationContext = getActivity().getApplicationContext();
         mActivity = getBaseActivity();
