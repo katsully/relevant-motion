@@ -84,7 +84,7 @@ public class MainFragment extends BaseFragment {
 
     // reading from local.properties
 //    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
-    private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
+    private static final String DEFAULT_USER_LICENSE = "";
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
@@ -707,9 +707,9 @@ public class MainFragment extends BaseFragment {
                     bone02[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone02[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
                     Quaternion bone02quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-                    bone01[4] = bone02quat.getPitch();  // x
-                    bone01[5] = bone02quat.getYaw();    // y
-                    bone01[6] = bone02quat.getRoll();   // z
+                    bone02[4] = bone02quat.getPitch();  // x
+                    bone02[5] = bone02quat.getYaw();    // y
+                    bone02[6] = bone02quat.getRoll();   // z
                 }
 
                 else if ( boneName.equals("RightUpperArm") ) {
@@ -718,9 +718,9 @@ public class MainFragment extends BaseFragment {
                     bone03[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone03[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
                     Quaternion bone03quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-                    bone01[4] = bone03quat.getPitch();  // x
-                    bone01[5] = bone03quat.getYaw();    // y
-                    bone01[6] = bone03quat.getRoll();   // z
+                    bone03[4] = bone03quat.getPitch();  // x
+                    bone03[5] = bone03quat.getYaw();    // y
+                    bone03[6] = bone03quat.getRoll();   // z
                 }
 
                 else if ( boneName.equals("RightForeArm") ) {
@@ -729,9 +729,9 @@ public class MainFragment extends BaseFragment {
                     bone04[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone04[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
                     Quaternion bone04quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-                    bone01[4] = bone04quat.getPitch();  // x
-                    bone01[5] = bone04quat.getYaw();    // y
-                    bone01[6] = bone04quat.getRoll();   // z
+                    bone04[4] = bone04quat.getPitch();  // x
+                    bone04[5] = bone04quat.getYaw();    // y
+                    bone04[6] = bone04quat.getRoll();   // z
                 }
 
                 else if ( boneName.equals("LeftUpperArm") ) {
@@ -740,9 +740,9 @@ public class MainFragment extends BaseFragment {
                     bone05[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone05[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
                     Quaternion bone05quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-                    bone01[4] = bone05quat.getPitch();  // x
-                    bone01[5] = bone05quat.getYaw();    // y
-                    bone01[6] = bone05quat.getRoll();   // z
+                    bone05[4] = bone05quat.getPitch();  // x
+                    bone05[5] = bone05quat.getYaw();    // y
+                    bone05[6] = bone05quat.getRoll();   // z
                 }
 
                 else if ( boneName.equals("LeftForeArm") ) {
@@ -751,9 +751,9 @@ public class MainFragment extends BaseFragment {
                     bone06[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone06[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
                     Quaternion bone06quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-                    bone01[4] = bone06quat.getPitch();  // x
-                    bone01[5] = bone06quat.getYaw();    // y
-                    bone01[6] = bone06quat.getRoll();   // z
+                    bone06[4] = bone06quat.getPitch();  // x
+                    bone06[5] = bone06quat.getYaw();    // y
+                    bone06[6] = bone06quat.getRoll();   // z
                 }
 
 
