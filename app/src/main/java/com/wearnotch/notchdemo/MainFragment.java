@@ -82,9 +82,11 @@ import butterknife.OnClick;
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
+//    private String DEFAULT_USER_LICENSE = "nu5dqYkSgjZLHnEXWp48";
     // reading from local.properties
 //    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
     private static final String DEFAULT_USER_LICENSE = "";
+//    private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
@@ -243,6 +245,16 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // load in license
+//        Properties properties = new Properties();
+//        InputStream inputStream =
+//                this.getClass().getClassLoader().getResourceAsStream("local.properties");
+//        try {
+//            properties.load(inputStream);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        DEFAULT_USER_LICENSE=properties.getProperty("license");
         super.onCreate(savedInstanceState);
         mApplicationContext = getActivity().getApplicationContext();
         mActivity = getBaseActivity();
