@@ -82,10 +82,10 @@ import butterknife.OnClick;
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
-//    private String DEFAULT_USER_LICENSE = "nu5dqYkSgjZLHnEXWp48";
+    private String DEFAULT_USER_LICENSE = "nu5dqYkSgjZLHnEXWp48";
     // reading from local.properties
 //    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
-    private static final String DEFAULT_USER_LICENSE = "";
+//    private static final String DEFAULT_USER_LICENSE = "";
 //    private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
 
     private static final String NOTCH_DIR = "notch_tutorial";
@@ -1349,7 +1349,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "172.16.255.34"; // the IP of the computer sending OSC to...
+    private String myIP = "172.16.71.222"; // the IP of the computer sending OSC to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
