@@ -168,7 +168,7 @@ public class Quaternion {
     /** Get the roll euler angle in degrees, which is the rotation around the z axis. Requires that this quaternion is normalized.
      * @return the rotation around the z axis in degrees (between -180 and +180) */
     public float getRoll () {
-        return getRollRad() * MathUtils.radiansToDegrees;
+        return (getRollRad() - 3.14f) * MathUtils.radiansToDegrees;
     }
 
     /** Get the pitch euler angle in radians, which is the rotation around the x axis. Requires that this quaternion is normalized.
@@ -193,7 +193,7 @@ public class Quaternion {
     /** Get the yaw euler angle in degrees, which is the rotation around the y axis. Requires that this quaternion is normalized.
      * @return the rotation around the y axis in degrees (between -180 and +180) */
     public float getYaw () {
-        return getYawRad() * MathUtils.radiansToDegrees;
+        return (getYawRad() + 3.14f) * MathUtils.radiansToDegrees;
     }
 
     public final static float len2 (final float x, final float y, final float z, final float w) {
