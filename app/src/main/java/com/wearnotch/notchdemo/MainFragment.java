@@ -1429,7 +1429,7 @@ public class MainFragment extends BaseFragment {
                     OSCMessage bone03OriX = new OSCMessage("/notch/"+ bone03[0] +"/ori/x", Arrays.asList(bone03[4]));
                     OSCMessage bone03OriY = new OSCMessage("/notch/"+ bone03[0] +"/ori/y", Arrays.asList(bone03[5]));
                     OSCMessage bone03OriZ = new OSCMessage("/notch/"+ bone03[0] +"/ori/z", Arrays.asList(bone03[6]));
-                    OSCMessage bone03OriW = new OSCMessage("/notch/"+ bone03[0] +"/ori/z", Arrays.asList(bone03[7]));
+                    OSCMessage bone03OriW = new OSCMessage("/notch/"+ bone03[0] +"/ori/w", Arrays.asList(bone03[7]));
 
 //                    OSCMessage bone04PosX = new OSCMessage("/notch/"+ bone04[0] +"/pos/x", Arrays.asList(bone04[1]));
 //                    OSCMessage bone04PosY = new OSCMessage("/notch/"+ bone04[0] +"/pos/y", Arrays.asList(bone04[2]));
@@ -1483,10 +1483,10 @@ public class MainFragment extends BaseFragment {
 //                        bone02bundle.addPacket(bone02RotX);
 //                        bone02bundle.addPacket(bone02RotY);
 //                        bone02bundle.addPacket(bone02RotZ);
-                        bone02bundle.addPacket(bone01OriX);
-                        bone02bundle.addPacket(bone01OriY);
-                        bone02bundle.addPacket(bone01OriZ);
-                        bone02bundle.addPacket(bone01OriW);
+                        bone02bundle.addPacket(bone02OriX);
+                        bone02bundle.addPacket(bone02OriY);
+                        bone02bundle.addPacket(bone02OriZ);
+                        bone02bundle.addPacket(bone02OriW);
 
                         OSCBundle bone03bundle = new OSCBundle();
                         bone03bundle.addPacket(bone03PosX);
@@ -1495,10 +1495,10 @@ public class MainFragment extends BaseFragment {
 //                        bone03bundle.addPacket(bone03RotX);
 //                        bone03bundle.addPacket(bone03RotY);
 //                        bone03bundle.addPacket(bone03RotZ);
-                        bone03bundle.addPacket(bone01OriX);
-                        bone03bundle.addPacket(bone01OriY);
-                        bone03bundle.addPacket(bone01OriZ);
-                        bone03bundle.addPacket(bone01OriW);
+                        bone03bundle.addPacket(bone03OriX);
+                        bone03bundle.addPacket(bone03OriY);
+                        bone03bundle.addPacket(bone03OriZ);
+                        bone03bundle.addPacket(bone03OriW);
 
 //                        OSCBundle bone04bundle = new OSCBundle();
 //                        bone04bundle.addPacket(bone04PosX);
