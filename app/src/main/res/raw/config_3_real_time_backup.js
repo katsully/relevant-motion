@@ -18,12 +18,6 @@
             "color1": "Green",
             "color2": "Green",
             "frequency": 20
-        },
-        {
-            "name": "LeftUpperArm",
-            "color1": "Red",
-            "color2": "Red",
-            "frequency": 20
         }
     ],
     "master_bone": "ChestBottom",

@@ -21,8 +21,14 @@
         },
         {
             "name": "LeftUpperArm",
-            "color1": "Red",
-            "color2": "Red",
+            "color1": "Yellow",
+            "color2": "Yellow",
+            "frequency": 20
+        },
+        {
+            "name": "LeftForeArm",
+            "color1": "Pink",
+            "color2": "Pink",
             "frequency": 20
         }
     ],
