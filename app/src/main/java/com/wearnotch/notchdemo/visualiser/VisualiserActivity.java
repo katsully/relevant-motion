@@ -56,6 +56,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+// OSC imports
+import com.illposed.osc.utility.OSCPacketDispatcher;
+import java.net.*;
+import java.util.*;
+import com.illposed.osc.*;
+
 public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private static final String TAG = "Visualiser";
 
@@ -155,6 +161,9 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
 
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
         decimalFormat = new DecimalFormat("0.000", otherSymbols);
+
+        // Start the thread that sends messages
+        oscThread.start();
     }
 
     @Subscribe
@@ -568,6 +577,9 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
                 // Lateral tilt (side bend) is rotation around global Z axis
                 .append("Lateral tilt left(-)/right(+): ").append((int)chestAngles.get(2)).append("°\n");
 
+        bone01[0] = (int)elbowAngles.get(0);
+        System.out.println(bone01[0]);
+
         mAnglesText.setText(sb.toString());
     }
 
@@ -773,4 +785,78 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
         }
     }
 
+    Object[] bone01 = new Object[1];
+
+    /* ---- OSC SECTION ----
+   * These two variables hold the IP address and port number.
+   * You should change them to the appropriate address and port.
+   */
+    private String myIP = "172.16.44.109"; // the IP of the computer sending OSC to...
+    private int myPort = 8000;
+    public OSCPortOut oscPortOut;  // This is used to send messages
+    private int OSCdelay = 40; // interval for sending OSC data
+
+    // This thread will contain all the code that pertains to OSC
+    private Thread oscThread = new Thread() {
+        @Override
+        public void run() {
+            /* The first part of the run() method initializes the OSCPortOut for sending messages.
+             * For more advanced apps, where you want to change the address during runtime, you will want
+             * to have this section in a different thread, but since we won't be changing addresses here,
+             * we only have to initialize the address once.
+             */
+            try {
+                // Connect to some IP address and port
+                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+            } catch(UnknownHostException e) {
+                // Error handling when your IP isn't found
+                return;
+            } catch(Exception e) {
+                // Error handling for any other errors
+                return;
+            }
+
+            // TODO: make OSC streaming toggle-able
+            while (true) {
+                if (oscPortOut != null) {
+
+//                    bone01[0] = "test";
+
+
+                    // construct osc messages w arrays from mRealtime log function
+                    OSCMessage bone01PosX = new OSCMessage("/notch/test", Arrays.asList(bone01[0]));
+//                    OSCMessage bone01PosY = new OSCMessage("/notch/"+ bone01[0] +"/pos/y", Arrays.asList(bone01[2]));
+//                    OSCMessage bone01PosZ = new OSCMessage("/notch/"+ bone01[0] +"/pos/z", Arrays.asList(bone01[3]));
+//                    OSCMessage bone01RotX = new OSCMessage("/notch/"+ bone02[0] +"/rot/x", Arrays.asList(bone01[4]));
+//                    OSCMessage bone01RotY = new OSCMessage("/notch/"+ bone02[0] +"/rot/y", Arrays.asList(bone01[5]));
+//                    OSCMessage bone01RotZ = new OSCMessage("/notch/"+ bone02[0] +"/rot/z", Arrays.asList(bone01[6]));
+//                    OSCMessage bone01OriX = new OSCMessage("/notch/"+ bone01[0] +"/ori/x", Arrays.asList(bone01[4]));
+//                    OSCMessage bone01OriY = new OSCMessage("/notch/"+ bone01[0] +"/ori/y", Arrays.asList(bone01[5]));
+//                    OSCMessage bone01OriZ = new OSCMessage("/notch/"+ bone01[0] +"/ori/z", Arrays.asList(bone01[6]));
+//                    OSCMessage bone01OriW = new OSCMessage("/notch/"+ bone01[0] +"/ori/w", Arrays.asList(bone01[7]));
+
+                    try {
+                        // make osc bundles and add osc messages to them
+                        OSCBundle bone01bundle = new OSCBundle();
+                        bone01bundle.addPacket(bone01PosX);
+//                        bone01bundle.addPacket(bone01PosY);
+//                        bone01bundle.addPacket(bone01PosZ);
+//                        bone01bundle.addPacket(bone01RotX);
+//                        bone01bundle.addPacket(bone01RotY);
+//                        bone01bundle.addPacket(bone01RotZ);
+
+
+                        // send the bundles
+                        oscPortOut.send(bone01bundle);
+
+
+                        sleep(OSCdelay); // pause so it's not sending LOADS of OSC
+
+                    } catch (Exception e) {
+                        // Error handling for some error
+                    }
+                }
+            }
+        }
+    };
 }
