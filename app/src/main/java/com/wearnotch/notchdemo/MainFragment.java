@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.illposed.osc.utility.OSCPacketDispatcher;
 import com.wearnotch.db.model.Device;
 import com.wearnotch.db.NotchDataBase;
 import com.wearnotch.framework.ActionDevice;
@@ -43,7 +42,6 @@ import com.wearnotch.framework.NotchNetwork;
 import com.wearnotch.framework.Skeleton;
 import com.wearnotch.framework.Workout;
 import com.wearnotch.internal.util.IOUtil;
-import com.wearnotch.notchdemo.math.Vector3;
 import com.wearnotch.notchdemo.util.Util;
 import com.wearnotch.notchdemo.visualiser.VisualiserActivity;
 import com.wearnotch.notchdemo.visualiser.VisualizerSettings;
@@ -54,6 +52,7 @@ import com.wearnotch.service.common.NotchError;
 import com.wearnotch.service.common.NotchProgress;
 import com.wearnotch.framework.visualiser.VisualiserData;
 import com.wearnotch.notchdemo.math.Quaternion;
+
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -269,7 +268,7 @@ public class MainFragment extends BaseFragment {
         }
 
         // Start the thread that sends messages
-//        oscThread.start();
+        oscThread.start();
     }
 
     @Override
@@ -673,13 +672,11 @@ public class MainFragment extends BaseFragment {
     long mUpdateStartTime;
     long mRefreshTime = 20;
     // Bone Object format: [0]=name, [1]=posX, [2]=posY, [3]=posZ, [4]=oriX, [5]=oriY, [6]=oriZ, [7]=oriW
-    Object[] bone01 = new Object[8];
-    Object[] bone02 = new Object[8];
-    Object[] bone03 = new Object[8];
-    Object[] bone04 = new Object[8];
-    Object[] bone05 = new Object[8];
+    Object[] bone01 = new Object[11];
+    Object[] bone02 = new Object[11];
+    Object[] bone03 = new Object[11];
 
-    int multiplier = 100;
+    int multiplier = 5;
 
 
     // TESTING relative angle function
@@ -693,13 +690,7 @@ public class MainFragment extends BaseFragment {
     fvec3 elbowAngles = new fvec3();
     Skeleton mSkeleton;
 
-
-    //    Object[] bone04 = new Object[7];
-//    Object[] bone05 = new Object[7];
-//    Object[] bone06 = new Object[7];
-    Object[] bones = {bone01, bone02, bone03, bone04, bone05};
-//    Object[] bones = {bone01, bone02, bone03, bone04, bone05, bone06};
-//    OSCBundle bone02bundle = new OSCBundle(); // tried to be efficient in mLogRealTimeData by making OSC messsges and bundles here but it broke after a few seconds of running
+    Object[] bones = { bone01, bone02, bone03 };
 
     Runnable mLogRealTimeData = new Runnable() {
         @Override
@@ -718,6 +709,15 @@ public class MainFragment extends BaseFragment {
             if (currentFrame > mRealTimeData.getFrameCount() - 1) {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
+
+
+
+
+
+
+
+
+
 
 //            int frameIndex = mRealTimeData.getFrameCount();
 //
@@ -766,143 +766,84 @@ public class MainFragment extends BaseFragment {
 
                 String boneName = b.getName();
 
+                // --- QUATERNIONS ---
+                // Notch SDK quat FORMAT: W, X, Y, Z
+                // library quat FORMAT:   X, Y, Z, W
+
+                // --- relative angle ---
+//                Bone foreArm = mSkeleton.getBone("RightForeArm");
+//                Bone upperArm = mSkeleton.getBone("RightUpperArm");
+//                mRealTimeData.calculateRelativeAngle(foreArm, upperArm, frameIndex, elbowAngles);
+//                System.out.println((float)elbowAngles.get(0));
+
                 if ( boneName.equals("ChestBottom") ) {
-                    bone01[0] = b.getName();                                  // bone name
+                    bone01[0] = b.getName(); // bone name
+                    // pos
                     bone01[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
                     bone01[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone01[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // Euler
-//                    Quaternion bone01quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone01[4] = bone01quat.getPitch();  // x
-//                    bone01[5] = bone01quat.getYaw();    // y
-//                    bone01[6] = bone01quat.getRoll();   // z
-                    // Quat
-                    bone01[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // x
-                    bone01[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-                    bone01[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-                    bone01[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
-
-                }
-
-                else if ( boneName.equals("RightForeArm") ) {
-                    bone02[0] = b.getName();                                  // bone name
-                    bone02[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    bone02[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    bone02[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // E
-//                    Quaternion bone02quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone02[4] = bone02quat.getPitch();  // x
-//                    bone02[5] = bone02quat.getYaw();    // y
-//                    bone02[6] = bone02quat.getRoll();   // z
-                    // Q
-//                    Bone foreArm = mSkeleton.getBone("RightForeArm");
-//                    Bone upperArm = mSkeleton.getBone("RightUpperArm");
-//                    mRealTimeData.calculateRelativeAngle(foreArm, upperArm, frameIndex, elbowAngles);
-//                    System.out.println((float)elbowAngles.get(0));
-                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // x
-                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
-
-//                    bone02[4] = mRealTimeData.calculateRelativeAngle(b,currentFrame).get(0);  // x
-//                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-//                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-//                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
+                    // Quat (ori)
+                    bone01[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w or a
+                    bone01[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x or i
+                    bone01[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y or j
+                    bone01[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z or k
+                    // Euler (rot)
+//                    Quaternion bone01quat = new Quaternion( (float)bone01[5], (float)bone01[6], (float)bone01[7], (float)bone01[4] ); // android lib: X, Y, Z, W
+                    Quaternion bone01quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+                    bone01[8]  = bone01quat.getPitch();   // x
+                    bone01[9]  = bone01quat.getYaw();     // y
+                    bone01[10] = bone01quat.getRoll();    // z
                 }
 
                 else if ( boneName.equals("RightUpperArm") ) {
-                    bone03[0] = b.getName();                                  // bone name
+                    bone02[0] = b.getName();  // bone name
+                    // pos
+                    bone02[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
+                    bone02[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
+                    bone02[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
+                    // ori
+                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
+                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
+                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
+                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
+                    // rot
+                    // can only run Quaternion once, then following become confused...
+//                    Quaternion bone02quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+                    Quaternion bone02quat = new Quaternion( (float)bone02[5], (float)bone02[6], (float)bone02[7], (float)bone02[4] ); // android lib: X, Y, Z, W
+                    bone02[8]  = bone02quat.getPitch();   // x
+                    bone02[9]  = bone02quat.getYaw();     // y
+                    bone02[10] = bone02quat.getRoll();    // z
+                }
+
+                else if ( boneName.equals("RightForeArm") ) {
+                    bone03[0] = b.getName(); // bone name
+                    // pos
                     bone03[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
                     bone03[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
                     bone03[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // E
-//                    Quaternion bone03quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone03[4] = bone03quat.getPitch();  // x
-//                    bone03[5] = bone03quat.getYaw();    // y
-//                    bone03[6] = bone03quat.getRoll();   // z
-                    // Q
-                    bone03[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // x
-                    bone03[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-                    bone03[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-                    bone03[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
+                    // ori
+                    bone03[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
+                    bone03[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
+                    bone03[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
+                    bone03[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
+                    // rot
+//                    Quaternion bone03quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+                    Quaternion bone03quat = new Quaternion( (float)bone03[5], (float)bone03[6], (float)bone03[7], (float)bone03[4] ); // android lib: X, Y, Z, W
+                    bone03[8]  = bone03quat.getPitch();   // x
+                    bone03[9]  = bone03quat.getYaw();     // y
+                    bone03[10] = bone03quat.getRoll();    // z
+
+
+                    // tried to use another quat lib but didnt work...
+//                    double[]  = new double[3];
+//                    double [] nums = new double[3];
+//                    double[] tt = quaternion2Euler( (float)bone03[4], (float)bone03[5], (float)bone03[6], (float)bone03[7], nums);
+//                    System.out.println(tt[0]);
+//                    System.out.println(nums[0]);
+
+//                    quaternion2Euler( q, res, "XYZ");
+
                 }
-
-//                else if ( boneName.equals("LeftUpperArm") ) {
-//                    bone04[0] = b.getName();                                  // bone name
-//                    bone04[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone04[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone04[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    // E
-////                    Quaternion bone03quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-////                    bone04[4] = bone03quat.getPitch();  // x
-////                    bone04[5] = bone03quat.getYaw();    // y
-////                    bone04[6] = bone03quat.getRoll();   // z
-//                    // Q
-//                    bone04[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // x
-//                    bone04[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-//                    bone04[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-//                    bone04[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
-//                }
-//
-//                else if ( boneName.equals("LeftForeArm") ) {
-//                    bone05[0] = b.getName();                                  // bone name
-//                    bone05[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone05[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone05[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    // E
-////                    Quaternion bone03quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-////                    bone05[4] = bone05quat.getPitch();  // x
-////                    bone05[5] = bone05quat.getYaw();    // y
-////                    bone05[6] = bone05quat.getRoll();   // z
-//                    // Q
-//                    bone05[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // x
-//                    bone05[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // y
-//                    bone05[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // z
-//                    bone05[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // w
-//                }
-
-                // TESTING relative angle... but returns a single float, not a vec3, hows that helpful?
-//                boneChild = b;
-//                boneParent = b.getParent();
-//                bone03[4] = mRealTimeData.calculateRelativeAngle(b, currentFrame, outVec3A, outVec3B);
-////                    bone03[4] = mRealTimeData.calculateRelativeAngle(b, currentFrame, outVec3);
-//                System.out.println(bone03[4]);
-
-
-//                else if ( boneName.equals("RightForeArm") ) {
-//                    bone04[0] = b.getName();                                  // bone name
-//                    bone04[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone04[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone04[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    Quaternion bone04quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone04[4] = bone04quat.getPitch();  // x
-//                    bone04[5] = bone04quat.getYaw();    // y
-//                    bone04[6] = bone04quat.getRoll();   // z
-//                }
-//
-//                else if ( boneName.equals("LeftUpperArm") ) {
-//                    bone05[0] = b.getName();                                  // bone name
-//                    bone05[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone05[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone05[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    Quaternion bone05quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone05[4] = bone05quat.getPitch();  // x
-//                    bone05[5] = bone05quat.getYaw();    // y
-//                    bone05[6] = bone05quat.getRoll();   // z
-//                }
-//
-//                else if ( boneName.equals("LeftForeArm") ) {
-//                    bone06[0] = b.getName();                                  // bone name
-//                    bone06[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone06[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone06[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    Quaternion bone06quat = new Quaternion(mRealTimeData.getQ(b,currentFrame).get(0), mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3));
-//                    bone06[4] = bone06quat.getPitch();  // x
-//                    bone06[5] = bone06quat.getYaw();    // y
-//                    bone06[6] = bone06quat.getRoll();   // z
-//                }
-
-
 
 
                 // NOTE: didnt work well this way, breaks after a few seconds...
@@ -1478,229 +1419,196 @@ public class MainFragment extends BaseFragment {
     }
 
 
-//
-//    /* ---- OSC SECTION ----
-//     * These two variables hold the IP address and port number.
-//     * You should change them to the appropriate address and port.
-//     */
-//    private String myIP = "192.168.1.7"; // the IP of the computer sending OSC to...
-//    private int myPort = 8000;
-//    public OSCPortOut oscPortOut;  // This is used to send messages
-//    private int OSCdelay = 40; // interval for sending OSC data
-//
-//    // This thread will contain all the code that pertains to OSC
-//    private Thread oscThread = new Thread() {
-//        @Override
-//        public void run() {
-//            /* The first part of the run() method initializes the OSCPortOut for sending messages.
-//             * For more advanced apps, where you want to change the address during runtime, you will want
-//             * to have this section in a different thread, but since we won't be changing addresses here,
-//             * we only have to initialize the address once.
-//             */
-//
-//            try {
-//                // Connect to some IP address and port
-//                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
-//            } catch(UnknownHostException e) {
-//                // Error handling when your IP isn't found
-//                return;
-//            } catch(Exception e) {
-//                // Error handling for any other errors
-//                return;
-//            }
-//
-//            // TODO: make OSC streaming toggle-able
-//            while (true) {
-//                if (oscPortOut != null) {
-//
-//                    // construct osc messages w arrays from mRealtime log function
-//                    OSCMessage bone01PosX = new OSCMessage("/notch/"+ bone01[0] +"/pos/x", Arrays.asList(bone01[1]));
-//                    OSCMessage bone01PosY = new OSCMessage("/notch/"+ bone01[0] +"/pos/y", Arrays.asList(bone01[2]));
-//                    OSCMessage bone01PosZ = new OSCMessage("/notch/"+ bone01[0] +"/pos/z", Arrays.asList(bone01[3]));
-////                    OSCMessage bone01RotX = new OSCMessage("/notch/"+ bone02[0] +"/rot/x", Arrays.asList(bone01[4]));
-////                    OSCMessage bone01RotY = new OSCMessage("/notch/"+ bone02[0] +"/rot/y", Arrays.asList(bone01[5]));
-////                    OSCMessage bone01RotZ = new OSCMessage("/notch/"+ bone02[0] +"/rot/z", Arrays.asList(bone01[6]));
-////                    OSCMessage bone01OriX = new OSCMessage("/notch/"+ bone01[0] +"/ori/x", Arrays.asList(bone01[4]));
-////                    OSCMessage bone01OriY = new OSCMessage("/notch/"+ bone01[0] +"/ori/y", Arrays.asList(bone01[5]));
-////                    OSCMessage bone01OriZ = new OSCMessage("/notch/"+ bone01[0] +"/ori/z", Arrays.asList(bone01[6]));
-////                    OSCMessage bone01OriW = new OSCMessage("/notch/"+ bone01[0] +"/ori/w", Arrays.asList(bone01[7]));
-//
-//
-//                    OSCMessage bone02PosX = new OSCMessage("/notch/"+ bone02[0] +"/pos/x", Arrays.asList(bone02[1]));
-//                    OSCMessage bone02PosY = new OSCMessage("/notch/"+ bone02[0] +"/pos/y", Arrays.asList(bone02[2]));
-//                    OSCMessage bone02PosZ = new OSCMessage("/notch/"+ bone02[0] +"/pos/z", Arrays.asList(bone02[3]));
-//
-////                    OSCMessage bone02RotX = new OSCMessage("/notch/"+ bone02[0] +"/rot/x", Arrays.asList(bone02[4]));
-////                    OSCMessage bone02RotY = new OSCMessage("/notch/"+ bone02[0] +"/rot/y", Arrays.asList(bone02[5]));
-////                    OSCMessage bone02RotZ = new OSCMessage("/notch/"+ bone02[0] +"/rot/z", Arrays.asList(bone02[6]));
-//                    OSCMessage bone02OriX = new OSCMessage("/notch/"+ bone02[0] +"/ori/x", Arrays.asList(bone02[4]));
-//                    OSCMessage bone02OriY = new OSCMessage("/notch/"+ bone02[0] +"/ori/y", Arrays.asList(bone02[5]));
-//                    OSCMessage bone02OriZ = new OSCMessage("/notch/"+ bone02[0] +"/ori/z", Arrays.asList(bone02[6]));
-//                    OSCMessage bone02OriW = new OSCMessage("/notch/"+ bone02[0] +"/ori/w", Arrays.asList(bone02[7]));
-//
-//
-//                    OSCMessage bone03PosX = new OSCMessage("/notch/"+ bone03[0] +"/pos/x", Arrays.asList(bone03[1]));
-//                    OSCMessage bone03PosY = new OSCMessage("/notch/"+ bone03[0] +"/pos/y", Arrays.asList(bone03[2]));
-//                    OSCMessage bone03PosZ = new OSCMessage("/notch/"+ bone03[0] +"/pos/z", Arrays.asList(bone03[3]));
-////                    OSCMessage bone03RotX = new OSCMessage("/notch/"+ bone03[0] +"/rot/x", Arrays.asList(bone03[4]));
-////                    OSCMessage bone03RotY = new OSCMessage("/notch/"+ bone03[0] +"/rot/y", Arrays.asList(bone03[5]));
-////                    OSCMessage bone03RotZ = new OSCMessage("/notch/"+ bone03[0] +"/rot/z", Arrays.asList(bone03[6]));
-//                    OSCMessage bone03OriX = new OSCMessage("/notch/"+ bone03[0] +"/ori/x", Arrays.asList(bone03[4]));
-//                    OSCMessage bone03OriY = new OSCMessage("/notch/"+ bone03[0] +"/ori/y", Arrays.asList(bone03[5]));
-//                    OSCMessage bone03OriZ = new OSCMessage("/notch/"+ bone03[0] +"/ori/z", Arrays.asList(bone03[6]));
-//                    OSCMessage bone03OriW = new OSCMessage("/notch/"+ bone03[0] +"/ori/w", Arrays.asList(bone03[7]));
-//
-//
-////                    OSCMessage bone04PosX = new OSCMessage("/notch/"+ bone04[0] +"/pos/x", Arrays.asList(bone04[1]));
-////                    OSCMessage bone04PosY = new OSCMessage("/notch/"+ bone04[0] +"/pos/y", Arrays.asList(bone04[2]));
-////                    OSCMessage bone04PosZ = new OSCMessage("/notch/"+ bone04[0] +"/pos/z", Arrays.asList(bone04[3]));
-////
-////                    OSCMessage bone04OriX = new OSCMessage("/notch/"+ bone04[0] +"/ori/x", Arrays.asList(bone04[4]));
-////                    OSCMessage bone04OriY = new OSCMessage("/notch/"+ bone04[0] +"/ori/y", Arrays.asList(bone04[5]));
-////                    OSCMessage bone04OriZ = new OSCMessage("/notch/"+ bone04[0] +"/ori/z", Arrays.asList(bone04[6]));
-////                    OSCMessage bone04OriW = new OSCMessage("/notch/"+ bone04[0] +"/ori/w", Arrays.asList(bone04[7]));
-////
-////
-////                    OSCMessage bone05PosX = new OSCMessage("/notch/"+ bone05[0] +"/pos/x", Arrays.asList(bone05[1]));
-////                    OSCMessage bone05PosY = new OSCMessage("/notch/"+ bone05[0] +"/pos/y", Arrays.asList(bone05[2]));
-////                    OSCMessage bone05PosZ = new OSCMessage("/notch/"+ bone05[0] +"/pos/z", Arrays.asList(bone05[3]));
-////
-////                    OSCMessage bone05OriX = new OSCMessage("/notch/"+ bone05[0] +"/ori/x", Arrays.asList(bone05[4]));
-////                    OSCMessage bone05OriY = new OSCMessage("/notch/"+ bone05[0] +"/ori/y", Arrays.asList(bone05[5]));
-////                    OSCMessage bone05OriZ = new OSCMessage("/notch/"+ bone05[0] +"/ori/z", Arrays.asList(bone05[6]));
-////                    OSCMessage bone05OriW = new OSCMessage("/notch/"+ bone05[0] +"/ori/w", Arrays.asList(bone05[7]));
-//
-//
-////                    OSCMessage bone05PosX = new OSCMessage("/notch/"+ bone05[0] +"/pos/x", Arrays.asList(bone05[1]));
-////                    OSCMessage bone05PosY = new OSCMessage("/notch/"+ bone05[0] +"/pos/y", Arrays.asList(bone05[2]));
-////                    OSCMessage bone05PosZ = new OSCMessage("/notch/"+ bone05[0] +"/pos/z", Arrays.asList(bone05[3]));
-////                    OSCMessage bone05RotX = new OSCMessage("/notch/"+ bone05[0] +"/rot/x", Arrays.asList(bone05[4]));
-////                    OSCMessage bone05RotY = new OSCMessage("/notch/"+ bone05[0] +"/rot/y", Arrays.asList(bone05[5]));
-////                    OSCMessage bone05RotZ = new OSCMessage("/notch/"+ bone05[0] +"/rot/z", Arrays.asList(bone05[6]));
-////
-////                    OSCMessage bone06PosX = new OSCMessage("/notch/"+ bone06[0] +"/pos/x", Arrays.asList(bone06[1]));
-////                    OSCMessage bone06PosY = new OSCMessage("/notch/"+ bone06[0] +"/pos/y", Arrays.asList(bone06[2]));
-////                    OSCMessage bone06PosZ = new OSCMessage("/notch/"+ bone06[0] +"/pos/z", Arrays.asList(bone06[3]));
-////                    OSCMessage bone06RotX = new OSCMessage("/notch/"+ bone06[0] +"/rot/x", Arrays.asList(bone06[4]));
-////                    OSCMessage bone06RotY = new OSCMessage("/notch/"+ bone06[0] +"/rot/y", Arrays.asList(bone06[5]));
-////                    OSCMessage bone06RotZ = new OSCMessage("/notch/"+ bone06[0] +"/rot/z", Arrays.asList(bone06[6]));
-//
-//
-//                    // TODO clever for looping of bones thus less code
-////                    for (Object x:bones)
-////                    {
-////                        System.out.println(x);
-////                    }
-//
-//                    try {
-//                        // make osc bundles and add osc messages to them
-//                        OSCBundle bone01bundle = new OSCBundle();
-//                        bone01bundle.addPacket(bone01PosX);
-//                        bone01bundle.addPacket(bone01PosY);
-//                        bone01bundle.addPacket(bone01PosZ);
-////                        bone01bundle.addPacket(bone01RotX);
-////                        bone01bundle.addPacket(bone01RotY);
-////                        bone01bundle.addPacket(bone01RotZ);
-//
-//                        // old way- sending quaternions
-//                        // TODO option to send Quaternion or Euler angles
-////                        bone01bundle.addPacket(bone01OriX);
-////                        bone01bundle.addPacket(bone01OriY);
-////                        bone01bundle.addPacket(bone01OriZ);
-////                        bone01bundle.addPacket(bone01OriW);
-//
-//                        OSCBundle bone02bundle = new OSCBundle();
-//                        bone02bundle.addPacket(bone02PosX);
-//                        bone02bundle.addPacket(bone02PosY);
-//                        bone02bundle.addPacket(bone02PosZ);
-////                        bone02bundle.addPacket(bone02RotX);
-////                        bone02bundle.addPacket(bone02RotY);
-////                        bone02bundle.addPacket(bone02RotZ);
-//                        bone02bundle.addPacket(bone02OriX);
-//                        bone02bundle.addPacket(bone02OriY);
-//                        bone02bundle.addPacket(bone02OriZ);
-//                        bone02bundle.addPacket(bone02OriW);
-//
-//                        OSCBundle bone03bundle = new OSCBundle();
-//                        bone03bundle.addPacket(bone03PosX);
-//                        bone03bundle.addPacket(bone03PosY);
-//                        bone03bundle.addPacket(bone03PosZ);
-////                        bone03bundle.addPacket(bone03RotX);
-////                        bone03bundle.addPacket(bone03RotY);
-////                        bone03bundle.addPacket(bone03RotZ);
-////                        bone03bundle.addPacket(bone03OriX);
-////                        bone03bundle.addPacket(bone03OriY);
-////                        bone03bundle.addPacket(bone03OriZ);
-////                        bone03bundle.addPacket(bone03OriW);
-//
-////                        OSCBundle bone04bundle = new OSCBundle();
-////                        bone04bundle.addPacket(bone04PosX);
-////                        bone04bundle.addPacket(bone04PosY);
-////                        bone04bundle.addPacket(bone04PosZ);
-//////                        bone04bundle.addPacket(bone04RotX);
-//////                        bone04bundle.addPacket(bone04RotY);
-//////                        bone04bundle.addPacket(bone04RotZ);
-////                        bone04bundle.addPacket(bone04OriX);
-////                        bone04bundle.addPacket(bone04OriY);
-////                        bone04bundle.addPacket(bone04OriZ);
-////                        bone04bundle.addPacket(bone04OriW);
-//
-////                        OSCBundle bone05bundle = new OSCBundle();
-////                        bone05bundle.addPacket(bone05PosX);
-////                        bone05bundle.addPacket(bone05PosY);
-////                        bone05bundle.addPacket(bone05PosZ);
-//////                        bone05bundle.addPacket(bone05RotX);
-//////                        bone05bundle.addPacket(bone05RotY);
-//////                        bone05bundle.addPacket(bone05RotZ);
-////                        bone05bundle.addPacket(bone05OriX);
-////                        bone05bundle.addPacket(bone05OriY);
-////                        bone05bundle.addPacket(bone05OriZ);
-////                        bone05bundle.addPacket(bone05OriW);
-//
-////                        OSCBundle bone04bundle = new OSCBundle();
-////                        bone04bundle.addPacket(bone04PosX);
-////                        bone04bundle.addPacket(bone04PosY);
-////                        bone04bundle.addPacket(bone04PosZ);
-////                        bone04bundle.addPacket(bone04RotX);
-////                        bone04bundle.addPacket(bone04RotY);
-////                        bone04bundle.addPacket(bone04RotZ);
-////
-////                        OSCBundle bone05bundle = new OSCBundle();
-////                        bone05bundle.addPacket(bone05PosX);
-////                        bone05bundle.addPacket(bone05PosY);
-////                        bone05bundle.addPacket(bone05PosZ);
-////                        bone05bundle.addPacket(bone05RotX);
-////                        bone05bundle.addPacket(bone05RotY);
-////                        bone05bundle.addPacket(bone05RotZ);
-////
-////                        OSCBundle bone06bundle = new OSCBundle();
-////                        bone06bundle.addPacket(bone06PosX);
-////                        bone06bundle.addPacket(bone06PosY);
-////                        bone06bundle.addPacket(bone06PosZ);
-////                        bone06bundle.addPacket(bone06RotX);
-////                        bone06bundle.addPacket(bone06RotY);
-////                        bone06bundle.addPacket(bone06RotZ);
-//
-//                        // send the bundles
-//                        oscPortOut.send(bone01bundle);
-//                        oscPortOut.send(bone02bundle);
-//                        oscPortOut.send(bone03bundle);
-////                        oscPortOut.send(bone04bundle);
-////                        oscPortOut.send(bone05bundle);
-////                        oscPortOut.send(bone06bundle);
-//
-//
-////                        oscPortOut.send(bone02bundle); // breaks after a few seconds this way... of creating OSCMessages in realtime log function
-//
-//                        sleep(OSCdelay); // pause so it's not sending LOADS of OSC
-//
-//                    } catch (Exception e) {
-//                        // Error handling for some error
+
+    /* ---- OSC SECTION ----
+     * These two variables hold the IP address and port number.
+     * You should change them to the appropriate address and port.
+     */
+    private String myIP = "172.16.44.109"; // the IP of the computer sending OSC to...
+    private int myPort = 8002;
+    public OSCPortOut oscPortOut;  // This is used to send messages
+    private int OSCdelay = 40; // interval for sending OSC data
+
+    // This thread will contain all the code that pertains to OSC
+    private Thread oscThread = new Thread() {
+        @Override
+        public void run() {
+            /* The first part of the run() method initializes the OSCPortOut for sending messages.
+             * For more advanced apps, where you want to change the address during runtime, you will want
+             * to have this section in a different thread, but since we won't be changing addresses here,
+             * we only have to initialize the address once.
+             */
+
+            try {
+                // Connect to some IP address and port
+                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+            } catch(UnknownHostException e) {
+                // Error handling when your IP isn't found
+                return;
+            } catch(Exception e) {
+                // Error handling for any other errors
+                return;
+            }
+
+            // TODO: make OSC streaming toggle-able
+            while (true) {
+                if (oscPortOut != null) {
+                    // constructs osc messages w arrays from mRealtime log function
+
+                    // bone01 == ChestBottom
+                    // pos
+                    OSCMessage bone01PosX = new OSCMessage("/notch/"+ bone01[0] +"/pos/x", Arrays.asList(bone01[1]));
+                    OSCMessage bone01PosY = new OSCMessage("/notch/"+ bone01[0] +"/pos/y", Arrays.asList(bone01[2]));
+                    OSCMessage bone01PosZ = new OSCMessage("/notch/"+ bone01[0] +"/pos/z", Arrays.asList(bone01[3]));
+                    // ori (quat)
+                    OSCMessage bone01OriW = new OSCMessage("/notch/"+ bone01[0] +"/ori/w", Arrays.asList(bone01[4]));
+                    OSCMessage bone01OriX = new OSCMessage("/notch/"+ bone01[0] +"/ori/x", Arrays.asList(bone01[5]));
+                    OSCMessage bone01OriY = new OSCMessage("/notch/"+ bone01[0] +"/ori/y", Arrays.asList(bone01[6]));
+                    OSCMessage bone01OriZ = new OSCMessage("/notch/"+ bone01[0] +"/ori/z", Arrays.asList(bone01[7]));
+                    // rot
+                    OSCMessage bone01RotX = new OSCMessage("/notch/"+ bone01[0] +"/rot/x", Arrays.asList(bone01[8]));
+                    OSCMessage bone01RotY = new OSCMessage("/notch/"+ bone01[0] +"/rot/y", Arrays.asList(bone01[9]));
+                    OSCMessage bone01RotZ = new OSCMessage("/notch/"+ bone01[0] +"/rot/z", Arrays.asList(bone01[10]));
+
+
+                    // bone02 == RightUpperArm
+                    // pos
+                    OSCMessage bone02PosX = new OSCMessage("/notch/"+ bone02[0] +"/pos/x", Arrays.asList(bone02[1]));
+                    OSCMessage bone02PosY = new OSCMessage("/notch/"+ bone02[0] +"/pos/y", Arrays.asList(bone02[2]));
+                    OSCMessage bone02PosZ = new OSCMessage("/notch/"+ bone02[0] +"/pos/z", Arrays.asList(bone02[3]));
+                    // ori
+                    OSCMessage bone02OriW = new OSCMessage("/notch/"+ bone02[0] +"/ori/w", Arrays.asList(bone02[4]));
+                    OSCMessage bone02OriX = new OSCMessage("/notch/"+ bone02[0] +"/ori/x", Arrays.asList(bone02[5]));
+                    OSCMessage bone02OriY = new OSCMessage("/notch/"+ bone02[0] +"/ori/y", Arrays.asList(bone02[6]));
+                    OSCMessage bone02OriZ = new OSCMessage("/notch/"+ bone02[0] +"/ori/z", Arrays.asList(bone02[7]));
+                    // rot
+                    OSCMessage bone02RotX = new OSCMessage("/notch/"+ bone02[0] +"/rot/x", Arrays.asList(bone02[8]));
+                    OSCMessage bone02RotY = new OSCMessage("/notch/"+ bone02[0] +"/rot/y", Arrays.asList(bone02[9]));
+                    OSCMessage bone02RotZ = new OSCMessage("/notch/"+ bone02[0] +"/rot/z", Arrays.asList(bone02[10]));
+
+
+                    // bone03 == RightForeArm
+                    // pos
+                    OSCMessage bone03PosX = new OSCMessage("/notch/"+ bone03[0] +"/pos/x", Arrays.asList(bone03[1]));
+                    OSCMessage bone03PosY = new OSCMessage("/notch/"+ bone03[0] +"/pos/y", Arrays.asList(bone03[2]));
+                    OSCMessage bone03PosZ = new OSCMessage("/notch/"+ bone03[0] +"/pos/z", Arrays.asList(bone03[3]));
+                    // ori
+                    OSCMessage bone03OriW = new OSCMessage("/notch/"+ bone03[0] +"/ori/w", Arrays.asList(bone03[4]));
+                    OSCMessage bone03OriX = new OSCMessage("/notch/"+ bone03[0] +"/ori/x", Arrays.asList(bone03[5]));
+                    OSCMessage bone03OriY = new OSCMessage("/notch/"+ bone03[0] +"/ori/y", Arrays.asList(bone03[6]));
+                    OSCMessage bone03OriZ = new OSCMessage("/notch/"+ bone03[0] +"/ori/z", Arrays.asList(bone03[7]));
+                    // rot
+                    OSCMessage bone03RotX = new OSCMessage("/notch/"+ bone03[0] +"/rot/x", Arrays.asList(bone03[8]));
+                    OSCMessage bone03RotY = new OSCMessage("/notch/"+ bone03[0] +"/rot/y", Arrays.asList(bone03[9]));
+                    OSCMessage bone03RotZ = new OSCMessage("/notch/"+ bone03[0] +"/rot/z", Arrays.asList(bone03[10]));
+
+
+                    // TODO clever for looping of bones thus less code
+//                    for (Object x:bones)
+//                    {
+//                        System.out.println(x);
 //                    }
-//                }
-//            }
-//        }
-//    };
+
+                    try {
+                        // make osc bundles and add osc messages to them
+                        OSCBundle bone01bundle = new OSCBundle();
+                        // pos
+                        bone01bundle.addPacket(bone01PosX);
+                        bone01bundle.addPacket(bone01PosY);
+                        bone01bundle.addPacket(bone01PosZ);
+                        // ori
+                        bone01bundle.addPacket(bone01OriW);
+                        bone01bundle.addPacket(bone01OriX);
+                        bone01bundle.addPacket(bone01OriY);
+                        bone01bundle.addPacket(bone01OriZ);
+                        // rot
+                        bone01bundle.addPacket(bone01RotX);
+                        bone01bundle.addPacket(bone01RotY);
+                        bone01bundle.addPacket(bone01RotZ);
+
+
+                        OSCBundle bone02bundle = new OSCBundle();
+                        // pos
+                        bone02bundle.addPacket(bone02PosX);
+                        bone02bundle.addPacket(bone02PosY);
+                        bone02bundle.addPacket(bone02PosZ);
+                        // ori
+                        bone02bundle.addPacket(bone02OriW);
+                        bone02bundle.addPacket(bone02OriX);
+                        bone02bundle.addPacket(bone02OriY);
+                        bone02bundle.addPacket(bone02OriZ);
+                        // rot
+                        bone02bundle.addPacket(bone02RotX);
+                        bone02bundle.addPacket(bone02RotY);
+                        bone02bundle.addPacket(bone02RotZ);
+
+
+                        OSCBundle bone03bundle = new OSCBundle();
+                        // pos
+                        bone03bundle.addPacket(bone03PosX);
+                        bone03bundle.addPacket(bone03PosY);
+                        bone03bundle.addPacket(bone03PosZ);
+                        // ori
+                        bone03bundle.addPacket(bone03OriW);
+                        bone03bundle.addPacket(bone03OriX);
+                        bone03bundle.addPacket(bone03OriY);
+                        bone03bundle.addPacket(bone03OriZ);
+                        // rot
+                        bone03bundle.addPacket(bone03RotX);
+                        bone03bundle.addPacket(bone03RotY);
+                        bone03bundle.addPacket(bone03RotZ);
+
+                        // send the bundles
+                        oscPortOut.send(bone01bundle);
+                        oscPortOut.send(bone02bundle);
+                        oscPortOut.send(bone03bundle);
+
+
+                        // pause so it's not sending LOADS of OSC
+                        sleep(OSCdelay);
+
+                    } catch (Exception e) {
+                        // Error handling for some error
+                    }
+                }
+            }
+        }
+    };
+
+
+
+
+    // --- attempt at using another quat lib... no success ---
+    enum RotSeq{zyx, zyz, zxy, zxz, yxz, yxy, yzx, yzy, xyz, xyx, xzy,xzx};
+
+    public void twoaxisrot(double r11, double r12, double r21, double r31, double r32, double res[]){
+        res[0] = Math.atan2( r11, r12 );
+        res[1] = Math.acos ( r21 );
+        res[2] = Math.atan2( r31, r32 );
+    }
+
+    public void threeaxisrot(double r11, double r12, double r21, double r31, double r32, double res[]){
+        res[0] = Math.atan2( r31, r32 );
+        res[1] = Math.asin ( r21 );
+        res[2] = Math.atan2( r11, r12 );
+    }
+
+    public double[] quaternion2Euler(float qW, float qX, float qY, float qZ, double res[]){
+
+        threeaxisrot(
+                -2*(qY*qZ - qW*qX),
+                qW*qW - qX*qX - qY*qY + qZ*qZ,
+                2*(qX*qZ + qW*qY),
+                -2*(qX*qY - qW*qZ),
+                qW*qW + qX*qX - qY*qY - qZ*qZ,
+                res);
+
+        return res;
+    }
 
 
 }
+
+
+
+

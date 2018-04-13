@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 38.0, 78.0, 1359.0, 938.0 ],
+		"rect" : [ 38.0, 78.0, 1253.0, 938.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -113,7 +113,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3283.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 3191.0, 541.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -130,7 +129,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3203.5, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 3111.5, 541.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -147,7 +145,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3123.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 3031.0, 541.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -163,7 +160,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 3123.0, 582.0, 210.0, 22.0 ],
-					"presentation_rect" : [ 3031.0, 592.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak position 0. 0. 0."
 				}
@@ -180,7 +176,6 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
 					"patching_rect" : [ 3123.0, 622.0, 397.0, 22.0 ],
-					"presentation_rect" : [ 3031.0, 632.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "jit.gl.gridshape @shape sphere @scale 0.2 @lighting_enable 1 @layer 1"
 				}
@@ -194,7 +189,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 3103.666748, 374.999939, 70.0, 22.0 ],
-					"presentation_rect" : [ 3011.666748, 384.999939, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak 1. 1. 1."
 				}
@@ -209,7 +203,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3552.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 3460.666748, 219.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -224,7 +217,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3327.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 3235.666748, 219.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -239,7 +231,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3103.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 3011.666748, 219.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -255,7 +246,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3552.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 3460.666748, 174.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -270,7 +260,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3327.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 3235.666748, 174.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -285,7 +274,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 3103.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 3011.666748, 174.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -341,7 +329,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2557.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 2452.0, 529.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -358,7 +345,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2477.5, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 2372.5, 529.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -375,7 +361,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2397.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 2292.0, 529.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -391,7 +376,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 2397.0, 582.0, 210.0, 22.0 ],
-					"presentation_rect" : [ 2292.0, 580.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak position 0. 0. 0."
 				}
@@ -408,7 +392,6 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
 					"patching_rect" : [ 2397.0, 622.0, 397.0, 22.0 ],
-					"presentation_rect" : [ 2292.0, 620.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "jit.gl.gridshape @shape sphere @scale 0.2 @lighting_enable 1 @layer 1"
 				}
@@ -422,7 +405,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 2377.666748, 374.999939, 70.0, 22.0 ],
-					"presentation_rect" : [ 2272.666748, 372.999939, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak 1. 1. 1."
 				}
@@ -437,7 +419,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2826.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 2721.666748, 207.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -452,7 +433,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2601.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 2496.666748, 207.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -467,7 +447,6 @@
 					"outlettype" : [ "", "" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2377.666748, 209.999954, 203.0, 143.0 ],
-					"presentation_rect" : [ 2272.666748, 207.999954, 0.0, 0.0 ],
 					"setstyle" : 3,
 					"style" : "chiba"
 				}
@@ -483,7 +462,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2826.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 2721.666748, 162.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -498,7 +476,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2601.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 2496.666748, 162.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -513,7 +490,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 2377.666748, 164.999969, 50.0, 22.0 ],
-					"presentation_rect" : [ 2272.666748, 162.999969, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -569,7 +545,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1787.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 1787.0, 531.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -586,7 +561,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1707.5, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 1707.5, 531.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -603,7 +577,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1627.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 1627.0, 531.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -619,7 +592,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 1627.0, 582.0, 210.0, 22.0 ],
-					"presentation_rect" : [ 1627.0, 582.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak position 0. 0. 0."
 				}
@@ -636,7 +608,6 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
 					"patching_rect" : [ 1627.0, 622.0, 397.0, 22.0 ],
-					"presentation_rect" : [ 1627.0, 622.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "jit.gl.gridshape @shape sphere @scale 0.2 @lighting_enable 1 @layer 1"
 				}
@@ -654,7 +625,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 1047.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 1047.0, 530.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -671,7 +641,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 967.5, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 967.5, 530.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -688,7 +657,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 887.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 887.0, 530.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
@@ -704,7 +672,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 887.0, 582.0, 210.0, 22.0 ],
-					"presentation_rect" : [ 887.0, 581.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "pak position 0. 0. 0."
 				}
@@ -721,7 +688,6 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
 					"patching_rect" : [ 887.0, 622.0, 397.0, 22.0 ],
-					"presentation_rect" : [ 887.0, 621.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "jit.gl.gridshape @shape sphere @scale 0.2 @lighting_enable 1 @layer 1"
 				}
@@ -739,7 +705,6 @@
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 264.0, 531.0, 50.0, 22.0 ],
-					"presentation_rect" : [ 628.0, 415.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 

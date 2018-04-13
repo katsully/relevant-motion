@@ -578,7 +578,7 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
                 .append("Lateral tilt left(-)/right(+): ").append((int)chestAngles.get(2)).append("°\n");
 
         bone01[0] = (int)elbowAngles.get(0);
-        System.out.println(bone01[0]);
+//        System.out.println(bone01[0]);
 
         mAnglesText.setText(sb.toString());
     }
