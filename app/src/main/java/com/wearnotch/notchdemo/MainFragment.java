@@ -711,33 +711,25 @@ public class MainFragment extends BaseFragment {
             }
 
 
-
-
-
-
-
-
-
-
 //            int frameIndex = mRealTimeData.getFrameCount();
 //
-//            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
-//            Bone chest = mSkeleton.getBone("ChestTop");
-//            Bone root = mSkeleton.getRoot();
-//            Bone foreArm = mSkeleton.getBone("RightForeArm");
-//            Bone upperArm = mSkeleton.getBone("RightUpperArm");
-//            // Calculate forearm angles with respect to upper arm (determine elbow joint angles).
-//            // Angles correspond to rotations around X,Y and Z axis of the paren bone's coordinate system, respectively.
-//            // The coordinate system is X-left, Y-up, Z-front aligned.
-//            // Default orientations are defined in the steady pose (in the skeleton file)
-//            // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
-//            mRealTimeData.calculateRelativeAngle(foreArm, upperArm, frameIndex, elbowAngles);
-//
-//            // Calculate chest angles with respect root, i.e. absolute angles
-//            // The root orientation is the always the same as in the steady pose.
-//            mRealTimeData.calculateRelativeAngle(chest, root, frameIndex, chestAngles);
-//
-//            // Show angles
+            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
+            Bone chest = mSkeleton.getBone("ChestTop");
+            Bone root = mSkeleton.getRoot();
+            Bone foreArm = mSkeleton.getBone("RightForeArm");
+            Bone upperArm = mSkeleton.getBone("RightUpperArm");
+            // Calculate forearm angles with respect to upper arm (determine elbow joint angles).
+            // Angles correspond to rotations around X,Y and Z axis of the paren bone's coordinate system, respectively.
+            // The coordinate system is X-left, Y-up, Z-front aligned.
+            // Default orientations are defined in the steady pose (in the skeleton file)
+            // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
+            mRealTimeData.calculateRelativeAngle(foreArm, upperArm, currentFrame, elbowAngles);
+
+            // Calculate chest angles with respect root, i.e. absolute angles
+            // The root orientation is the always the same as in the steady pose.
+//                                                                                                                                                                                                                                   mRealTimeData.calculateRelativeAngle(chest, root, currentFrame, chestAngles);
+
+            // Show angles
 //            StringBuilder sb = new StringBuilder();
 //            sb.append("Elbow angles:\n")
 //                    // Extension/flexion is rotation around the upperarm's X-axis
@@ -754,7 +746,12 @@ public class MainFragment extends BaseFragment {
 //
 ////            mAnglesText.setText(sb.toString());
 //            System.out.println((int)elbowAngles.get(0));
-//            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
+            bone03[8]   = elbowAngles.get(2);  // x
+            bone03[9]   = elbowAngles.get(1);  // y
+            bone03[10]  = elbowAngles.get(0);  // z
+
+
+            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
 
 
 
@@ -789,10 +786,10 @@ public class MainFragment extends BaseFragment {
                     bone01[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z or k
                     // Euler (rot)
 //                    Quaternion bone01quat = new Quaternion( (float)bone01[5], (float)bone01[6], (float)bone01[7], (float)bone01[4] ); // android lib: X, Y, Z, W
-                    Quaternion bone01quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-                    bone01[8]  = bone01quat.getPitch();   // x
-                    bone01[9]  = bone01quat.getYaw();     // y
-                    bone01[10] = bone01quat.getRoll();    // z
+//                    Quaternion bone01quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+//                    bone01[8]  = bone01quat.getPitch();   // x
+//                    bone01[9]  = bone01quat.getYaw();     // y
+//                    bone01[10] = bone01quat.getRoll();    // z
                 }
 
                 else if ( boneName.equals("RightUpperArm") ) {
@@ -809,10 +806,10 @@ public class MainFragment extends BaseFragment {
                     // rot
                     // can only run Quaternion once, then following become confused...
 //                    Quaternion bone02quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-                    Quaternion bone02quat = new Quaternion( (float)bone02[5], (float)bone02[6], (float)bone02[7], (float)bone02[4] ); // android lib: X, Y, Z, W
-                    bone02[8]  = bone02quat.getPitch();   // x
-                    bone02[9]  = bone02quat.getYaw();     // y
-                    bone02[10] = bone02quat.getRoll();    // z
+//                    Quaternion bone02quat = new Quaternion( (float)bone02[5], (float)bone02[6], (float)bone02[7], (float)bone02[4] ); // android lib: X, Y, Z, W
+//                    bone02[8]  = bone02quat.getPitch();   // x
+//                    bone02[9]  = bone02quat.getYaw();     // y
+//                    bone02[10] = bone02quat.getRoll();    // z
                 }
 
                 else if ( boneName.equals("RightForeArm") ) {
@@ -828,10 +825,10 @@ public class MainFragment extends BaseFragment {
                     bone03[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
                     // rot
 //                    Quaternion bone03quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-                    Quaternion bone03quat = new Quaternion( (float)bone03[5], (float)bone03[6], (float)bone03[7], (float)bone03[4] ); // android lib: X, Y, Z, W
-                    bone03[8]  = bone03quat.getPitch();   // x
-                    bone03[9]  = bone03quat.getYaw();     // y
-                    bone03[10] = bone03quat.getRoll();    // z
+//                    Quaternion bone03quat = new Quaternion( (float)bone03[5], (float)bone03[6], (float)bone03[7], (float)bone03[4] ); // android lib: X, Y, Z, W
+//                    bone03[8]  = bone03quat.getPitch();   // x
+//                    bone03[9]  = bone03quat.getYaw();     // y
+//                    bone03[10] = bone03quat.getRoll();    // z
 
 
                     // tried to use another quat lib but didnt work...
@@ -845,28 +842,6 @@ public class MainFragment extends BaseFragment {
 
                 }
 
-
-                // NOTE: didnt work well this way, breaks after a few seconds...
-//                if ( boneName.equals("Hip") ) {
-//                    bone02[0] = b.getName();                                  // bone name
-//                    bone02[1] = mRealTimeData.getPos(b,currentFrame).get(0);  // x
-//                    bone02[2] = mRealTimeData.getPos(b,currentFrame).get(1);  // y
-//                    bone02[3] = mRealTimeData.getPos(b,currentFrame).get(2);  // z
-//                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);    // x
-//                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);    // y
-//                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);    // z
-//                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // w
-//                    //  bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);    // w // one way
-////                    bone02.add(mRealTimeData.getQ(b,currentFrame).get(3));    // w // another way
-//
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/x", Arrays.asList(bone02[1]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/y", Arrays.asList(bone02[2]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/pos/z", Arrays.asList(bone02[3]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/x", Arrays.asList(bone02[4]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/y", Arrays.asList(bone02[5]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/z", Arrays.asList(bone02[6]) ));
-//                    bone02bundle.addPacket(new OSCMessage("/notch/"+ bone02[0] +"/ori/w", Arrays.asList(bone02[7]) ));
-//                }
 
             }
 
@@ -1424,7 +1399,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "172.16.44.109"; // the IP of the computer sending OSC to...
+    private String myIP = "192.168.0.23"; // the IP of the computer sending OSC to...
     private int myPort = 8002;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data

@@ -53,7 +53,7 @@
 							"modernui" : 1
 						}
 ,
-						"rect" : [ 117.0, 346.0, 1219.0, 611.0 ],
+						"rect" : [ 321.0, 263.0, 1219.0, 611.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -88,7 +88,6 @@
 									"numinlets" : 1,
 									"numoutlets" : 0,
 									"patching_rect" : [ 495.0, 545.0, 150.0, 20.0 ],
-									"presentation_rect" : [ 494.0, 542.0, 0.0, 0.0 ],
 									"style" : "",
 									"text" : "quat always works... "
 								}
@@ -652,6 +651,15 @@
 							}
 , 							{
 								"patchline" : 								{
+									"destination" : [ "obj-21", 0 ],
+									"disabled" : 0,
+									"hidden" : 0,
+									"source" : [ "obj-14", 0 ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
 									"destination" : [ "obj-11", 0 ],
 									"disabled" : 0,
 									"hidden" : 0,
@@ -841,16 +849,7 @@
 							}
 , 							{
 								"patchline" : 								{
-									"destination" : [ "obj-21", 0 ],
-									"disabled" : 0,
-									"hidden" : 0,
-									"source" : [ "obj-4", 0 ]
-								}
-
-							}
-, 							{
-								"patchline" : 								{
-									"destination" : [ "obj-4", 2 ],
+									"destination" : [ "obj-4", 3 ],
 									"disabled" : 0,
 									"hidden" : 0,
 									"source" : [ "obj-41", 0 ]
@@ -913,7 +912,7 @@
 							}
 , 							{
 								"patchline" : 								{
-									"destination" : [ "obj-4", 3 ],
+									"destination" : [ "obj-4", 2 ],
 									"disabled" : 0,
 									"hidden" : 0,
 									"source" : [ "obj-6", 0 ]
