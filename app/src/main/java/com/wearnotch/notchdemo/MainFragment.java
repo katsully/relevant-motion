@@ -687,7 +687,7 @@ public class MainFragment extends BaseFragment {
     Bone boneParent;
 
     fvec3 chestAngles = new fvec3();
-    fvec3 elbowAngles = new fvec3();
+    fvec3 angles = new fvec3();
     Skeleton mSkeleton;
 
     Object[] bones = { bone01, bone02, bone03 };
@@ -714,7 +714,7 @@ public class MainFragment extends BaseFragment {
 //            int frameIndex = mRealTimeData.getFrameCount();
 //
             // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
-            Bone chest = mSkeleton.getBone("ChestTop");
+            Bone chestBottom = mSkeleton.getBone("ChestBottom");
             Bone root = mSkeleton.getRoot();
             Bone foreArm = mSkeleton.getBone("RightForeArm");
             Bone upperArm = mSkeleton.getBone("RightUpperArm");
@@ -723,7 +723,7 @@ public class MainFragment extends BaseFragment {
             // The coordinate system is X-left, Y-up, Z-front aligned.
             // Default orientations are defined in the steady pose (in the skeleton file)
             // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
-            mRealTimeData.calculateRelativeAngle(foreArm, upperArm, currentFrame, elbowAngles);
+            mRealTimeData.calculateRelativeAngle(root, chestBottom, currentFrame, angles);
 
             // Calculate chest angles with respect root, i.e. absolute angles
             // The root orientation is the always the same as in the steady pose.
@@ -745,10 +745,10 @@ public class MainFragment extends BaseFragment {
 //                    .append("Lateral tilt left(-)/right(+): ").append((int)chestAngles.get(2)).append("°\n");
 //
 ////            mAnglesText.setText(sb.toString());
-//            System.out.println((int)elbowAngles.get(0));
-            bone03[8]   = elbowAngles.get(2);  // x
-            bone03[9]   = elbowAngles.get(1);  // y
-            bone03[10]  = elbowAngles.get(0);  // z
+//            System.out.println((int)angles.get(1));
+            bone01[8]   = angles.get(2);  // x
+            bone01[9]   = angles.get(1);  // y
+            bone01[10]  = angles.get(0);  // z
 
 
             // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
@@ -1399,8 +1399,8 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "192.168.1.15"; // the IP of the computer sending OSC to...
-    private int myPort = 8002;
+    private String myIP = "192.168.1.5"; // the IP of the computer sending OSC to...
+    private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
 
