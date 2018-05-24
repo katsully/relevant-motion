@@ -686,8 +686,9 @@ public class MainFragment extends BaseFragment {
     Bone boneChild;
     Bone boneParent;
 
-    fvec3 chestAngles = new fvec3();
-    fvec3 angles = new fvec3();
+    fvec3 chestAnglesOLD = new fvec3();
+    fvec3 chestAngle = new fvec3();
+    fvec3 elbowAngle = new fvec3();
     Skeleton mSkeleton;
 
     Object[] bones = { bone01, bone02, bone03 };
@@ -713,7 +714,7 @@ public class MainFragment extends BaseFragment {
 
 //            int frameIndex = mRealTimeData.getFrameCount();
 //
-            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
+            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS ---
             Bone chestBottom = mSkeleton.getBone("ChestBottom");
             Bone root = mSkeleton.getRoot();
             Bone foreArm = mSkeleton.getBone("RightForeArm");
@@ -723,7 +724,9 @@ public class MainFragment extends BaseFragment {
             // The coordinate system is X-left, Y-up, Z-front aligned.
             // Default orientations are defined in the steady pose (in the skeleton file)
             // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
-            mRealTimeData.calculateRelativeAngle(root, chestBottom, currentFrame, angles);
+            mRealTimeData.calculateRelativeAngle(root, chestBottom, currentFrame, chestAngle);
+            mRealTimeData.calculateRelativeAngle(upperArm, foreArm, currentFrame, elbowAngle);
+
 
             // Calculate chest angles with respect root, i.e. absolute angles
             // The root orientation is the always the same as in the steady pose.
@@ -746,9 +749,9 @@ public class MainFragment extends BaseFragment {
 //
 ////            mAnglesText.setText(sb.toString());
 //            System.out.println((int)angles.get(1));
-            bone01[8]   = angles.get(2);  // x
-            bone01[9]   = angles.get(1);  // y
-            bone01[10]  = angles.get(0);  // z
+            bone01[8]   = chestAngle.get(2);  // x
+            bone01[9]   = chestAngle.get(1);  // y
+            bone01[10]  = chestAngle.get(0);  // z
 
 
             // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
