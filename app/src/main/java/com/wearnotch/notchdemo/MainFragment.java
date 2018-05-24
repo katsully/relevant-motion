@@ -51,8 +51,6 @@ import com.wearnotch.service.common.NotchCallback;
 import com.wearnotch.service.common.NotchError;
 import com.wearnotch.service.common.NotchProgress;
 import com.wearnotch.framework.visualiser.VisualiserData;
-import com.wearnotch.notchdemo.math.Quaternion;
-
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -70,25 +68,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
 // OSC imports
 import java.net.*;
 import java.util.*;
 import com.illposed.osc.*;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
-
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
-
-//    private String DEFAULT_USER_LICENSE = "nu5dqYkSgjZLHnEXWp48";
-    // reading from local.properties
-//    private static final String DEFAULT_USER_LICENSE = System.getProperty("license");
-//    private static final String DEFAULT_USER_LICENSE = "";
     private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
-//    private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
@@ -107,7 +99,7 @@ public class MainFragment extends BaseFragment {
     private Measurement mCurrentMeasurement;
     private File mCurrentOutput;
     private String mUser;
-    private boolean mRealTime, mRemote, mChangingChannel, mOSC;
+    private boolean mRealTime, mRemote, mChangingChannel;
     private VisualiserData mRealTimeData;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private SimpleDateFormat mSDF;
@@ -124,116 +116,113 @@ public class MainFragment extends BaseFragment {
     private enum State {CALIBRATION,STEADY,CAPTURE}
     private State mState;
 
-    @InjectView(R.id.new_title)
+    @BindView(R.id.new_title)
     TextView mNewTitle;
 
-    @InjectView(R.id.device_list)
+    @BindView(R.id.device_list)
     TextView mDeviceList;
 
-    @InjectView(R.id.device_management_txt)
+    @BindView(R.id.device_management_txt)
     TextView mDeviceManagementTxt;
 
-    @InjectView(R.id.selected_channel_txt)
+    @BindView(R.id.selected_channel_txt)
     TextView mSelectedChannelTxt;
 
-    @InjectView(R.id.calibration_txt)
+    @BindView(R.id.calibration_txt)
     TextView mCalibrationTxt;
 
-    @InjectView(R.id.steady_txt)
+    @BindView(R.id.steady_txt)
     TextView mSteadyTxt;
 
-    @InjectView(R.id.capture_txt)
+    @BindView(R.id.capture_txt)
     TextView mCaptureTxt;
 
-    @InjectView(R.id.current_network)
+    @BindView(R.id.current_network)
     TextView mCurrentNetwork;
 
-    @InjectView(R.id.chk_realtime)
+    @BindView(R.id.chk_realtime)
     CheckBox mRealTimeBox;
 
-    @InjectView(R.id.chk_remote)
+    @BindView(R.id.chk_remote)
     CheckBox mRemoteBox;
 
-    @InjectView(R.id.chk_OSC)
-    CheckBox mOSCBox;
-
     // Buttons
-    @InjectView(R.id.btn_set_user)
+    @BindView(R.id.btn_set_user)
     Button mButtonSetUser;
 
-    @InjectView(R.id.btn_pair)
+    @BindView(R.id.btn_pair)
     Button mButtonPair;
 
-    @InjectView(R.id.btn_sync_pair)
+    @BindView(R.id.btn_sync_pair)
     Button mButtonSyncPair;
 
-    @InjectView(R.id.btn_remove)
+    @BindView(R.id.btn_remove)
     Button mButtonRemove;
 
-    @InjectView(R.id.btn_connect)
+    @BindView(R.id.btn_connect)
     Button mButtonConnect;
 
-    @InjectView(R.id.btn_disconnect)
+    @BindView(R.id.btn_disconnect)
     Button mButtonDisconnect;
 
-    @InjectView(R.id.btn_shutdown)
+    @BindView(R.id.btn_shutdown)
     Button mButtonShutDown;
 
-    @InjectView(R.id.btn_erase)
+    @BindView(R.id.btn_erase)
     Button mButtonErase;
 
-    @InjectView(R.id.btn_change_channel)
+    @BindView(R.id.btn_change_channel)
     Button mButtonChangeChannel;
 
-    @InjectView(R.id.btn_unchecked_init)
+    @BindView(R.id.btn_unchecked_init)
     Button mButtonUncheckedInit;
 
-    @InjectView(R.id.btn_configure_calib)
+    @BindView(R.id.btn_configure_calib)
     Button mButtonConfigureCalib;
 
-    @InjectView(R.id.btn_calibrate)
+    @BindView(R.id.btn_calibrate)
     Button mButtonCalibrate;
 
-    @InjectView(R.id.btn_get_calibration)
+    @BindView(R.id.btn_get_calibration)
     Button mButtonGetCalibData;
 
-    @InjectView(R.id.btn_init_3_steady)
+    @BindView(R.id.btn_init_3_steady)
     Button mButtonInitSteady;
 
-    @InjectView(R.id.btn_configure_steady)
+    @BindView(R.id.btn_configure_steady)
     Button mButtonConfigureSteady;
 
-    @InjectView(R.id.btn_steady)
+    @BindView(R.id.btn_steady)
     Button mButtonSteady;
 
-    @InjectView(R.id.btn_get_steady)
+    @BindView(R.id.btn_get_steady)
     Button mButtonGetSteadyData;
 
-    @InjectView(R.id.btn_init_3_capture)
+    @BindView(R.id.btn_init_3_capture)
     Button mButtonInitCapture;
 
-    @InjectView(R.id.btn_configure_capture)
+    @BindView(R.id.btn_configure_capture)
     Button mButtonConfigure;
 
-    @InjectView(R.id.btn_capture)
+    @BindView(R.id.btn_capture)
     Button mButtonCapture;
 
-    @InjectView(R.id.btn_download)
+    @BindView(R.id.btn_download)
     Button mButtonDownload;
 
-    @InjectView(R.id.btn_post_download)
+    @BindView(R.id.btn_post_download)
     Button mButtonPostDownload;
 
-    @InjectView(R.id.btn_visualize)
+    @BindView(R.id.btn_visualize)
     Button mButtonVisualize;
 
-    @InjectView(R.id.btn_show_example)
+    @BindView(R.id.btn_show_example)
     Button mButtonShowExample;
 
-    @InjectView(R.id.counter_text)
+    @BindView(R.id.counter_text)
     TextView mCounterText;
 
-    @InjectView(R.id.dock_image)
+    @BindView(R.id.dock_image)
     ImageView mDockImg;
 
     AlertDialog userDialog, fileDialog, channelDialog;
@@ -247,16 +236,6 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // load in license
-//        Properties properties = new Properties();
-//        InputStream inputStream =
-//                this.getClass().getClassLoader().getResourceAsStream("local.properties");
-//        try {
-//            properties.load(inputStream);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        DEFAULT_USER_LICENSE=properties.getProperty("license");
         super.onCreate(savedInstanceState);
         mApplicationContext = getActivity().getApplicationContext();
         mActivity = getBaseActivity();
@@ -274,7 +253,7 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.inject(this, root);
+        ButterKnife.bind(this, root);
 
         // Set typefaces
         Typeface tfLight = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Light.ttf");
@@ -318,7 +297,6 @@ public class MainFragment extends BaseFragment {
 
         mCounterText.setTypeface(tfLight);
         mRealTimeBox.setTypeface(tfLight);
-        mOSCBox.setTypeface(tfLight);
         mRemoteBox.setTypeface(tfLight);
 
 
@@ -347,7 +325,6 @@ public class MainFragment extends BaseFragment {
         public void run() {
             setActionBarTitle(R.string.app_name);
             if (mNotchService != null && mUser == null) {
-                System.out.println(DEFAULT_USER_LICENSE);
                 mUser = DEFAULT_USER_LICENSE;
                 if (DEFAULT_USER_LICENSE.length() > 0) {
                     updateUser(mUser);
@@ -383,14 +360,6 @@ public class MainFragment extends BaseFragment {
     void checkRemote() {
         mRemote = mRemoteBox.isChecked();
         mRealTimeBox.setEnabled(!mRemote);
-    }
-
-    // ReMo OSC Button (+ added chk_OSC to fragment_main.xml)
-    @OnCheckedChanged(R.id.chk_OSC)
-    void OSCtoggle() {
-        mOSC = mOSCBox.isChecked();
-        mOSCBox.setChecked(mOSC);
-//        System.out.println(mOSC);
     }
 
     @OnClick(R.id.btn_set_user)
@@ -535,9 +504,7 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_real_time))));
-//                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_12_real_time))));
-
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_1_real_time))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -613,6 +580,11 @@ public class MainFragment extends BaseFragment {
     Cancellable c;
 
     @OnClick(R.id.btn_capture)
+    void cptr() {
+        mState = State.CAPTURE;
+        mCountDown.start();
+    }
+
     void capture() {
         mVisualiserActivity = null;
         if (mRealTime) {
@@ -667,7 +639,6 @@ public class MainFragment extends BaseFragment {
         }
     }
 
-
     // vars realtime
     long mUpdateStartTime;
     long mRefreshTime = 20;
@@ -686,9 +657,13 @@ public class MainFragment extends BaseFragment {
     Bone boneChild;
     Bone boneParent;
 
-    fvec3 chestAnglesOLD = new fvec3();
+
+    // make some angle vars
     fvec3 chestAngle = new fvec3();
+    fvec3 shoulderAngle = new fvec3();
     fvec3 elbowAngle = new fvec3();
+
+
     Skeleton mSkeleton;
 
     Object[] bones = { bone01, bone02, bone03 };
@@ -711,142 +686,116 @@ public class MainFragment extends BaseFragment {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
 
-
-//            int frameIndex = mRealTimeData.getFrameCount();
-//
-            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS ---
+            // get some bones
+            Bone root = mSkeleton.getRoot(); // a helpful method
+            Bone hip = mSkeleton.getBone("Hip");
             Bone chestBottom = mSkeleton.getBone("ChestBottom");
-            Bone root = mSkeleton.getRoot();
-            Bone foreArm = mSkeleton.getBone("RightForeArm");
-            Bone upperArm = mSkeleton.getBone("RightUpperArm");
-            // Calculate forearm angles with respect to upper arm (determine elbow joint angles).
-            // Angles correspond to rotations around X,Y and Z axis of the paren bone's coordinate system, respectively.
-            // The coordinate system is X-left, Y-up, Z-front aligned.
-            // Default orientations are defined in the steady pose (in the skeleton file)
+            Bone rightCollar = mSkeleton.getBone("RightCollar");
+            Bone rightUpperArm = mSkeleton.getBone("RightUpperArm");
+
+            // get some angles
             // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
-            mRealTimeData.calculateRelativeAngle(root, chestBottom, currentFrame, chestAngle);
-            mRealTimeData.calculateRelativeAngle(upperArm, foreArm, currentFrame, elbowAngle);
+            // Hack:  frameIndex = 0 gives current realtime frames
+            mRealTimeData.calculateRelativeAngle(hip, chestBottom, 0, chestAngle);
+            mRealTimeData.calculateRelativeAngle(rightCollar, rightUpperArm, 0, shoulderAngle);
+
+            System.out.println(chestAngle);
+            System.out.println(shoulderAngle);
 
 
-            // Calculate chest angles with respect root, i.e. absolute angles
-            // The root orientation is the always the same as in the steady pose.
-//                                                                                                                                                                                                                                   mRealTimeData.calculateRelativeAngle(chest, root, currentFrame, chestAngles);
 
-            // Show angles
-//            StringBuilder sb = new StringBuilder();
-//            sb.append("Elbow angles:\n")
-//                    // Extension/flexion is rotation around the upperarm's X-axis
-//                    .append("Extension(+)/flexion(-): ").append((int)elbowAngles.get(0)).append("°\n")
-//                    // Supination/pronation is rotation around the upperarm's Y-axis
-//                    .append("Supination(+)/pronation(-): ").append((int)elbowAngles.get(1)).append("°\n")
-//                    .append("\nChest angles:\n")
-//                    // Anterior/posterior tilt (forward/backward bend) is rotation around global X axis
-//                    .append("Anterior(+)/posterior(-) tilt: ").append((int)chestAngles.get(0)).append("°\n")
-//                    // Rotation to left/right is rotation around the global Y axis
-//                    .append("Rotation left(+)/right(-): ").append((int)chestAngles.get(1)).append("°\n")
-//                    // Lateral tilt (side bend) is rotation around global Z axis
-//                    .append("Lateral tilt left(-)/right(+): ").append((int)chestAngles.get(2)).append("°\n");
-//
-////            mAnglesText.setText(sb.toString());
-//            System.out.println((int)angles.get(1));
+            // order
             bone01[8]   = chestAngle.get(2);  // x
             bone01[9]   = chestAngle.get(1);  // y
             bone01[10]  = chestAngle.get(0);  // z
 
 
-            // --- DIRECTLY FROM VISUALISER ACTIVITY CLASS --- (but not working)
 
-
-
-            // Logging data for measured bones
-//            Log.d("REALTIME", "Current frame:" + currentFrame);
-
-
-            for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
-
-                String boneName = b.getName();
-
-                // --- QUATERNIONS ---
-                // Notch SDK quat FORMAT: W, X, Y, Z
-                // library quat FORMAT:   X, Y, Z, W
-
-                // --- relative angle ---
-//                Bone foreArm = mSkeleton.getBone("RightForeArm");
-//                Bone upperArm = mSkeleton.getBone("RightUpperArm");
-//                mRealTimeData.calculateRelativeAngle(foreArm, upperArm, frameIndex, elbowAngles);
-//                System.out.println((float)elbowAngles.get(0));
-
-                if ( boneName.equals("ChestBottom") ) {
-                    bone01[0] = b.getName(); // bone name
-                    // pos
-                    bone01[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    bone01[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    bone01[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // Quat (ori)
-                    bone01[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w or a
-                    bone01[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x or i
-                    bone01[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y or j
-                    bone01[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z or k
-                    // Euler (rot)
-//                    Quaternion bone01quat = new Quaternion( (float)bone01[5], (float)bone01[6], (float)bone01[7], (float)bone01[4] ); // android lib: X, Y, Z, W
-//                    Quaternion bone01quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-//                    bone01[8]  = bone01quat.getPitch();   // x
-//                    bone01[9]  = bone01quat.getYaw();     // y
-//                    bone01[10] = bone01quat.getRoll();    // z
-                }
-
-                else if ( boneName.equals("RightUpperArm") ) {
-                    bone02[0] = b.getName();  // bone name
-                    // pos
-                    bone02[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    bone02[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    bone02[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // ori
-                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
-                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
-                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
-                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
-                    // rot
-                    // can only run Quaternion once, then following become confused...
-//                    Quaternion bone02quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-//                    Quaternion bone02quat = new Quaternion( (float)bone02[5], (float)bone02[6], (float)bone02[7], (float)bone02[4] ); // android lib: X, Y, Z, W
-//                    bone02[8]  = bone02quat.getPitch();   // x
-//                    bone02[9]  = bone02quat.getYaw();     // y
-//                    bone02[10] = bone02quat.getRoll();    // z
-                }
-
-                else if ( boneName.equals("RightForeArm") ) {
-                    bone03[0] = b.getName(); // bone name
-                    // pos
-                    bone03[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
-                    bone03[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
-                    bone03[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
-                    // ori
-                    bone03[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
-                    bone03[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
-                    bone03[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
-                    bone03[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
-                    // rot
-//                    Quaternion bone03quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
-//                    Quaternion bone03quat = new Quaternion( (float)bone03[5], (float)bone03[6], (float)bone03[7], (float)bone03[4] ); // android lib: X, Y, Z, W
-//                    bone03[8]  = bone03quat.getPitch();   // x
-//                    bone03[9]  = bone03quat.getYaw();     // y
-//                    bone03[10] = bone03quat.getRoll();    // z
-
-
-                    // tried to use another quat lib but didnt work...
-//                    double[]  = new double[3];
-//                    double [] nums = new double[3];
-//                    double[] tt = quaternion2Euler( (float)bone03[4], (float)bone03[5], (float)bone03[6], (float)bone03[7], nums);
-//                    System.out.println(tt[0]);
-//                    System.out.println(nums[0]);
-
-//                    quaternion2Euler( q, res, "XYZ");
-
-                }
-
-
-            }
+//            for (Bone b : mNotchService.getNetwork().getDevices().keySet()) {
+//
+//                String boneName = b.getName();
+//
+//                // --- QUATERNIONS ---
+//                // Notch SDK quat FORMAT: W, X, Y, Z
+//                // library quat FORMAT:   X, Y, Z, W
+//
+//                // --- relative angle ---
+////                Bone foreArm = mSkeleton.getBone("RightForeArm");
+////                Bone upperArm = mSkeleton.getBone("RightUpperArm");
+////                mRealTimeData.calculateRelativeAngle(foreArm, upperArm, frameIndex, elbowAngles);
+////                System.out.println((float)elbowAngles.get(0));
+//
+//                if ( boneName.equals("ChestBottom") ) {
+//                    bone01[0] = b.getName(); // bone name
+//                    // pos
+//                    bone01[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
+//                    bone01[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
+//                    bone01[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
+//                    // Quat (ori)
+//                    bone01[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w or a
+//                    bone01[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x or i
+//                    bone01[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y or j
+//                    bone01[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z or k
+//                    // Euler (rot)
+////                    Quaternion bone01quat = new Quaternion( (float)bone01[5], (float)bone01[6], (float)bone01[7], (float)bone01[4] ); // android lib: X, Y, Z, W
+////                    Quaternion bone01quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+////                    bone01[8]  = bone01quat.getPitch();   // x
+////                    bone01[9]  = bone01quat.getYaw();     // y
+////                    bone01[10] = bone01quat.getRoll();    // z
+//                }
+//
+//                else if ( boneName.equals("RightUpperArm") ) {
+//                    bone02[0] = b.getName();  // bone name
+//                    // pos
+//                    bone02[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
+//                    bone02[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
+//                    bone02[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
+//                    // ori
+//                    bone02[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
+//                    bone02[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
+//                    bone02[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
+//                    bone02[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
+//                    // rot
+//                    // can only run Quaternion once, then following become confused...
+////                    Quaternion bone02quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+////                    Quaternion bone02quat = new Quaternion( (float)bone02[5], (float)bone02[6], (float)bone02[7], (float)bone02[4] ); // android lib: X, Y, Z, W
+////                    bone02[8]  = bone02quat.getPitch();   // x
+////                    bone02[9]  = bone02quat.getYaw();     // y
+////                    bone02[10] = bone02quat.getRoll();    // z
+//                }
+//
+//                else if ( boneName.equals("RightForeArm") ) {
+//                    bone03[0] = b.getName(); // bone name
+//                    // pos
+//                    bone03[1] = multiplier * mRealTimeData.getPos(b,currentFrame).get(0);  // x
+//                    bone03[2] = multiplier * mRealTimeData.getPos(b,currentFrame).get(1);  // y
+//                    bone03[3] = multiplier * mRealTimeData.getPos(b,currentFrame).get(2);  // z
+//                    // ori
+//                    bone03[4] = mRealTimeData.getQ(b,currentFrame).get(0);  // w
+//                    bone03[5] = mRealTimeData.getQ(b,currentFrame).get(1);  // x
+//                    bone03[6] = mRealTimeData.getQ(b,currentFrame).get(2);  // y
+//                    bone03[7] = mRealTimeData.getQ(b,currentFrame).get(3);  // z
+//                    // rot
+////                    Quaternion bone03quat = new Quaternion( mRealTimeData.getQ(b,currentFrame).get(1), mRealTimeData.getQ(b,currentFrame).get(2), mRealTimeData.getQ(b,currentFrame).get(3), mRealTimeData.getQ(b,currentFrame).get(0) );
+////                    Quaternion bone03quat = new Quaternion( (float)bone03[5], (float)bone03[6], (float)bone03[7], (float)bone03[4] ); // android lib: X, Y, Z, W
+////                    bone03[8]  = bone03quat.getPitch();   // x
+////                    bone03[9]  = bone03quat.getYaw();     // y
+////                    bone03[10] = bone03quat.getRoll();    // z
+//
+//
+//                    // tried to use another quat lib but didnt work...
+////                    double[]  = new double[3];
+////                    double [] nums = new double[3];
+////                    double[] tt = quaternion2Euler( (float)bone03[4], (float)bone03[5], (float)bone03[6], (float)bone03[7], nums);
+////                    System.out.println(tt[0]);
+////                    System.out.println(nums[0]);
+//
+////                    quaternion2Euler( q, res, "XYZ");
+//
+//                }
+//
+//
+//            }
 
             mHandler.postDelayed(mLogRealTimeData, mRefreshTime);
         }
@@ -854,74 +803,61 @@ public class MainFragment extends BaseFragment {
 
 
 
-    // Original Notch Realtime Code w/out OSC
-    /*
-    Cancellable c;
-
-    @OnClick(R.id.btn_capture)
-    void cptr() {
-        mState = State.CAPTURE;
-        mCountDown.start();
-    }
-
-    void capture() {
-        mVisualiserActivity = null;
-        if (mRealTime) {
-            inProgress();
-            c = mNotchService.capture(new NotchCallback<Void>() {
-                @Override
-                public void onProgress(NotchProgress progress) {
-                    if (progress.getState() == NotchProgress.State.REALTIME_UPDATE) {
-                        mRealTimeData = (VisualiserData) progress.getObject();
-                        updateRealTime();
-                    }
-                }
-
-                @Override
-                public void onSuccess(Void nothing) {
-                    clearText();
-                }
-
-                @Override
-                public void onFailure(NotchError notchError) {
-                    Util.showNotification(Util.getNotchErrorStr(notchError));
-                    clearText();
-                }
-
-                @Override
-                public void onCancelled() {
-                    Util.showNotification("Real-time measurement stopped!");
-                    clearText();
-                }
-            });
-        }
-        else {
-            if (mRemote) {
-                mNotchService.remoteCapture(new EmptyCallback<Measurement>() {
-                    @Override
-                    public void onSuccess(Measurement measurement) {
-                        mCurrentMeasurement = measurement;
-                        getNewOutput();
-                        File newOutput = new File(mCurrentOutput.getParentFile(), mCurrentOutput.getName().replace(".zip",".notchx"));
-                        saveForPostDownload(mCurrentMeasurement, newOutput);
-                        clearText();
-                    }
-                });
-            } else {
-                mNotchService.timedCapture(new EmptyCallback<Measurement>() {
-                    @Override
-                    public void onSuccess(Measurement measurement) {
-                        mCurrentMeasurement = measurement;
-                        Util.showNotification("Capture finished");
-                        clearText();
-                    }
-                });
-            }
-        }
-    }
-    */
-
-
+//    void capture() {
+//        mVisualiserActivity = null;
+//        if (mRealTime) {
+//            inProgress();
+//            c = mNotchService.capture(new NotchCallback<Void>() {
+//                @Override
+//                public void onProgress(NotchProgress progress) {
+//                    if (progress.getState() == NotchProgress.State.REALTIME_UPDATE) {
+//                        mRealTimeData = (VisualiserData) progress.getObject();
+//                        updateRealTime();
+//                    }
+//                }
+//
+//                @Override
+//                public void onSuccess(Void nothing) {
+//                    clearText();
+//                }
+//
+//                @Override
+//                public void onFailure(NotchError notchError) {
+//                    Util.showNotification(Util.getNotchErrorStr(notchError));
+//                    clearText();
+//                }
+//
+//                @Override
+//                public void onCancelled() {
+//                    Util.showNotification("Real-time measurement stopped!");
+//                    clearText();
+//                }
+//            });
+//        }
+//        else {
+//            if (mRemote) {
+//                mNotchService.remoteCapture(new EmptyCallback<Measurement>() {
+//                    @Override
+//                    public void onSuccess(Measurement measurement) {
+//                        mCurrentMeasurement = measurement;
+//                        getNewOutput();
+//                        File newOutput = new File(mCurrentOutput.getParentFile(), mCurrentOutput.getName().replace(".zip",".notchx"));
+//                        saveForPostDownload(mCurrentMeasurement, newOutput);
+//                        clearText();
+//                    }
+//                });
+//            } else {
+//                mNotchService.timedCapture(new EmptyCallback<Measurement>() {
+//                    @Override
+//                    public void onSuccess(Measurement measurement) {
+//                        mCurrentMeasurement = measurement;
+//                        Util.showNotification("Capture finished");
+//                        clearText();
+//                    }
+//                });
+//            }
+//        }
+//    }
 
     @OnClick(R.id.btn_download)
     void download() {
@@ -1402,7 +1338,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "192.168.1.5"; // the IP of the computer sending OSC to...
+    private String myIP = "172.16.44.101"; // the IP of the computer sending OSC to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
@@ -1555,38 +1491,6 @@ public class MainFragment extends BaseFragment {
 
 
 
-
-    // --- attempt at using another quat lib... no success ---
-    enum RotSeq{zyx, zyz, zxy, zxz, yxz, yxy, yzx, yzy, xyz, xyx, xzy,xzx};
-
-    public void twoaxisrot(double r11, double r12, double r21, double r31, double r32, double res[]){
-        res[0] = Math.atan2( r11, r12 );
-        res[1] = Math.acos ( r21 );
-        res[2] = Math.atan2( r31, r32 );
-    }
-
-    public void threeaxisrot(double r11, double r12, double r21, double r31, double r32, double res[]){
-        res[0] = Math.atan2( r31, r32 );
-        res[1] = Math.asin ( r21 );
-        res[2] = Math.atan2( r11, r12 );
-    }
-
-    public double[] quaternion2Euler(float qW, float qX, float qY, float qZ, double res[]){
-
-        threeaxisrot(
-                -2*(qY*qZ - qW*qX),
-                qW*qW - qX*qX - qY*qY + qZ*qZ,
-                2*(qX*qZ + qW*qY),
-                -2*(qX*qY - qW*qZ),
-                qW*qW + qX*qX - qY*qY - qZ*qZ,
-                res);
-
-        return res;
-    }
-
-
 }
-
-
 
 

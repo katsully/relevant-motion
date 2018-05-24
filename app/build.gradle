@@ -11,24 +11,24 @@ project.ext.modelAssetsDir = new File((File) project.buildDir, '../src/main/asse
 
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
-    flavorDimensions "default"
 
+    flavorDimensions 'default'
 
     defaultConfig {
-        applicationId "com.wearnotch.notchdemo.tutorial"
+        applicationId 'com.wearnotch.notchdemo.tutorial'
         minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 6
-        versionName "1.5"
+        targetSdkVersion 26
+        versionCode 8
+        versionName '1.7'
 
         multiDexEnabled true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -38,15 +38,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    productFlavors {
-
-        notch {}
-
-        mock {
-            applicationId 'com.wearnotch.notchdemo.tutorial.mock'
         }
     }
 
@@ -63,22 +54,21 @@ android {
 }
 
 dependencies {
-    compile 'com.notch.sdk:sdk-android:1.1.262'
-
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-
-    compile 'com.jakewharton:butterknife:6.0.0'
-    annotationProcessor 'com.jakewharton:butterknife:6.0.0'
-
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+    compile 'com.notch.sdk:sdk-android:1.1.307'
 
     compile 'com.illposed.osc:javaosc-core:0.4'
+
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.android.support:multidex:1.0.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
