@@ -12,7 +12,25 @@
             "color1": "Cyan",
             "color2": "Cyan",
             "frequency": 20
-        }
+        },
+        {
+            "name": "RightForeArm",
+            "color1": "Red",
+            "color2": "Red",
+            "frequency": 20
+        },
+         {
+             "name": "LeftUpperArm",
+             "color1": "Yellow",
+             "color2": "Yellow",
+             "frequency": 20
+         },
+         {
+             "name": "LeftForeArm",
+             "color1": "Green",
+             "color2": "Green",
+             "frequency": 20
+         }
     ],
     "master_bone": "ChestBottom",
     "special": {
