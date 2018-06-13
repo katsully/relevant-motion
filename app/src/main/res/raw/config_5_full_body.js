@@ -3,14 +3,32 @@
     "bones": [
         {
             "name": "ChestBottom",
+            "color1": "Cyan",
+            "color2": "Cyan",
+            "frequency": 20
+        },
+        {
+            "name": "RightLowerLeg",
             "color1": "Blue",
             "color2": "Blue",
             "frequency": 20
         },
         {
-            "name": "RightUpperArm",
-            "color1": "Cyan",
-            "color2": "Cyan",
+            "name": "RightForeArm",
+            "color1": "Green",
+            "color2": "Green",
+            "frequency": 20
+        },
+        {
+            "name": "LeftLowerLeg",
+            "color1": "Yellow",
+            "color2": "Yellow",
+            "frequency": 20
+        },
+        {
+            "name": "LeftForeArm",
+            "color1": "Red",
+            "color2": "Red",
             "frequency": 20
         }
     ],

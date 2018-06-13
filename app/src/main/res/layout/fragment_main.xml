@@ -37,385 +37,383 @@
 
         <LinearLayout
             android:id="@+id/menu_list"
-            android:orientation="vertical"
-            android:gravity="left"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/new_title"
-                android:text="CURRENT LICENSE:\nUNKNOWN"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="CURRENT LICENSE:\nUNKNOWN"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_set_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Set license">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Set license"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/device_management_txt"
-                android:text="\nDEVICE MANAGEMENT"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="\nDEVICE MANAGEMENT"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_pair"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Pair new device">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Pair new device"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_sync_pair"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Sync Pairing">
-            </Button>
-
-            <Button
-                android:id="@+id/btn_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
                 android:layout_marginLeft="20dp"
-                android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Remove all device">
-            </Button>
-
-            <TextView
-                android:id="@+id/selected_channel_txt"
-                android:text="Selected channel"
-                android:textColor="@color/blue"
-                android:textSize="16dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"/>
+                android:background="@color/transparent"
+                android:text="Sync Pairing"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_connect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Connect to network">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Connect to network"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+            <Button
+                android:id="@+id/btn_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Remove all device"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+            <TextView
+                android:id="@+id/selected_channel_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Selected channel"
+                android:textColor="@color/blue"
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/btn_disconnect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Disconnect">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Disconnect"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_shutdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Shutdown">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Shutdown"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_erase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Erase devices">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Erase devices"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_change_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Change channel">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Change channel"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/calibration_txt"
-                android:text="\nCALIBRATION"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="\nCALIBRATION"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_unchecked_init"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Unchecked Init">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Unchecked Init"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_configure_calib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Configure calibration">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Configure calibration"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_calibrate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Start calibration">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Start calibration"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_get_calibration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Get calibration data">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Get calibration data"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/steady_txt"
-                android:text="\nSTEADY"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="\nSTEADY"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_init_3_steady"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="3 notch init">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="3 notch init"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_configure_steady"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Configure steady">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Configure steady"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_steady"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Start steady">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Start steady"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_get_steady"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Get steady data">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Get steady data"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/capture_txt"
-                android:text="\nCAPTURE"
-                android:textColor="@color/blue"
-                android:textSize="20dp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="\nCAPTURE"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
 
             <CheckBox
-                android:layout_alignParentLeft="true"
                 android:id="@+id/chk_realtime"
-                android:textColor="@color/white"
-                android:textSize="16dp"
-                android:text="Real-time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="Real-time"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
 
             <CheckBox
                 android:id="@+id/chk_remote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="12dp"
                 android:checked="false"
                 android:text="Remote capture"
-                android:textSize="16dp"
                 android:textColor="@color/white"
-                android:layout_marginLeft="12dp"
-                android:layout_marginBottom="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/btn_init_3_capture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="3 notch init">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="3 notch init"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_configure_capture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Configure 2 sec capture">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Configure 2 sec capture"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_capture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Capture 2 sec">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Capture 2 sec"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Download">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Download"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_post_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-                android:textSize="16dp"
-                android:text="Post-download">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Post-download"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_visualize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="30dp"
-                android:textSize="16dp"
-                android:text="Visualize  ">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Visualize  "
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_show_example"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@color/transparent"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="30dp"
-                android:textSize="16dp"
-                android:text="Show example">
-            </Button>
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Show example"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
 
-         </LinearLayout>
+            <Button
+                android:id="@+id/btn_stop_osc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Stop OSC"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+            <Button
+                android:id="@+id/btn_start_osc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Start OSC"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+        </LinearLayout>
     </ScrollView>
 
     <TextView
@@ -428,11 +426,12 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:weightSum="1"
-        android:layout_centerInParent="true"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:weightSum="1">
 
         <View
             android:layout_width="0dp"
@@ -441,13 +440,13 @@
 
         <ImageView
             android:id="@+id/dock_image"
-            android:layout_weight="0.5"
             android:layout_width="0dp"
-            android:src="@drawable/c0000"
-            android:rotation="180"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:adjustViewBounds="true"
+            android:rotation="180"
             android:scaleType="fitCenter"
-            android:adjustViewBounds="true"/>
+            android:src="@drawable/c0000" />
 
     </LinearLayout>
 

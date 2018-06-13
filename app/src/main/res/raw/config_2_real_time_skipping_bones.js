@@ -2,7 +2,7 @@
     "real_time": true,
     "bones": [
         {
-            "name": "ChestBottom",
+            "name": "RightLowerLeg",
             "color1": "Blue",
             "color2": "Blue",
             "frequency": 20
@@ -14,9 +14,9 @@
             "frequency": 20
         }
     ],
-    "master_bone": "ChestBottom",
+    "master_bone": "RightUpperArm",
     "special": {
-        "bone": "ChestBottom",
+        "bone": "RightUpperArm",
         "orientation": "Front"
     },
     "constraints": [

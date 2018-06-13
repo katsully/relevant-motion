@@ -111,10 +111,10 @@ public class MainFragment extends BaseFragment {
 
     private File mOutputDir = Environment.getExternalStoragePublicDirectory(NOTCH_DIR);
 
-
-
     private enum State {CALIBRATION,STEADY,CAPTURE}
     private State mState;
+
+    volatile boolean running = true;
 
     @BindView(R.id.new_title)
     TextView mNewTitle;
@@ -219,6 +219,13 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.btn_show_example)
     Button mButtonShowExample;
 
+    @BindView(R.id.btn_stop_osc)
+    Button mButtonStopOSC;
+
+    @BindView(R.id.btn_start_osc)
+    Button mButtonStartOSC;
+
+
     @BindView(R.id.counter_text)
     TextView mCounterText;
 
@@ -247,7 +254,9 @@ public class MainFragment extends BaseFragment {
         }
 
         // Start the thread that sends messages
-        oscThread.start();
+//        oscThread.start();
+        new OSCThread().start();
+
     }
 
     @Override
@@ -294,6 +303,8 @@ public class MainFragment extends BaseFragment {
         mButtonPostDownload.setTypeface(tfLight);
         mButtonVisualize.setTypeface(tfLight);
         mButtonShowExample.setTypeface(tfLight);
+        mButtonStopOSC.setTypeface(tfLight);
+        mButtonStartOSC.setTypeface(tfLight);
 
         mCounterText.setTypeface(tfLight);
         mRealTimeBox.setTypeface(tfLight);
@@ -504,7 +515,7 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_2_real_time))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_5_full_body))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -690,6 +701,8 @@ public class MainFragment extends BaseFragment {
             Bone leftCollar     = mSkeleton.getBone("LeftCollar");
             Bone leftUpperArm   = mSkeleton.getBone("LeftUpperArm");
             Bone leftForeArm    = mSkeleton.getBone("LeftForeArm");
+            Bone RightLowerLeg  = mSkeleton.getBone("RightLowerLeg");
+            Bone LeftLowerLeg   = mSkeleton.getBone("LeftLowerLeg");
 
 
             // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
@@ -939,6 +952,38 @@ public class MainFragment extends BaseFragment {
         mVisualiserActivity = new com.wearnotch.notchdemo.visualiser.VisualiserActivity();
         Intent i = VisualiserActivity.createIntent(getActivity(), Uri.fromFile(exampleFile));
         startActivity(i);
+    }
+
+    @OnClick(R.id.btn_stop_osc)
+    void stopOSC() {
+        System.out.println("stop OSC pre: " + running);
+        running = false;
+        System.out.println("stop OSC post: " + running);
+
+//        oscThread.join();
+//        oscThread.interrupt();
+
+        myIP = "172.16.47.75";
+
+
+    }
+
+    @OnClick(R.id.btn_start_osc)
+    void startOSC() {
+        System.out.println("start OSC pre: " + running);
+        running = true;
+        System.out.println("start OSC pre: " + running);
+
+        new OSCThread().start();
+
+//        OSCThread oscThread = new OSCThread();
+//        Thread th = new Thread(oscThread);
+//        th.start();
+
+//        oscThread = new OSCThread();
+//        oscThread.start();
+
+
     }
 
     private void buildUserDialog() {
@@ -1278,13 +1323,15 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP = "localhost"; // the IP of the computer sending OSC to...
+    private String myIP  = "172.16.47.30"; // the IP of the computer sending OSC to...
+    private String myIP2 = "172.16.47.75";
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
 
-    // This thread will contain all the code that pertains to OSC
-    private Thread oscThread = new Thread() {
+
+    private class OSCThread extends Thread {
+
         @Override
         public void run() {
             /* The first part of the run() method initializes the OSCPortOut for sending messages.
@@ -1305,7 +1352,7 @@ public class MainFragment extends BaseFragment {
             }
 
             // TODO: make OSC streaming toggle-able
-            while (true) {
+            while (running) {
                 if (oscPortOut != null) {
                     // constructs osc messages w arrays from mRealtime log function
 
@@ -1349,9 +1396,81 @@ public class MainFragment extends BaseFragment {
                 }
             }
         }
+    }
+
+
+    //private OSCThread oscThread = new OSCThread();
+//    (new OSCThread()).start();
+
+
+    // This thread will contain all the code that pertains to OSC
+//    private Thread oscThread = new Thread() {
+//        @Override
+//        public void run() {
+//            /* The first part of the run() method initializes the OSCPortOut for sending messages.
+//             * For more advanced apps, where you want to change the address during runtime, you will want
+//             * to have this section in a different thread, but since we won't be changing addresses here,
+//             * we only have to initialize the address once.
+//             */
+//
+//            try {
+//                // Connect to some IP address and port
+//                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+//            } catch(UnknownHostException e) {
+//                // Error handling when your IP isn't found
+//                return;
+//            } catch(Exception e) {
+//                // Error handling for any other errors
+//                return;
+//            }
+//
+//            // TODO: make OSC streaming toggle-able
+//            while (running) {
+//                if (oscPortOut != null) {
+//                    // constructs osc messages w arrays from mRealtime log function
+//
+//                    OSCMessage bone01Message = new OSCMessage("/notch/"+ chestObj[0] +"/all",           Arrays.asList(chestObj[1]+","+chestObj[2]+","+chestObj[3]+","+chestObj[4]+","+chestObj[5]+","+chestObj[6] ));
+//                    OSCMessage bone02Message = new OSCMessage("/notch/"+ rightUpperArmObj[0] +"/all",   Arrays.asList(rightUpperArmObj[1]+","+rightUpperArmObj[2]+","+rightUpperArmObj[3]+","+rightUpperArmObj[4]+","+rightUpperArmObj[5]+","+rightUpperArmObj[6] ));
+//                    OSCMessage bone03Message = new OSCMessage("/notch/"+ rightForeArmObj[0] +"/all",    Arrays.asList(rightForeArmObj[1]+","+rightForeArmObj[2]+","+rightForeArmObj[3]+","+rightForeArmObj[4]+","+rightForeArmObj[5]+","+rightForeArmObj[6] ));
+//                    OSCMessage bone04Message = new OSCMessage("/notch/"+ leftUpperArmObj[0] +"/all",    Arrays.asList(leftUpperArmObj[1]+","+leftUpperArmObj[2]+","+leftUpperArmObj[3]+","+leftUpperArmObj[4]+","+leftUpperArmObj[5]+","+leftUpperArmObj[6] ));
+//                    OSCMessage bone05Message = new OSCMessage("/notch/"+ leftForeArmObj[0] +"/all",     Arrays.asList(leftForeArmObj[1]+","+leftForeArmObj[2]+","+leftForeArmObj[3]+","+leftForeArmObj[4]+","+leftForeArmObj[5]+","+leftForeArmObj[6] ));
+//
+//                    try {
+//                        // make osc bundles and add osc messages to them
+//
+//                        OSCBundle bone01AllBundle = new OSCBundle();
+//                        bone01AllBundle.addPacket(bone01Message);
+//
+//                        OSCBundle bone02AllBundle = new OSCBundle();
+//                        bone02AllBundle.addPacket(bone02Message);
+//
+//                        OSCBundle bone03AllBundle = new OSCBundle();
+//                        bone03AllBundle.addPacket(bone03Message);
+//
+//                        OSCBundle bone04AllBundle = new OSCBundle();
+//                        bone04AllBundle.addPacket(bone04Message);
+//
+//                        OSCBundle bone05AllBundle = new OSCBundle();
+//                        bone05AllBundle.addPacket(bone05Message);
+//
+//                        oscPortOut.send(bone01AllBundle);
+//                        oscPortOut.send(bone02AllBundle);
+//                        oscPortOut.send(bone03AllBundle);
+//                        oscPortOut.send(bone04AllBundle);
+//                        oscPortOut.send(bone05AllBundle);
+//
+//
+//                        // pause so it's not sending LOADS of OSC
+//                        sleep(OSCdelay);
+//
+//                    } catch (Exception e) {
+//                        // Error handling for some error
+//                    }
+//                }
+//            }
+//        }
     };
 
 
-}
 
 
