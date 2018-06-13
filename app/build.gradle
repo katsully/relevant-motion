@@ -1,7 +1,8 @@
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
+        google()
+        jcenter()
     }
 }
 
@@ -12,7 +13,7 @@ project.ext.modelAssetsDir = new File((File) project.buildDir, '../src/main/asse
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     flavorDimensions 'default'
 

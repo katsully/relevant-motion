@@ -2,7 +2,7 @@
     "real_time": true,
     "bones": [
         {
-            "name": "ChestBottom",
+            "name": "RightLowerLeg",
             "color1": "Blue",
             "color2": "Blue",
             "frequency": 20
