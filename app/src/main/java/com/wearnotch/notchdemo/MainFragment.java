@@ -119,6 +119,9 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.new_title)
     TextView mNewTitle;
 
+    @BindView(R.id.current_IP)
+    TextView mCurrentIP;
+
     @BindView(R.id.device_list)
     TextView mDeviceList;
 
@@ -149,6 +152,9 @@ public class MainFragment extends BaseFragment {
     // Buttons
     @BindView(R.id.btn_set_user)
     Button mButtonSetUser;
+
+    @BindView(R.id.btn_set_IP)
+    Button mButtonSetIP;
 
     @BindView(R.id.btn_pair)
     Button mButtonPair;
@@ -232,7 +238,7 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.dock_image)
     ImageView mDockImg;
 
-    AlertDialog userDialog, fileDialog, channelDialog;
+    AlertDialog userDialog, fileDialog, channelDialog, userIPDialog;
 
 
     @Override
@@ -269,6 +275,7 @@ public class MainFragment extends BaseFragment {
         Typeface tfBold = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Bold.ttf");
 
         mNewTitle.setTypeface(tfBold);
+        mCurrentIP.setTypeface(tfBold);
         mDeviceManagementTxt.setTypeface(tfBold);
         mSelectedChannelTxt.setTypeface(tfLight);
         mCalibrationTxt.setTypeface(tfBold);
@@ -303,8 +310,11 @@ public class MainFragment extends BaseFragment {
         mButtonPostDownload.setTypeface(tfLight);
         mButtonVisualize.setTypeface(tfLight);
         mButtonShowExample.setTypeface(tfLight);
+
+        // OSC
         mButtonStopOSC.setTypeface(tfLight);
         mButtonStartOSC.setTypeface(tfLight);
+        mButtonSetIP.setTypeface(tfLight);
 
         mCounterText.setTypeface(tfLight);
         mRealTimeBox.setTypeface(tfLight);
@@ -320,6 +330,7 @@ public class MainFragment extends BaseFragment {
         mSDF = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
         buildUserDialog();
+        buildUserIPDialog();
         buildChannelDialog();
         try {
             checkAndCopyExample();
@@ -376,6 +387,12 @@ public class MainFragment extends BaseFragment {
     @OnClick(R.id.btn_set_user)
     void setUser() {
         userDialog.show();
+    }
+
+    @OnClick(R.id.btn_set_IP)
+    void setIP() {
+        System.out.println("setting IP");
+        userIPDialog.show();
     }
 
     @OnClick(R.id.btn_pair)
@@ -956,34 +973,14 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.btn_stop_osc)
     void stopOSC() {
-        System.out.println("stop OSC pre: " + running);
         running = false;
-        System.out.println("stop OSC post: " + running);
-
-//        oscThread.join();
-//        oscThread.interrupt();
-
-        myIP = "172.16.47.75";
-
-
     }
 
     @OnClick(R.id.btn_start_osc)
     void startOSC() {
-        System.out.println("start OSC pre: " + running);
         running = true;
-        System.out.println("start OSC pre: " + running);
 
         new OSCThread().start();
-
-//        OSCThread oscThread = new OSCThread();
-//        Thread th = new Thread(oscThread);
-//        th.start();
-
-//        oscThread = new OSCThread();
-//        oscThread.start();
-
-
     }
 
     private void buildUserDialog() {
@@ -1009,6 +1006,34 @@ public class MainFragment extends BaseFragment {
         });
 
         userDialog = builder.create();
+    }
+
+    private void buildUserIPDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setMessage("Enter IP");
+
+        // Set up the input
+        final EditText input = new EditText(this.mApplicationContext);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setTextColor(getResources().getColor(R.color.black));
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String IP;
+                IP = input.getText().toString();
+
+                myIP = IP;
+                updateUserIP(myIP);
+
+//                mNotchService.setLicense(user);
+//                updateUser(mNotchService.getLicense());
+//                mUser = user;
+            }
+        });
+
+        userIPDialog = builder.create();
     }
 
     private void buildFileDialog(final File[] files) {
@@ -1146,6 +1171,30 @@ public class MainFragment extends BaseFragment {
                 } else {
                     mSelectedChannelTxt.setText("SELECTED CHANNEL: " + mSelectedChannel.toChar());
                 }
+            }
+        });
+    }
+
+    private void updateUserIP(final String IP) {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mCurrentIP.setText("IP:\n" + IP);
+//                if (mDB == null) mDB = NotchDataBase.getInst();
+//                StringBuilder sb = new StringBuilder();
+//                sb.append("Device list:\n");
+//                for (Device device : mDB.findAllDevices(user)) {
+//                    sb.append("Notch ").append(device.getNotchDevice().getNetworkId()).append(" (");
+//                    sb.append(device.getNotchDevice().getDeviceMac()).append(") ");
+//                    sb.append("FW: " + device.getSwVersion() + ", ");
+//                    sb.append("Ch: " + device.getChannel().toChar() + "\n");
+//                }
+//                mDeviceList.setText(sb.toString());
+//                if (mSelectedChannel == null) {
+//                    mSelectedChannelTxt.setText("SELECTED CHANNEL: UNSPECIFIED");
+//                } else {
+//                    mSelectedChannelTxt.setText("SELECTED CHANNEL: " + mSelectedChannel.toChar());
+//                }
             }
         });
     }
@@ -1323,8 +1372,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP  = "172.16.47.30"; // the IP of the computer sending OSC to...
-    private String myIP2 = "172.16.47.75";
+    private String myIP  = "127.0.0.1"; // the IP of the computer sending OSC to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data

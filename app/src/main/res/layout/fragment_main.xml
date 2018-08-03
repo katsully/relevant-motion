@@ -52,6 +52,16 @@
                 android:textColor="@color/blue"
                 android:textSize="20dp" />
 
+            <TextView
+                android:id="@+id/current_IP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="IP:\n127.0.0.1"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/btn_set_user"
                 android:layout_width="wrap_content"
@@ -410,6 +420,17 @@
                 android:layout_marginLeft="20dp"
                 android:background="@color/transparent"
                 android:text="Start OSC"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+            <Button
+                android:id="@+id/btn_set_IP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:text="Set IP"
                 android:textColor="@color/white"
                 android:textSize="16dp"></Button>
 

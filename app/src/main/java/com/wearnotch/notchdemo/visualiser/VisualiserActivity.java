@@ -29,8 +29,11 @@ import com.wearnotch.framework.visualiser.VisualiserData;
 import com.wearnotch.notchdemo.R;
 import com.wearnotch.notchdemo.util.Util;
 import com.wearnotch.notchmaths.fvec3;
+import com.wearnotch.notchmaths.fvec4;
 import com.wearnotch.visualiser.NotchSkeletonRenderer;
 import com.wearnotch.visualiser.shader.ColorShader;
+// real times
+import com.wearnotch.visualiser.RendererQuaternionSource;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -239,6 +242,42 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
         }
     }
 
+    // custom realtime code from Eszter
+    public static class CustomQuaternionSource implements RendererQuaternionSource {
+        public CustomQuaternionSource() {
+        }
+
+        public fvec4 getQ(VisualiserData data, Bone bone, int frameIndex) {
+            Skeleton skeleton = data.getSkeleton();
+
+            Bone  bLeftForeArm = skeleton.getBone("LeftForeArm");
+            Bone  bRightForeArm = skeleton.getBone("RightForeArm");
+            Bone  bLeftUpperArm = skeleton.getBone("LeftUpperArm");
+            Bone  bRightUpperArm = skeleton.getBone("RightUpperArm");
+            Bone  bLeftThigh = skeleton.getBone("LeftThigh");
+            Bone  bRightThigh = skeleton.getBone("RightThigh");
+            Bone  bLeftLowerLeg = skeleton.getBone("LeftLowerLeg");
+            Bone  bRightLowerLeg = skeleton.getBone("RightLowerLeg");
+            Bone  bChest = skeleton.getBone("ChestTop");
+            Bone  bHip = skeleton.getBone("Hip");
+
+
+            // Interpolate the orientations using SLERP (note: this may look funny)
+            if (bone.equals(bLeftUpperArm)) {
+                return fvec4.slerp(data.getQ(bLeftForeArm, frameIndex), data.getQ(bChest, frameIndex), 0.3f);
+            } else if (bone.equals(bRightUpperArm)) {
+                return fvec4.slerp(data.getQ(bRightForeArm, frameIndex), data.getQ(bChest, frameIndex), 0.3f);
+            } else if (bone.equals(bLeftThigh)) {
+                return fvec4.slerp(data.getQ(bLeftLowerLeg, frameIndex), data.getQ(bHip, frameIndex), 0.3f);
+            } else if (bone.equals(bRightThigh)) {
+                return fvec4.slerp(data.getQ(bRightLowerLeg, frameIndex), data.getQ(bHip, frameIndex), 0.3f);
+            } else {
+                return data.getQ(bone, frameIndex);
+            }
+
+        }
+    }
+
     private void initRenderer() {
         new AsyncTask<Void, Void, ExtendedRenderer>() {
             @Override
@@ -311,6 +350,9 @@ public class VisualiserActivity extends AppCompatActivity implements SeekBar.OnS
                     }
 
                     buildBoneSelectorDialog();
+
+                    RendererQuaternionSource mCustomSource = new CustomQuaternionSource();
+                    mRenderer.setQuaternionSource(mCustomSource);
 
                 } else {
                     showNotification(R.string.error_invalid_measurement);
