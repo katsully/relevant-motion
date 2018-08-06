@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.notch.sdk:sdk-android:1.1.307'
 
     implementation 'com.illposed.osc:javaosc-core:0.4'
+    implementation "org.java-websocket:Java-WebSocket:1.3.9"
 
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
@@ -67,42 +68,10 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
 
     implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:multidex:1.0.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
-
-task convertObj(type: JavaExec) {
-    ext.srcFile1 = file('../model/equipment_tutorial.obj')
-    ext.srcFile2 = file('../model/equipment_tutorial.js')
-    inputs.file files([srcFile1,srcFile2])
-    outputs.dir project.modelAssetsDir
-
-    main = 'com.wearnotch.visualiserutil.ObjConverter'
-    classpath = configurations.compile
-    args = [ srcFile1.getAbsolutePath(), srcFile2.getAbsolutePath(),
-             new File((File) project.modelAssetsDir, 'equipment.dat').getAbsolutePath() ]
-}
-
-task convertMtl(type: JavaExec) {
-    ext.srcFile = file('../model/equipment_tutorial.mtl')
-    inputs.file srcFile
-    outputs.dir project.modelAssetsDir
-
-    main = 'com.wearnotch.visualiserutil.MtlConverter'
-    classpath = configurations.compile
-    args = [ srcFile.getAbsolutePath(),
-             new File((File) project.modelAssetsDir, 'equipment_mtl.dat').getAbsolutePath() ]
-}
-
-project.afterEvaluate {
-    project.tasks.findAll {
-        it.name.startsWith('generate') && it.name.endsWith('Assets')
-    }.each {
-        it.dependsOn convertObj
-        it.dependsOn convertMtl
-    }
-}
-

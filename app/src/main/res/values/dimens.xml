@@ -9,5 +9,7 @@
     <dimen name="desc_text_size">18dp</dimen>
     <dimen name="desc_padding">8dp</dimen>
     <dimen name="timer_text_size">50sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 
 </resources>

@@ -15,7 +15,11 @@ out/
 
 # Gradle files
 .gradle/
+gradle/*
+gradle/wrapper
+gradle/wrapper/*
 build/
+.gradle/*
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -55,3 +59,9 @@ freeline/
 freeline_project_description.json
 
 *.DS_Store
+
+.ideas/
+.ideas/*
+
+gradlew
+gradlew.bat
