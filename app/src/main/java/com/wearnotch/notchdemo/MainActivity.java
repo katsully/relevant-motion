@@ -1,7 +1,10 @@
 package com.wearnotch.notchdemo;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,33 +12,36 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-// websocket imports
+// component imports
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+// websocket imports
+import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URI;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiInfo;
+import java.util.Locale;
 
+// notch imports
 import com.wearnotch.service.NotchAndroidService;
-
-import org.java_websocket.WebSocket;
-import org.java_websocket.handshake.ClientHandshake;
-
 import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
-    // websocket server
-    Server server;
+    // websocket server vars
     TextView infoip, msg;
-    // websocket client
-    TextView response;
-    EditText editTextAddress, editTextPort;
-    Button buttonConnect, buttonClear;
+    WebsocketServer wsServer;
 
-    WebsocketServerS wsServer;
+//    Server server;
+//    // websocket client
+//    TextView response;
+//    EditText editTextAddress, editTextPort;
+//    Button buttonConnect, buttonClear;
+
 
     private MainActivity.SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -45,11 +51,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // tabs
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // TABS
         mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -58,7 +61,6 @@ public class MainActivity extends BaseActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        // end tabs
 
 
         ButterKnife.bind(this);
@@ -81,53 +83,6 @@ public class MainActivity extends BaseActivity {
 
         bindService(controlServiceIntent, this, BIND_AUTO_CREATE);
 
-
-        //websocket server 2
-        String ipAddress = "192.168.0.12";
-        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
-        wsServer = new WebsocketServerS(inetSockAddress);
-//        WSServer wsServer = new WSServer(inetSockAddress);
-        wsServer.start();
-
-//        WSClient wsClient = new WSClient( new URI("ws://localhost:8887") );
-//        wsClient.run();
-
-
-//        // for websocket server
-//        infoip = (TextView) findViewById(R.id.infoip);
-//        msg = (TextView) findViewById(R.id.msg);
-//        server = new Server(this);
-//        System.out.println("~~~~~~~~~~~~~~~~~~~~");
-//        System.out.println(server.getIpAddress());
-//        System.out.println(infoip);
-//        infoip.setText(server.getIpAddress() + ":" + server.getPort());
-//
-//        // for websocket client
-//        editTextAddress = (EditText) findViewById(R.id.addressEditText);
-//        editTextPort = (EditText) findViewById(R.id.portEditText);
-//        buttonConnect = (Button) findViewById(R.id.connectButton);
-//        buttonClear = (Button) findViewById(R.id.clearButton);
-//        response = (TextView) findViewById(R.id.responseTextView);
-//
-//
-//        buttonConnect.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View arg0) {
-//                Client myClient = new Client(editTextAddress.getText()
-//                        .toString(), Integer.parseInt(editTextPort
-//                        .getText().toString()), response);
-//                myClient.execute();
-//            }
-//        });
-//
-//        buttonClear.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                response.setText("");
-//            }
-//        });
-
-
     }
 
     /**
@@ -142,43 +97,29 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return PlaceholderFragment.newInstance(position + 1);
-            System.out.println(position);
             switch (position) {
                 case 0:
                     return new Tab1();
-//                    Tab1 tab1 = new Tab1();
-//                    return tab1;
                 case 1:
                     return new Tab2();
-//                    Tab2 tab2 = new Tab2();
-//                    return tab2;
                 case 2:
                     return new Tab3();
-//                    Tab3 tab3 = new Tab3();
-//                    return tab3;
                 default:
                     return null;
             }
-
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 3; // Show 3 total pages.
         }
     }
 
-    public void setIP(View v, WebSocket conn, ClientHandshake handshake, String message)
-    {
-        System.out.println("setting IP");
-        wsServer.broadcast( "from the server message" );
-//        broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
 
-//        Toast.makeText(this, "Clicked on Button", Toast.LENGTH_LONG).show();
+    public void setIP(View v)
+    {
+        System.out.println("clicked");
+        wsServer.broadcast( "from the server message" );
     }
 
 //    @OnClick(R.id.btn_set_IP)
@@ -186,6 +127,50 @@ public class MainActivity extends BaseActivity {
 //        System.out.println("setting IP");
 ////        userIPDialog.show();
 //    }
+
+
+    public void startWebSocket(View v)
+    {
+        System.out.println("starting websocket server...");
+
+        // get the current IP address (to start server with)
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int IPbits = wifiInfo.getIpAddress();
+        String ipAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
+                (IPbits & 0xff), (IPbits >> 8 & 0xff),
+                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
+
+
+        Context context = getApplicationContext();
+
+        // websocket server
+        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
+        wsServer = new WebsocketServer(inetSockAddress, context, MainActivity.this);
+        wsServer.start();
+    }
+
+    public void stopWebSocket(View v)
+    {
+        System.out.println("stopping websocket server...");
+
+        try {
+            wsServer.stop();
+            System.out.println("websocket server stopped");
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        catch (InterruptedException e) {
+            System.out.println(e);
+        }
+    }
+
+
+    // TODO for all buttons
+    public void uncheckedinit(View v) {
+        System.out.println("unchecking and initing");
+    }
 
 
 }

@@ -1,24 +1,38 @@
 package com.wearnotch.notchdemo;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
+import com.wearnotch.notchdemo.util.Util;
 
+import java.net.InetSocketAddress;
 import org.java_websocket.WebSocket;
-import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+import android.content.Intent;
+import android.app.Activity;
 
-public class WebsocketServerS extends WebSocketServer
+
+public class WebsocketServer extends WebSocketServer
 {
+    // vars
+    private static final String TAG = "WebSocket";
+    InetSocketAddress IPAddress;
+    Activity mActivity;
+    Context MainContext;
 
-    public WebsocketServerS(InetSocketAddress address) {
+    // create
+    public WebsocketServer(InetSocketAddress address, Context context, Activity activity) {
         super(address);
+        IPAddress = address;
+        MainContext = context;
+        mActivity = activity;
         // TODO Auto-generated constructor stub
     }
 
+    // methods
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         // TODO Auto-generated method stub
@@ -33,6 +47,8 @@ public class WebsocketServerS extends WebSocketServer
         ex.printStackTrace();
         if( conn != null ) {
             // some errors like port binding failed may not be assignable to a specific websocket
+            System.out.println("error starting websocket, see logs: " + conn);
+            showNotification("error starting websocket, see logs: " + conn);
         }
     }
 
@@ -41,7 +57,6 @@ public class WebsocketServerS extends WebSocketServer
         // TODO Auto-generated method stub
         broadcast( message );
         System.out.println( conn + ": " + message );
-
     }
 
     @Override
@@ -50,13 +65,25 @@ public class WebsocketServerS extends WebSocketServer
         conn.send("Welcome to the server!"); //This method sends a message to the new client
         broadcast( "new connection: " + handshake.getResourceDescriptor() ); //This method sends a message to all clients connected
         System.out.println( conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!" );
-
-//        System.out.println("new neue connection to " + conn.getRemoteSocketAddress());
-
     }
 
     @Override
     public void onStart() {
-        System.out.println("Server started!");
+        System.out.println("Server started: " + IPAddress);
+        showNotification("server started: " + IPAddress);
+    }
+
+
+    // helper
+    public void showNotification(final String msg) {
+        try {
+            mActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(MainContext, msg , Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Toast exception", e);
+        }
     }
 }

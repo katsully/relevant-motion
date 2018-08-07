@@ -125,8 +125,8 @@ tools:context="com.wearnotch.notchdemo.Main2Activity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_width="296dp"
+        android:layout_height="262dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

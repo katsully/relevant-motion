@@ -19,17 +19,62 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
 
-    <Button
-        android:id="@+id/btn_set_IP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#FF0000"
-        android:text="Set IP"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        android:onClick="setIP"></Button>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_set_IP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FF0000"
+            android:text="Set IP"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            android:onClick="setIP"></Button>
+
+        <Button
+            android:id="@+id/btn_start_ws"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF00"
+            android:text="Start Websocket"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            android:onClick="startWebSocket"></Button>
+
+        <Button
+            android:id="@+id/btn_stop_ws"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0000FF"
+            android:text="Stop Websocket"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            android:onClick="stopWebSocket"></Button>
+
+        <Button
+            android:id="@+id/btn_unchecked_init"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="20dp"
+            android:background="#0000FF"
+            android:text="Unchecked Init"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:onClick="uncheckedinit"></Button>
+
+    </LinearLayout>
+
 
 
     <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->

@@ -497,6 +497,7 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.btn_unchecked_init)
     void uncheckedinit() {
+        System.out.println("unchecking and initing");
         inProgress();
         mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
             @Override
@@ -1313,7 +1314,6 @@ public class MainFragment extends BaseFragment {
 
     private void inProgress() {
         setCounterText(mCounterText,"In progress...");
-
     }
 
     public class EmptyCallback<T> implements NotchCallback<T> {
