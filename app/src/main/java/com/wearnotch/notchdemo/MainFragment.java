@@ -89,7 +89,6 @@ public class MainFragment extends BaseFragment {
     private static final int REQUEST_ALL_PERMISSION = 1;
     private static String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION };
 
-
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -165,8 +164,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.btn_remove)
     Button mButtonRemove;
 
-    @BindView(R.id.btn_connect)
-    Button mButtonConnect;
+//    @BindView(R.id.btn_connect)
+//    Button mButtonConnect;
 
     @BindView(R.id.btn_disconnect)
     Button mButtonDisconnect;
@@ -291,7 +290,7 @@ public class MainFragment extends BaseFragment {
         mButtonSyncPair.setTypeface(tfLight);
         mButtonRemove.setTypeface(tfLight);
         mButtonShutDown.setTypeface(tfLight);
-        mButtonConnect.setTypeface(tfLight);
+//        mButtonConnect.setTypeface(tfLight);
         mButtonDisconnect.setTypeface(tfLight);
         mButtonErase.setTypeface(tfLight);
         mButtonChangeChannel.setTypeface(tfLight);
@@ -432,23 +431,23 @@ public class MainFragment extends BaseFragment {
 
     }
 
-    @OnClick(R.id.btn_connect)
-    void connect() {
-        inProgress();
-        mNotchService.disconnect(new EmptyCallback<Void>(){
-            @Override
-            public void onSuccess(Void aVoid) {
-                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
-                    @Override
-                    public void onSuccess(NotchNetwork notchNetwork) {
-                        super.onSuccess(notchNetwork);
-                        updateNetwork();
-                        updateUser(mNotchService.getLicense());
-                    }
-                });
-            }
-        });
-    }
+//    @OnClick(R.id.btn_connect)
+//    void connect() {
+//        inProgress();
+//        mNotchService.disconnect(new EmptyCallback<Void>(){
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
+//                    @Override
+//                    public void onSuccess(NotchNetwork notchNetwork) {
+//                        super.onSuccess(notchNetwork);
+//                        updateNetwork();
+//                        updateUser(mNotchService.getLicense());
+//                    }
+//                });
+//            }
+//        });
+//    }
 
     @OnClick(R.id.btn_disconnect)
     void disconnect() {
@@ -533,7 +532,7 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_5_full_body))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_1_real_time))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -626,10 +625,11 @@ public class MainFragment extends BaseFragment {
 
                         mSkeleton = mRealTimeData.getSkeleton();
 
-                        updateRealTime();
+                        mRealTime = true; // needed here now if not visualizing
+                        // updateRealTime(); // for visualizing
                         mUpdateStartTime = System.currentTimeMillis();
                         mHandler.removeCallbacks(mLogRealTimeData);
-                        mHandler.post(mLogRealTimeData);
+                        mHandler.post(mLogRealTimeData); // start it
                     }
                 }
 
@@ -708,6 +708,8 @@ public class MainFragment extends BaseFragment {
             if (currentFrame > mRealTimeData.getFrameCount() - 1) {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
+
+            System.out.println(chestAngle.get(0));
 
             // get some bones
             Bone root           = mSkeleton.getRoot(); // a helpful method

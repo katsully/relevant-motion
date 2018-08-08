@@ -19,4 +19,17 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
 
+    <Button
+        android:id="@+id/btn_connect2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="200dp"
+        android:background="#FFF000"
+        android:text="Connect to network"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:onClick="click_connect"></Button>
+
 </android.support.constraint.ConstraintLayout>

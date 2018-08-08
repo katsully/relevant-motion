@@ -14,8 +14,11 @@ import android.support.v4.view.ViewPager;
 
 // component imports
 import android.view.View;
+import android.view.View.*;
 import android.widget.Button;
 import android.widget.EditText;
+import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
 
 // websocket imports
 import java.io.IOException;
@@ -25,7 +28,15 @@ import android.net.wifi.WifiInfo;
 import java.util.Locale;
 
 // notch imports
+import com.wearnotch.framework.ActionDevice;
+import com.wearnotch.framework.NotchChannel;
+import com.wearnotch.framework.NotchNetwork;
+import com.wearnotch.notchdemo.util.Util;
 import com.wearnotch.service.NotchAndroidService;
+import com.wearnotch.service.common.NotchCallback;
+import com.wearnotch.service.common.NotchError;
+import com.wearnotch.service.common.NotchProgress;
+
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,6 +46,9 @@ public class MainActivity extends BaseActivity {
     // websocket server vars
     TextView infoip, msg;
     WebsocketServer wsServer;
+
+    // notch
+    private NotchChannel mSelectedChannel;
 
 //    Server server;
 //    // websocket client
@@ -54,12 +68,12 @@ public class MainActivity extends BaseActivity {
         // TABS
         mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.container); // TODO re-add
+        mViewPager.setAdapter(mSectionsPagerAdapter); // TODO re-add
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); // TODO re-add
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
@@ -82,6 +96,17 @@ public class MainActivity extends BaseActivity {
         // controlServiceIntent.putExtra("MOCK", true);
 
         bindService(controlServiceIntent, this, BIND_AUTO_CREATE);
+
+
+//        Button clickButton = (Button) findViewById(R.id.btn_connect);
+//        clickButton.setOnClickListener( new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                System.out.println("this button clicking works");
+//
+//            }
+//        });
 
     }
 
@@ -171,6 +196,103 @@ public class MainActivity extends BaseActivity {
     public void uncheckedinit(View v) {
         System.out.println("unchecking and initing");
     }
+
+    public void click_connect(View v) {
+        connectNetwork();
+    }
+
+    public void connectNetwork() {
+//        inProgress();
+        mNotchService.disconnect(new EmptyCallback<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+                final String[] names = new String[] {"UNSPECIFIED","A","B","C","D","E","F","G","H","I",
+                        "J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z",};
+
+                mSelectedChannel = NotchChannel.fromChar(names[1].charAt(0));
+
+                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
+                    @Override
+                    public void onSuccess(NotchNetwork notchNetwork) {
+                        super.onSuccess(notchNetwork);
+                        updateNetwork();
+//                        updateUser(mNotchService.getLicense());
+                    }
+                });
+            }
+        });
+    }
+
+    private void updateNetwork() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Current network:\n");
+        if (mNotchService.getNetwork() != null) {
+            for (ActionDevice device : mNotchService.getNetwork().getDeviceSet()) {
+                sb.append(device.getNetworkId()).append(", ");
+            }
+        }
+        System.out.println(sb.toString());
+//        mCurrentNetwork.setText(sb.toString());
+    }
+
+    public class EmptyCallback<T> implements NotchCallback<T> {
+
+        @Override
+        public void onProgress(NotchProgress notchProgress) {
+        }
+
+        @Override
+        public void onSuccess(T t) {
+            Util.showNotification("Success!");
+            clearText();
+        }
+
+        @Override
+        public void onFailure(NotchError notchError) {
+            Util.showNotification(Util.getNotchErrorStr(notchError));
+            clearText();
+        }
+
+        @Override
+        public void onCancelled() {
+        }
+    }
+
+
+    private void setCounterText(final TextView text, final String str){
+//        setCounterText(text,str,50);
+    }
+
+    private void clearText() {
+//        setCounterText(mCounterText, "");
+    }
+
+
+
+
+//    @BindView(R.id.btn_connect)
+//    Button mButtonConnect;
+//
+//    @OnClick(R.id.btn_connect)
+//    void connect() {
+////        inProgress();
+//        mNotchService.disconnect(new EmptyCallback<Void>(){
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
+//                    @Override
+//                    public void onSuccess(NotchNetwork notchNetwork) {
+//                        super.onSuccess(notchNetwork);
+//                        updateNetwork();
+////                        updateUser(mNotchService.getLicense());
+//                    }
+//                });
+//            }
+//        });
+//    }
+
+
+
 
 
 }
