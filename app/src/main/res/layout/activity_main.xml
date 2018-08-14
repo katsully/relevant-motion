@@ -124,7 +124,7 @@ tools:context="com.wearnotch.notchdemo.Main2Activity">
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+        android:id="@+id/container2"
         android:layout_width="296dp"
         android:layout_height="262dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -143,15 +143,15 @@ tools:context="com.wearnotch.notchdemo.Main2Activity">
         <!--android:textSize="16dp"></Button>-->
 
 
-    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--xmlns:tools="http://schemas.android.com/tools"-->
-        <!--android:id="@+id/container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:paddingTop="48dp"-->
-        <!--android:background="@color/gray"-->
-        <!--tools:context=".MainActivity">-->
-    <!--</FrameLayout>-->
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="48dp"
+        android:background="@color/gray"
+        tools:context=".MainActivity">
+    </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

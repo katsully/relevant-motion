@@ -68,12 +68,12 @@ public class MainActivity extends BaseActivity {
         // TABS
         mSectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container); // TODO re-add
-        mViewPager.setAdapter(mSectionsPagerAdapter); // TODO re-add
+//        mViewPager = (ViewPager) findViewById(R.id.container); // TODO re-add
+//        mViewPager.setAdapter(mSectionsPagerAdapter); // TODO re-add
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); // TODO re-add
+//        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); // TODO re-add
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 

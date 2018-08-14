@@ -164,8 +164,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.btn_remove)
     Button mButtonRemove;
 
-//    @BindView(R.id.btn_connect)
-//    Button mButtonConnect;
+    @BindView(R.id.btn_connect)
+    Button mButtonConnect;
 
     @BindView(R.id.btn_disconnect)
     Button mButtonDisconnect;
@@ -431,23 +431,23 @@ public class MainFragment extends BaseFragment {
 
     }
 
-//    @OnClick(R.id.btn_connect)
-//    void connect() {
-//        inProgress();
-//        mNotchService.disconnect(new EmptyCallback<Void>(){
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
-//                    @Override
-//                    public void onSuccess(NotchNetwork notchNetwork) {
-//                        super.onSuccess(notchNetwork);
-//                        updateNetwork();
-//                        updateUser(mNotchService.getLicense());
-//                    }
-//                });
-//            }
-//        });
-//    }
+    @OnClick(R.id.btn_connect)
+    void connect() {
+        inProgress();
+        mNotchService.disconnect(new EmptyCallback<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+                mNotchService.uncheckedInit(mSelectedChannel, new EmptyCallback<NotchNetwork>() {
+                    @Override
+                    public void onSuccess(NotchNetwork notchNetwork) {
+                        super.onSuccess(notchNetwork);
+                        updateNetwork();
+                        updateUser(mNotchService.getLicense());
+                    }
+                });
+            }
+        });
+    }
 
     @OnClick(R.id.btn_disconnect)
     void disconnect() {
@@ -532,7 +532,7 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_1_real_time))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_4_limbs))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -626,7 +626,7 @@ public class MainFragment extends BaseFragment {
                         mSkeleton = mRealTimeData.getSkeleton();
 
                         mRealTime = true; // needed here now if not visualizing
-                        // updateRealTime(); // for visualizing
+                        updateRealTime(); // for visualizing
                         mUpdateStartTime = System.currentTimeMillis();
                         mHandler.removeCallbacks(mLogRealTimeData);
                         mHandler.post(mLogRealTimeData); // start it
