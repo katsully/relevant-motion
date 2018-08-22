@@ -51,13 +51,140 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusableInTouchMode="true">
 
-            <Switch
-                android:id="@+id/switch1"
+            <LinearLayout
+                android:id="@+id/info_osc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Switch" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/switch_osc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:text="OSC Streaming"
+                    android:textColor="#69a7b0"
+                    android:textSize="16dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/osc_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/osc_ip_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="OSC IP"
+                        android:text="127.0.0.1" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/osc_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/osc_port_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="OSC Port"
+                        android:text="8000" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_stop_osc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/transparent"
+                    android:text="Stop OSC"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"></Button>
+
+                <Button
+                    android:id="@+id/btn_start_osc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/transparent"
+                    android:text="Start OSC"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"></Button>
+
+                <!--<TextView-->
+                    <!--android:id="@+id/current_IP"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="IP: 127.0.0.1"-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="20dp" />-->
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/info_ws"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="8dp"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/switch_ws"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:text="WebSocket Streaming"
+                    android:textColor="#69a7b0"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/ws_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="left"
+                    android:text="WebSocket IP: 127.0.0.1"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ws_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/ws_port_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="WebSocket Port"
+                        android:text="8887" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <!--<Button-->
+                <!--android:id="@+id/btn_set_IP"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="0dp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:background="@color/transparent"-->
+                <!--android:text="Set IP"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="16dp"></Button>-->
+
+
+
+
 
             <Button
                 android:id="@+id/btn_start_ws"
@@ -97,15 +224,6 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/current_IP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:gravity="center_vertical"
-                android:text="IP:\n127.0.0.1"
-                android:textColor="@color/black"
-                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btn_set_user"
@@ -446,38 +564,6 @@
                 android:textColor="@color/black"
                 android:textSize="16dp"></Button>
 
-            <Button
-                android:id="@+id/btn_stop_osc"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/transparent"
-                android:text="Stop OSC"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
-
-            <Button
-                android:id="@+id/btn_start_osc"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/transparent"
-                android:text="Start OSC"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
-
-            <Button
-                android:id="@+id/btn_set_IP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="20dp"
-                android:background="@color/transparent"
-                android:text="Set IP"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -578,17 +664,14 @@
     </ScrollView>
 
 
-
-
-
     <TextView
-        android:layout_centerInParent="true"
-        android:background="@color/gray"
         android:id="@+id/counter_text"
-        android:textColor="@color/black"
-        android:textSize="60dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:textColor="#4d4d4d"
+        android:textSize="60dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -19,14 +19,14 @@ public class WebsocketServer extends WebSocketServer
 {
     // vars
     private static final String TAG = "WebSocket";
-    InetSocketAddress IPAddress;
+    InetSocketAddress WSIPAddress;
     Activity mActivity;
     Context MainContext;
 
     // create
-    public WebsocketServer(InetSocketAddress address, Context context, Activity activity) {
-        super(address);
-        IPAddress = address;
+    public WebsocketServer(InetSocketAddress IPAddress, Context context, Activity activity) {
+        super(IPAddress);
+        WSIPAddress = IPAddress;
         MainContext = context;
         mActivity = activity;
         // TODO Auto-generated constructor stub
@@ -69,8 +69,8 @@ public class WebsocketServer extends WebSocketServer
 
     @Override
     public void onStart() {
-        System.out.println("Server started: " + IPAddress);
-        showNotification("server started: " + IPAddress);
+        System.out.println("Server started: " + WSIPAddress);
+        showNotification("server started: " + WSIPAddress);
     }
 
 

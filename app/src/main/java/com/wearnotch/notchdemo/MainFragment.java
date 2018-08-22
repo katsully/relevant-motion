@@ -18,7 +18,9 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.health.SystemHealthManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.util.Log;
@@ -32,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
+import android.support.design.widget.TextInputLayout;
 
 import com.wearnotch.db.model.Device;
 import com.wearnotch.db.NotchDataBase;
@@ -73,6 +76,8 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
@@ -110,7 +115,8 @@ public class MainFragment extends BaseFragment {
     private Measurement mCurrentMeasurement;
     private File mCurrentOutput;
     private String mUser;
-    private boolean mRealTime, mRemote, mChangingChannel;
+    private boolean mRealTime = true;
+    private boolean mRemote, mChangingChannel;
     private VisualiserData mRealTimeData;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private SimpleDateFormat mSDF;
@@ -125,11 +131,18 @@ public class MainFragment extends BaseFragment {
     private enum State {CALIBRATION,STEADY,CAPTURE}
     private State mState;
 
+
+    // osc
     volatile boolean running = true;
+    boolean streamOSC = false;
+    private String oscIP  = "127.0.0.1"; // the IP of the computer sending OSC to...
+    private int oscPort = 8000;
 
     // websocket server vars
     TextView infoip, msg;
     WebsocketServer wsServer;
+    private String wsIP;
+    private int wsPort = 8887;
 
     boolean streamSequence1 = false;
     boolean streamSequence2 = false;
@@ -145,8 +158,20 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.new_title)
     TextView mNewTitle;
 
-    @BindView(R.id.current_IP)
-    TextView mCurrentIP;
+//    @BindView(R.id.current_IP)
+//    TextView mCurrentIP;
+
+    @BindView(R.id.osc_ip)
+    TextInputLayout mOSCIP;
+
+    @BindView(R.id.osc_port)
+    TextInputLayout mOSCPort;
+
+    @BindView(R.id.ws_ip)
+    TextView mWSIP;
+
+    @BindView(R.id.ws_port)
+    TextInputLayout mWSPort;
 
     @BindView(R.id.device_list)
     TextView mDeviceList;
@@ -169,8 +194,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.current_network)
     TextView mCurrentNetwork;
 
-    @BindView(R.id.chk_realtime)
-    CheckBox mRealTimeBox;
+//    @BindView(R.id.chk_realtime)
+//    CheckBox mRealTimeBox;
 
     @BindView(R.id.chk_remote)
     CheckBox mRemoteBox;
@@ -179,8 +204,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.btn_set_user)
     Button mButtonSetUser;
 
-    @BindView(R.id.btn_set_IP)
-    Button mButtonSetIP;
+//    @BindView(R.id.btn_set_IP)
+//    Button mButtonSetIP;
 
     @BindView(R.id.btn_pair)
     Button mButtonPair;
@@ -266,7 +291,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.dock_image)
     ImageView mDockImg;
 
-    AlertDialog userDialog, fileDialog, channelDialog, userIPDialog;
+//    AlertDialog userDialog, fileDialog, channelDialog, userIPDialog;
+    AlertDialog userDialog, fileDialog, channelDialog;
 
 
     @Override
@@ -357,8 +383,10 @@ public class MainFragment extends BaseFragment {
         // Other
         mSDF = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
+        checkRealTime();
+        setWSIPText();
         buildUserDialog();
-        buildUserIPDialog();
+//        buildUserIPDialog();
         buildChannelDialog();
         try {
             checkAndCopyExample();
@@ -397,7 +425,7 @@ public class MainFragment extends BaseFragment {
 
     @OnCheckedChanged(R.id.chk_realtime)
     void checkRealTime() {
-        mRealTime = mRealTimeBox.isChecked();
+//        mRealTime = mRealTimeBox.isChecked();
         mButtonCapture.setText(mRealTime ? "START REAL-TIME" : "CAPTURE 2 SEC");
         mButtonConfigure.setText(mRealTime ? "CONFIGURE REAL-TIME" : "CONFIGURE 2 SEC CAPTURE");
         mButtonDownload.setText(mRealTime ? "STOP REAL-TIME" : "DOWNLOAD");
@@ -409,7 +437,51 @@ public class MainFragment extends BaseFragment {
     @OnCheckedChanged(R.id.chk_remote)
     void checkRemote() {
         mRemote = mRemoteBox.isChecked();
-        mRealTimeBox.setEnabled(!mRemote);
+//        mRealTimeBox.setEnabled(!mRemote);
+    }
+
+    @OnCheckedChanged(R.id.switch_osc)
+    void onSwitched(boolean checked) {
+        streamOSC = checked;
+    }
+
+    @OnFocusChange(R.id.osc_ip_hint)
+    void onFocusChangeOSCIP(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            oscIP = mOSCIP.getEditText().getText().toString();
+            System.out.println("Changed OSC IP to: " + oscIP);
+        }
+    }
+
+    @OnFocusChange(R.id.osc_port_hint)
+    void onFocusChangeOSCPort(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            try {
+                oscPort = Integer.parseInt( mOSCPort.getEditText().getText().toString() );
+                mOSCPort.setHint("OSC Port");
+                System.out.println("Changed OSC Port to: " + oscPort);
+            }
+            catch (Exception e) {
+                mOSCPort.setHint("OSC Port needs int number");
+                System.out.println("OSC Port is not an int number " + e);
+            }
+        }
+    }
+
+    @OnFocusChange(R.id.ws_port_hint)
+    void onFocusChangeWSPort(View v, boolean hasFocus) {
+        System.out.println("ws focus changed");
+        if (!hasFocus) {
+            try {
+                wsPort = Integer.parseInt( mWSPort.getEditText().getText().toString() );
+                mWSPort.setHint("WebSocket Port");
+                System.out.println("Changed WebSocket Port to: " + wsPort);
+            }
+            catch (Exception e) {
+                mWSPort.setHint("WebSocket Port needs int number");
+                System.out.println("WebSocket Port is not an int number " + e);
+            }
+        }
     }
 
     @OnClick(R.id.btn_set_user)
@@ -417,11 +489,11 @@ public class MainFragment extends BaseFragment {
         userDialog.show();
     }
 
-    @OnClick(R.id.btn_set_IP)
-    void setIP() {
-        System.out.println("setting IP");
-        userIPDialog.show();
-    }
+//    @OnClick(R.id.btn_set_IP)
+//    void setIP() {
+//        System.out.println("setting IP");
+//        userIPDialog.show();
+//    }
 
     @OnClick(R.id.btn_pair)
     void pair() {
@@ -1070,19 +1142,29 @@ public class MainFragment extends BaseFragment {
     @OnClick(R.id.btn_stream_action)
     void StartAndGetstreamSequence1() {
         resetSequences();
-        System.out.println("streamActionStart: " + streamActionStart);
+//        System.out.println("streamActionStart: " + streamActionStart);
 
+        // start
         if (streamActionStart) {
             streamSequence2 = true;
+
+            // TODO if OSC
+            // updateUserIP(oscIP);
+//            if (streamOSC) {
+//
+//            }
             cptr();
 
+            // change the button to stop
             streamActionStart = false;
             mButtonStreamAction.setBackgroundColor(Color.parseColor("#FF0000"));
             mButtonStreamAction.setText("Stop Stream");
         }
+        // stop
         else if (!streamActionStart) {
             download();
 
+            // change the button to start
             streamActionStart = true;
             mButtonStreamAction.setBackgroundColor(Color.parseColor("#2CB978"));
             mButtonStreamAction.setText("Start Stream");
@@ -1112,26 +1194,21 @@ public class MainFragment extends BaseFragment {
     public void startWebSocket()
     {
         System.out.println("starting websocket server...");
+        System.out.print("the port is: "+ wsPort);
 
-        // get the current IP address (to start server with)
-        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(mApplicationContext.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int IPbits = wifiInfo.getIpAddress();
-        String ipAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
-                (IPbits & 0xff), (IPbits >> 8 & 0xff),
-                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
-
+        wsIP = getLocalIPAddress();
 
         Context context = getActivity().getApplicationContext();
 
         // websocket server
-        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
+        InetSocketAddress inetSockAddress = new InetSocketAddress(wsIP, wsPort);
         wsServer = new WebsocketServer(inetSockAddress, context, mActivity);
         wsServer.start();
     }
 
     public void stopWebSocket()
     {
+        // TODO stopping web socket doesnt work... or rather starting another on a diff port doesnt work..
         System.out.println("stopping websocket server...");
 
         try {
@@ -1144,6 +1221,22 @@ public class MainFragment extends BaseFragment {
         catch (InterruptedException e) {
             System.out.println(e);
         }
+    }
+
+    public String getLocalIPAddress() {
+        // get the current IP address (to start server with)
+        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(mApplicationContext.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int IPbits = wifiInfo.getIpAddress();
+        String thisIP = String.format(Locale.getDefault(), "%d.%d.%d.%d",
+                (IPbits & 0xff), (IPbits >> 8 & 0xff),
+                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
+
+        return thisIP;
+    }
+
+    public void setWSIPText() {
+        mWSIP.setText("WebSocket IP: " + getLocalIPAddress() );
     }
 
     private void buildUserDialog() {
@@ -1171,33 +1264,35 @@ public class MainFragment extends BaseFragment {
         userDialog = builder.create();
     }
 
-    private void buildUserIPDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setMessage("Enter IP");
-
-        // Set up the input
-        final EditText input = new EditText(this.mApplicationContext);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setTextColor(getResources().getColor(R.color.black));
-        builder.setView(input);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                String IP;
-                IP = input.getText().toString();
-
-                myIP = IP;
-                updateUserIP(myIP);
-
-//                mNotchService.setLicense(user);
-//                updateUser(mNotchService.getLicense());
-//                mUser = user;
-            }
-        });
-
-        userIPDialog = builder.create();
-    }
+//    private void buildUserIPDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//
+//        builder.setMessage("Enter IP");
+//
+//        // Set up the input
+//        final EditText input = new EditText(this.mApplicationContext);
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//        input.setTextColor(getResources().getColor(R.color.black));
+//        builder.setView(input);
+//
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                String IP;
+////                IP = input.getText().toString();
+//                IP = mOSCIP.getEditText().getText().toString();
+//                oscIP = IP;
+//
+//                oscIP = mOSCIP.getEditText().getText().toString();
+////                updateUserIP(oscIP);
+//
+////                mNotchService.setLicense(user);
+////                updateUser(mNotchService.getLicense());
+////                mUser = user;
+//            }
+//        });
+//
+//        userIPDialog = builder.create();
+//    }
 
     private void buildFileDialog(final File[] files) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -1338,29 +1433,32 @@ public class MainFragment extends BaseFragment {
         });
     }
 
-    private void updateUserIP(final String IP) {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mCurrentIP.setText("IP:\n" + IP);
-//                if (mDB == null) mDB = NotchDataBase.getInst();
-//                StringBuilder sb = new StringBuilder();
-//                sb.append("Device list:\n");
-//                for (Device device : mDB.findAllDevices(user)) {
-//                    sb.append("Notch ").append(device.getNotchDevice().getNetworkId()).append(" (");
-//                    sb.append(device.getNotchDevice().getDeviceMac()).append(") ");
-//                    sb.append("FW: " + device.getSwVersion() + ", ");
-//                    sb.append("Ch: " + device.getChannel().toChar() + "\n");
-//                }
-//                mDeviceList.setText(sb.toString());
-//                if (mSelectedChannel == null) {
-//                    mSelectedChannelTxt.setText("SELECTED CHANNEL: UNSPECIFIED");
-//                } else {
-//                    mSelectedChannelTxt.setText("SELECTED CHANNEL: " + mSelectedChannel.toChar());
-//                }
-            }
-        });
-    }
+//    private void updateUserIP(final String IP) {
+//        mActivity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mCurrentIP.setText("IP:\n" + IP);
+//
+////                mOSCIP.setText("test", TextView.BufferType.EDITABLE);
+//
+////                if (mDB == null) mDB = NotchDataBase.getInst();
+////                StringBuilder sb = new StringBuilder();
+////                sb.append("Device list:\n");
+////                for (Device device : mDB.findAllDevices(user)) {
+////                    sb.append("Notch ").append(device.getNotchDevice().getNetworkId()).append(" (");
+////                    sb.append(device.getNotchDevice().getDeviceMac()).append(") ");
+////                    sb.append("FW: " + device.getSwVersion() + ", ");
+////                    sb.append("Ch: " + device.getChannel().toChar() + "\n");
+////                }
+////                mDeviceList.setText(sb.toString());
+////                if (mSelectedChannel == null) {
+////                    mSelectedChannelTxt.setText("SELECTED CHANNEL: UNSPECIFIED");
+////                } else {
+////                    mSelectedChannelTxt.setText("SELECTED CHANNEL: " + mSelectedChannel.toChar());
+////                }
+//            }
+//        });
+//    }
 
     private void updateNetwork() {
         mActivity.runOnUiThread(new Runnable() {
@@ -1561,8 +1659,6 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP  = "127.0.0.1"; // the IP of the computer sending OSC to...
-    private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
 
@@ -1579,7 +1675,7 @@ public class MainFragment extends BaseFragment {
 
             try {
                 // Connect to some IP address and port
-                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+                oscPortOut = new OSCPortOut(InetAddress.getByName(oscIP), oscPort);
             } catch(UnknownHostException e) {
                 // Error handling when your IP isn't found
                 return;
@@ -1652,7 +1748,7 @@ public class MainFragment extends BaseFragment {
 //
 //            try {
 //                // Connect to some IP address and port
-//                oscPortOut = new OSCPortOut(InetAddress.getByName(myIP), myPort);
+//                oscPortOut = new OSCPortOut(InetAddress.getByName(oscIP), oscPort);
 //            } catch(UnknownHostException e) {
 //                // Error handling when your IP isn't found
 //                return;
