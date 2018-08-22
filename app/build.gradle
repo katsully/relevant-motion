@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId 'com.wearnotch.notchdemo.tutorial'
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 8
         versionName '1.7'

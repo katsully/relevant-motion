@@ -154,42 +154,42 @@ public class MainActivity extends BaseActivity {
 //    }
 
 
-    public void startWebSocket(View v)
-    {
-        System.out.println("starting websocket server...");
-
-        // get the current IP address (to start server with)
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int IPbits = wifiInfo.getIpAddress();
-        String ipAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
-                (IPbits & 0xff), (IPbits >> 8 & 0xff),
-                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
-
-
-        Context context = getApplicationContext();
-
-        // websocket server
-        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
-        wsServer = new WebsocketServer(inetSockAddress, context, MainActivity.this);
-        wsServer.start();
-    }
-
-    public void stopWebSocket(View v)
-    {
-        System.out.println("stopping websocket server...");
-
-        try {
-            wsServer.stop();
-            System.out.println("websocket server stopped");
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
-        catch (InterruptedException e) {
-            System.out.println(e);
-        }
-    }
+//    public void startWebSocket(View v)
+//    {
+//        System.out.println("starting websocket server...");
+//
+//        // get the current IP address (to start server with)
+//        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+//        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+//        int IPbits = wifiInfo.getIpAddress();
+//        String ipAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
+//                (IPbits & 0xff), (IPbits >> 8 & 0xff),
+//                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
+//
+//
+//        Context context = getApplicationContext();
+//
+//        // websocket server
+//        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
+//        wsServer = new WebsocketServer(inetSockAddress, context, MainActivity.this);
+//        wsServer.start();
+//    }
+//
+//    public void stopWebSocket(View v)
+//    {
+//        System.out.println("stopping websocket server...");
+//
+//        try {
+//            wsServer.stop();
+//            System.out.println("websocket server stopped");
+//        }
+//        catch (IOException e) {
+//            System.out.println(e);
+//        }
+//        catch (InterruptedException e) {
+//            System.out.println(e);
+//        }
+//    }
 
 
     // TODO for all buttons

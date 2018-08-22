@@ -5,42 +5,13 @@
     android:orientation="vertical"
     android:background="@color/transparent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal" >
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal" >-->
 
-        <Button
-            android:id="@+id/btn_start_ws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00FF00"
-            android:text="Start Websocket"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:onClick="startWebSocket"></Button>
-        <Button
-            android:id="@+id/btn_stop_ws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#0000FF"
-            android:text="Stop Websocket"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:onClick="stopWebSocket"></Button>
-
-        <Button
-            android:id="@+id/btn_cnct_net"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FF0000"
-            android:text="connectwork"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:onClick="connectNetwork"></Button>
-
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 
 
@@ -80,6 +51,35 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_start_ws"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00FF00"
+                android:text="Start Websocket"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:onClick="startWebSocket"></Button>
+            <Button
+                android:id="@+id/btn_stop_ws"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#0000FF"
+                android:text="Stop Websocket"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:onClick="stopWebSocket"></Button>
+
+            <Button
+                android:id="@+id/btn_cnct_net"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FF0000"
+                android:text="connectwork"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:onClick="connectNetwork"></Button>
 
             <TextView
                 android:id="@+id/new_title"

@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -78,6 +80,13 @@ import java.net.*;
 import java.util.*;
 import com.illposed.osc.*;
 
+// websocket imports
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiInfo;
+import java.util.Locale;
+
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
     private static final String DEFAULT_USER_LICENSE = "ZvqYLovXeNGREMadVnRE";
@@ -114,6 +123,10 @@ public class MainFragment extends BaseFragment {
     private State mState;
 
     volatile boolean running = true;
+
+    // websocket server vars
+    TextView infoip, msg;
+    WebsocketServer wsServer;
 
     @BindView(R.id.new_title)
     TextView mNewTitle;
@@ -532,7 +545,7 @@ public class MainFragment extends BaseFragment {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
             Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_4_limbs))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_5_full_body))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -708,6 +721,9 @@ public class MainFragment extends BaseFragment {
             if (currentFrame > mRealTimeData.getFrameCount() - 1) {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
+
+
+            wsServer.broadcast( "chest angle: [" + chestAngle.get(0) + "]"); // This method sends a message to all clients connected
 
             System.out.println(chestAngle.get(0));
 
@@ -984,6 +1000,53 @@ public class MainFragment extends BaseFragment {
         running = true;
 
         new OSCThread().start();
+    }
+
+    @OnClick(R.id.btn_start_ws)
+    void startWSButton() {
+        startWebSocket();
+    }
+
+    @OnClick(R.id.btn_stop_ws)
+    void stopWSButton() {
+        stopWebSocket();
+    }
+
+    public void startWebSocket()
+    {
+        System.out.println("starting websocket server...");
+
+        // get the current IP address (to start server with)
+        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(mApplicationContext.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int IPbits = wifiInfo.getIpAddress();
+        String ipAddress = String.format(Locale.getDefault(), "%d.%d.%d.%d",
+                (IPbits & 0xff), (IPbits >> 8 & 0xff),
+                (IPbits >> 16 & 0xff), (IPbits >> 24 & 0xff));
+
+
+        Context context = getActivity().getApplicationContext();
+
+        // websocket server
+        InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 8887);
+        wsServer = new WebsocketServer(inetSockAddress, context, mActivity);
+        wsServer.start();
+    }
+
+    public void stopWebSocket()
+    {
+        System.out.println("stopping websocket server...");
+
+        try {
+            wsServer.stop();
+            System.out.println("websocket server stopped");
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        catch (InterruptedException e) {
+            System.out.println(e);
+        }
     }
 
     private void buildUserDialog() {
@@ -1519,6 +1582,9 @@ public class MainFragment extends BaseFragment {
 //                }
 //            }
 //        }
+
+
+
     };
 
 

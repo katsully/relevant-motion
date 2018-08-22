@@ -37,29 +37,29 @@
             tools:layout_editor_absoluteY="0dp"
             android:onClick="setIP"></Button>
 
-        <Button
-            android:id="@+id/btn_start_ws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00FF00"
-            android:text="Start Websocket"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp"
-            android:onClick="startWebSocket"></Button>
+        <!--<Button-->
+            <!--android:id="@+id/btn_start_ws"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="#00FF00"-->
+            <!--android:text="Start Websocket"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="16dp"-->
+            <!--tools:layout_editor_absoluteX="0dp"-->
+            <!--tools:layout_editor_absoluteY="0dp"-->
+            <!--android:onClick="startWebSocket"></Button>-->
 
-        <Button
-            android:id="@+id/btn_stop_ws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#0000FF"
-            android:text="Stop Websocket"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp"
-            android:onClick="stopWebSocket"></Button>
+        <!--<Button-->
+            <!--android:id="@+id/btn_stop_ws"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="#0000FF"-->
+            <!--android:text="Stop Websocket"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="16dp"-->
+            <!--tools:layout_editor_absoluteX="0dp"-->
+            <!--tools:layout_editor_absoluteY="0dp"-->
+            <!--android:onClick="stopWebSocket"></Button>-->
 
         <Button
             android:id="@+id/btn_unchecked_init"
