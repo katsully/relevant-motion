@@ -31,6 +31,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.Color;
 
 import com.wearnotch.db.model.Device;
 import com.wearnotch.db.NotchDataBase;
@@ -93,6 +94,8 @@ public class MainFragment extends BaseFragment {
 
     private static final String NOTCH_DIR = "notch_tutorial";
     private static final long CALIBRATION_TIME = 7000L;
+    private static final long CALIBRATION_SEQ_TIME = 7500L;
+    private static final long STEADY_TIME_DELAY = 5000L;
     private static final long TIMED_CAPTURE_LENGTH = 2000L;
 
     private static final int REQUEST_ALL_PERMISSION = 1;
@@ -128,7 +131,13 @@ public class MainFragment extends BaseFragment {
     TextView infoip, msg;
     WebsocketServer wsServer;
 
-    boolean streamSequence = false;
+    boolean streamSequence1 = false;
+    boolean streamSequence2 = false;
+    boolean calibSequence1 = false;
+    boolean calibSequence2 = false;
+    boolean steadySequence1 = false;
+    boolean steadySequence2 = false;
+    boolean streamActionStart = true;
 
 
 
@@ -248,6 +257,8 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.btn_start_osc)
     Button mButtonStartOSC;
 
+    @BindView(R.id.btn_stream_action)
+    Button mButtonStreamAction;
 
     @BindView(R.id.counter_text)
     TextView mCounterText;
@@ -521,6 +532,10 @@ public class MainFragment extends BaseFragment {
             public void onSuccess(NotchNetwork notchNetwork) {
                 updateNetwork();
                 super.onSuccess(notchNetwork);
+
+                if (calibSequence1) {
+                    configureCalib();
+                }
             }
         });
     }
@@ -561,8 +576,11 @@ public class MainFragment extends BaseFragment {
                     updateNetwork();
                     super.onSuccess(notchNetwork);
 
-                    if (streamSequence) {
+                    if (streamSequence1) {
                         configureCapture();
+                    }
+                    if (steadySequence1) {
+                        configureSteady();
                     }
                 }
             });
@@ -734,7 +752,7 @@ public class MainFragment extends BaseFragment {
             // TODO put this in a conditional statement or try/catch
             wsServer.broadcast( "chest angle: [" + chestAngle.get(0) + "]"); // This method sends a message to all clients connected
 
-            System.out.println(chestAngle.get(0));
+//            System.out.println(chestAngle.get(0));
 
             // get some bones
             Bone root           = mSkeleton.getRoot(); // a helpful method
@@ -864,6 +882,7 @@ public class MainFragment extends BaseFragment {
                 c.cancel();
                 c = null;
             }
+            resetSequences();
         }
         else {
             getNewOutput();
@@ -1011,11 +1030,66 @@ public class MainFragment extends BaseFragment {
         new OSCThread().start();
     }
 
-    @OnClick(R.id.btn_init_config_stream)
-    void InitAndConfigStreamSequence() {
-        streamSequence = true;
+//    /Users/Spencer/.gradle/caches/modules-2/files-2.1/com.notch/framework/1.1.54/3deb683507b15c4aeee10e6f7c00d5e744c68a67/framework-1.1.54.jar!/com/wearnotch/framework/Workout.class
+    // *** SEQUENCES ***
+    @OnClick(R.id.btn_init_config_calib)
+    void InitAndConfigCalibSequence() {
+        resetSequences();
+        calibSequence1 = true;
+        uncheckedinit();
+    }
+
+    @OnClick(R.id.btn_start_get_calibrate)
+    void StartAndGetCalibSequence() {
+        resetSequences();
+        calibSequence2 = true;
+        calibrate();
+    }
+
+    @OnClick(R.id.btn_init_config_steady)
+    void InitAndConfigSteadySequence() {
+        resetSequences();
+        steadySequence1 = true;
         initSteady();
     }
+
+    @OnClick(R.id.btn_start_get_steady)
+    void StartAndGetSteadySequence() {
+        resetSequences();
+        steadySequence2 = true;
+        steady();
+    }
+
+    @OnClick(R.id.btn_init_config_stream)
+    void InitAndConfigstreamSequence1() {
+        resetSequences();
+        streamSequence1 = true;
+        initSteady();
+    }
+
+    @OnClick(R.id.btn_stream_action)
+    void StartAndGetstreamSequence1() {
+        resetSequences();
+        System.out.println("streamActionStart: " + streamActionStart);
+
+        if (streamActionStart) {
+            streamSequence2 = true;
+            cptr();
+
+            streamActionStart = false;
+            mButtonStreamAction.setBackgroundColor(Color.parseColor("#FF0000"));
+            mButtonStreamAction.setText("Stop Stream");
+        }
+        else if (!streamActionStart) {
+            download();
+
+            streamActionStart = true;
+            mButtonStreamAction.setBackgroundColor(Color.parseColor("#2CB978"));
+            mButtonStreamAction.setText("Start Stream");
+        }
+    }
+
+
 
     @OnClick(R.id.btn_start_ws)
     void startWSButton() {
@@ -1025,6 +1099,14 @@ public class MainFragment extends BaseFragment {
     @OnClick(R.id.btn_stop_ws)
     void stopWSButton() {
         stopWebSocket();
+    }
+
+    public void resetSequences() {
+        streamSequence1 = false;
+        calibSequence1 = false;
+        calibSequence2 = false;
+
+        steadySequence1 = false;
     }
 
     public void startWebSocket()
@@ -1343,12 +1425,39 @@ public class MainFragment extends BaseFragment {
                         public void run() {
                             mDockImg.setVisibility(View.GONE);
                             mDockAnimation.stop();
+
+//                            if (calibSequence2) {
+//                                getCalibData();
+//                            }
                         }
                     },CALIBRATION_TIME);
+
+                    // a little more of a delay for the next sequence function
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (calibSequence2) {
+                                getCalibData();
+                            }
+                        }
+                    },CALIBRATION_SEQ_TIME);
+
                     break;
 
                 case STEADY:
                     mNotchService.steady(new EmptyCallback<Measurement>());
+
+                    // for the sequence
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (steadySequence2) {
+                                getSteadyData();
+                            }
+                        }
+                    }, STEADY_TIME_DELAY);
+
                     break;
 
                 case CAPTURE:

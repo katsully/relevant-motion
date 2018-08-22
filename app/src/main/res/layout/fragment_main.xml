@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -41,9 +42,9 @@
 
     <ScrollView
         android:id="@+id/scroll_view"
-        android:layout_below="@id/current_network"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_network">
 
         <LinearLayout
             android:id="@+id/menu_list"
@@ -60,6 +61,7 @@
                 android:text="Start Websocket"
                 android:textColor="@color/white"
                 android:textSize="16dp"></Button>
+
             <Button
                 android:id="@+id/btn_stop_ws"
                 android:layout_width="wrap_content"
@@ -74,10 +76,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#FF0000"
+                android:onClick="connectNetwork"
                 android:text="connectwork"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                android:onClick="connectNetwork"></Button>
+                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/new_title"
@@ -472,14 +474,99 @@
                 android:textSize="16dp"></Button>
 
 
-            <Button
-                android:id="@+id/btn_init_config_stream"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#0000FF"
-                android:text="start realtime seq"
-                android:textColor="@color/white"
-                android:textSize="16dp"></Button>
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_calib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set calib"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_start_get_calibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start calib"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_steady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set steady"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_start_get_steady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start steady"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_stream"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set stream"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_stream_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start stream"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>
