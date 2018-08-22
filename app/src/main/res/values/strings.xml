@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Notch Tutorial App</string>
+    <string name="app_name">ReMo</string>
 
     <string name="status_cancelled">Operation cancelled!</string>
     <string name="status_internal_error">Internal error happened! Code: %1$s</string>
