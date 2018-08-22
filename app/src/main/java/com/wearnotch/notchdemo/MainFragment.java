@@ -299,54 +299,54 @@ public class MainFragment extends BaseFragment {
         ButterKnife.bind(this, root);
 
         // Set typefaces
-        Typeface tfLight = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Light.ttf");
-        Typeface tfBold = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Bold.ttf");
+//        Typeface tfLight = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Light.ttf");
+//        Typeface tfBold = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Bold.ttf");
 
-        mNewTitle.setTypeface(tfBold);
-        mCurrentIP.setTypeface(tfBold);
-        mDeviceManagementTxt.setTypeface(tfBold);
-        mSelectedChannelTxt.setTypeface(tfLight);
-        mCalibrationTxt.setTypeface(tfBold);
-        mSteadyTxt.setTypeface(tfBold);
-        mCaptureTxt.setTypeface(tfBold);
-
-        mCurrentNetwork.setTypeface(tfLight);
-        mDeviceList.setTypeface(tfLight);
-
-        // Set button typeface
-        mButtonSetUser.setTypeface(tfLight);
-        mButtonPair.setTypeface(tfLight);
-        mButtonSyncPair.setTypeface(tfLight);
-        mButtonRemove.setTypeface(tfLight);
-        mButtonShutDown.setTypeface(tfLight);
-//        mButtonConnect.setTypeface(tfLight);
-        mButtonDisconnect.setTypeface(tfLight);
-        mButtonErase.setTypeface(tfLight);
-        mButtonChangeChannel.setTypeface(tfLight);
-        mButtonUncheckedInit.setTypeface(tfLight);
-        mButtonConfigureCalib.setTypeface(tfLight);
-        mButtonCalibrate.setTypeface(tfLight);
-        mButtonGetCalibData.setTypeface(tfLight);
-        mButtonInitSteady.setTypeface(tfLight);
-        mButtonConfigureSteady.setTypeface(tfLight);
-        mButtonSteady.setTypeface(tfLight);
-        mButtonGetSteadyData.setTypeface(tfLight);
-        mButtonInitCapture.setTypeface(tfLight);
-        mButtonConfigure.setTypeface(tfLight);
-        mButtonCapture.setTypeface(tfLight);
-        mButtonDownload.setTypeface(tfLight);
-        mButtonPostDownload.setTypeface(tfLight);
-        mButtonVisualize.setTypeface(tfLight);
-        mButtonShowExample.setTypeface(tfLight);
-
-        // OSC
-        mButtonStopOSC.setTypeface(tfLight);
-        mButtonStartOSC.setTypeface(tfLight);
-        mButtonSetIP.setTypeface(tfLight);
-
-        mCounterText.setTypeface(tfLight);
-        mRealTimeBox.setTypeface(tfLight);
-        mRemoteBox.setTypeface(tfLight);
+//        mNewTitle.setTypeface(tfBold);
+//        mCurrentIP.setTypeface(tfBold);
+//        mDeviceManagementTxt.setTypeface(tfBold);
+//        mSelectedChannelTxt.setTypeface(tfLight);
+//        mCalibrationTxt.setTypeface(tfBold);
+//        mSteadyTxt.setTypeface(tfBold);
+//        mCaptureTxt.setTypeface(tfBold);
+//
+//        mCurrentNetwork.setTypeface(tfLight);
+//        mDeviceList.setTypeface(tfLight);
+//
+//        // Set button typeface
+//        mButtonSetUser.setTypeface(tfLight);
+//        mButtonPair.setTypeface(tfLight);
+//        mButtonSyncPair.setTypeface(tfLight);
+//        mButtonRemove.setTypeface(tfLight);
+//        mButtonShutDown.setTypeface(tfLight);
+////        mButtonConnect.setTypeface(tfLight);
+//        mButtonDisconnect.setTypeface(tfLight);
+//        mButtonErase.setTypeface(tfLight);
+//        mButtonChangeChannel.setTypeface(tfLight);
+//        mButtonUncheckedInit.setTypeface(tfLight);
+//        mButtonConfigureCalib.setTypeface(tfLight);
+//        mButtonCalibrate.setTypeface(tfLight);
+//        mButtonGetCalibData.setTypeface(tfLight);
+//        mButtonInitSteady.setTypeface(tfLight);
+//        mButtonConfigureSteady.setTypeface(tfLight);
+//        mButtonSteady.setTypeface(tfLight);
+//        mButtonGetSteadyData.setTypeface(tfLight);
+//        mButtonInitCapture.setTypeface(tfLight);
+//        mButtonConfigure.setTypeface(tfLight);
+//        mButtonCapture.setTypeface(tfLight);
+//        mButtonDownload.setTypeface(tfLight);
+//        mButtonPostDownload.setTypeface(tfLight);
+//        mButtonVisualize.setTypeface(tfLight);
+//        mButtonShowExample.setTypeface(tfLight);
+//
+//        // OSC
+//        mButtonStopOSC.setTypeface(tfLight);
+//        mButtonStartOSC.setTypeface(tfLight);
+//        mButtonSetIP.setTypeface(tfLight);
+//
+//        mCounterText.setTypeface(tfLight);
+//        mRealTimeBox.setTypeface(tfLight);
+//        mRemoteBox.setTypeface(tfLight);
 
 
         // Animation
@@ -373,7 +373,7 @@ public class MainFragment extends BaseFragment {
     Runnable mSetDefaultUser = new Runnable() {
         @Override
         public void run() {
-            setActionBarTitle(R.string.app_name);
+            setActionBarTitle(R.string.app_name_long);
             if (mNotchService != null && mUser == null) {
                 mUser = DEFAULT_USER_LICENSE;
                 if (DEFAULT_USER_LICENSE.length() > 0) {
@@ -387,7 +387,7 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setActionBarTitle(R.string.app_name);
+        setActionBarTitle(R.string.app_name_long);
         if (mNotchService != null && mUser == null) {
             mUser = DEFAULT_USER_LICENSE;
             updateUser(mUser);
