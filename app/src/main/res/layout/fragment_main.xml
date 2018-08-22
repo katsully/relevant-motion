@@ -101,7 +101,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="30dp"
                     android:layout_marginLeft="20dp"
-                    android:background="@color/transparent"
                     android:text="Stop OSC"
                     android:textColor="@color/black"
                     android:textSize="16dp"></Button>
@@ -112,7 +111,6 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="30dp"
                     android:layout_marginLeft="20dp"
-                    android:background="@color/transparent"
                     android:text="Start OSC"
                     android:textColor="@color/black"
                     android:textSize="16dp"></Button>
@@ -169,6 +167,115 @@
                         android:text="8887" />
                 </android.support.design.widget.TextInputLayout>
 
+                <Button
+                    android:id="@+id/btn_start_ws"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start WebSocket"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"></Button>
+
+                <Button
+                    android:id="@+id/btn_stop_ws"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stop WebSocket"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_calib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set calib"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_start_get_calibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start calib"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_steady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set steady"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_start_get_steady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start steady"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:padding="6dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_init_config_stream"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFB600"
+                    android:text="set stream"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:id="@+id/btn_stream_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2CB978"
+                    android:text="start stream"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:layout_weight="1"></Button>
+
             </LinearLayout>
 
             <!--<Button-->
@@ -183,36 +290,6 @@
                 <!--android:textSize="16dp"></Button>-->
 
 
-
-
-
-            <Button
-                android:id="@+id/btn_start_ws"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00FF00"
-                android:text="Start Websocket"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
-
-            <Button
-                android:id="@+id/btn_stop_ws"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#0000FF"
-                android:text="Stop Websocket"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
-
-            <Button
-                android:id="@+id/btn_cnct_net"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#FF0000"
-                android:onClick="connectNetwork"
-                android:text="connectwork"
-                android:textColor="@color/black"
-                android:textSize="16dp"></Button>
 
             <TextView
                 android:id="@+id/new_title"
@@ -563,101 +640,6 @@
                 android:text="Show example"
                 android:textColor="@color/black"
                 android:textSize="16dp"></Button>
-
-
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:padding="6dp"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/btn_init_config_calib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#FFB600"
-                    android:text="set calib"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-                <Button
-                    android:id="@+id/btn_start_get_calibrate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#2CB978"
-                    android:text="start calib"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-            </LinearLayout>
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:padding="6dp"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/btn_init_config_steady"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#FFB600"
-                    android:text="set steady"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-                <Button
-                    android:id="@+id/btn_start_get_steady"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#2CB978"
-                    android:text="start steady"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-            </LinearLayout>
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:padding="6dp"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/btn_init_config_stream"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#FFB600"
-                    android:text="set stream"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-                <Button
-                    android:id="@+id/btn_stream_action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#2CB978"
-                    android:text="start stream"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:layout_weight="1"></Button>
-
-            </LinearLayout>
 
 
         </LinearLayout>
