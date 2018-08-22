@@ -47,7 +47,12 @@ captures/
 
 .settings/
 .settings/*
+app/.settings/
+app/.settings/*
 .project
+app/.project
+app/.classpath
+
 
 # Keystore files
 *.jks
