@@ -59,8 +59,7 @@
                 android:background="#00FF00"
                 android:text="Start Websocket"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                android:onClick="startWebSocket"></Button>
+                android:textSize="16dp"></Button>
             <Button
                 android:id="@+id/btn_stop_ws"
                 android:layout_width="wrap_content"
@@ -68,8 +67,7 @@
                 android:background="#0000FF"
                 android:text="Stop Websocket"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                android:onClick="stopWebSocket"></Button>
+                android:textSize="16dp"></Button>
 
             <Button
                 android:id="@+id/btn_cnct_net"
@@ -470,6 +468,16 @@
                 android:layout_marginLeft="20dp"
                 android:background="@color/transparent"
                 android:text="Set IP"
+                android:textColor="@color/white"
+                android:textSize="16dp"></Button>
+
+
+            <Button
+                android:id="@+id/btn_init_config_stream"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#0000FF"
+                android:text="start realtime seq"
                 android:textColor="@color/white"
                 android:textSize="16dp"></Button>
 

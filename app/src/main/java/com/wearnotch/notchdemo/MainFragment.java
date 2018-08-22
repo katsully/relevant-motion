@@ -128,6 +128,11 @@ public class MainFragment extends BaseFragment {
     TextView infoip, msg;
     WebsocketServer wsServer;
 
+    boolean streamSequence = false;
+
+
+
+
     @BindView(R.id.new_title)
     TextView mNewTitle;
 
@@ -555,6 +560,10 @@ public class MainFragment extends BaseFragment {
                 public void onSuccess(NotchNetwork notchNetwork) {
                     updateNetwork();
                     super.onSuccess(notchNetwork);
+
+                    if (streamSequence) {
+                        configureCapture();
+                    }
                 }
             });
         } catch (Exception e) {
@@ -722,7 +731,7 @@ public class MainFragment extends BaseFragment {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
 
-
+            // TODO put this in a conditional statement or try/catch
             wsServer.broadcast( "chest angle: [" + chestAngle.get(0) + "]"); // This method sends a message to all clients connected
 
             System.out.println(chestAngle.get(0));
@@ -1000,6 +1009,12 @@ public class MainFragment extends BaseFragment {
         running = true;
 
         new OSCThread().start();
+    }
+
+    @OnClick(R.id.btn_init_config_stream)
+    void InitAndConfigStreamSequence() {
+        streamSequence = true;
+        initSteady();
     }
 
     @OnClick(R.id.btn_start_ws)
