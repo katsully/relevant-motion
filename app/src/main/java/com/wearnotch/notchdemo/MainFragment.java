@@ -821,7 +821,7 @@ public class MainFragment extends BaseFragment {
                 currentFrame = mRealTimeData.getFrameCount() - 1;
             }
 
-            // TODO put this in a conditional statement or try/catch
+            // TODO: only if streamWS is true do below: + put this in a conditional statement or try/catch so it doesn't break
             wsServer.broadcast( "chest angle: [" + chestAngle.get(0) + "]"); // This method sends a message to all clients connected
 
 //            System.out.println(chestAngle.get(0));
