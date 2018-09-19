@@ -74,35 +74,35 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-task convertObj(type: JavaExec) {
-    ext.srcFile1 = file('../model/equipment_tutorial.obj')
-    ext.srcFile2 = file('../model/equipment_tutorial.js')
-    inputs.file files([srcFile1,srcFile2])
-    outputs.dir project.modelAssetsDir
+//task convertObj(type: JavaExec) {
+//    ext.srcFile1 = file('../model/equipment_tutorial.obj')
+//    ext.srcFile2 = file('../model/equipment_tutorial.js')
+//    inputs.file files([srcFile1,srcFile2])
+//    outputs.dir project.modelAssetsDir
+//
+//    main = 'com.wearnotch.visualiserutil.ObjConverter'
+//    classpath = configurations.compile
+//    args = [ srcFile1.getAbsolutePath(), srcFile2.getAbsolutePath(),
+//             new File((File) project.modelAssetsDir, 'equipment.dat').getAbsolutePath() ]
+//}
+//
+//task convertMtl(type: JavaExec) {
+//    ext.srcFile = file('../model/equipment_tutorial.mtl')
+//    inputs.file srcFile
+//    outputs.dir project.modelAssetsDir
+//
+//    main = 'com.wearnotch.visualiserutil.MtlConverter'
+//    classpath = configurations.compile
+//    args = [ srcFile.getAbsolutePath(),
+//             new File((File) project.modelAssetsDir, 'equipment_mtl.dat').getAbsolutePath() ]
+//}
 
-    main = 'com.wearnotch.visualiserutil.ObjConverter'
-    classpath = configurations.compile
-    args = [ srcFile1.getAbsolutePath(), srcFile2.getAbsolutePath(),
-             new File((File) project.modelAssetsDir, 'equipment.dat').getAbsolutePath() ]
-}
-
-task convertMtl(type: JavaExec) {
-    ext.srcFile = file('../model/equipment_tutorial.mtl')
-    inputs.file srcFile
-    outputs.dir project.modelAssetsDir
-
-    main = 'com.wearnotch.visualiserutil.MtlConverter'
-    classpath = configurations.compile
-    args = [ srcFile.getAbsolutePath(),
-             new File((File) project.modelAssetsDir, 'equipment_mtl.dat').getAbsolutePath() ]
-}
-
-project.afterEvaluate {
-    project.tasks.findAll {
-        it.name.startsWith('generate') && it.name.endsWith('Assets')
-    }.each {
-        it.dependsOn convertObj
-        it.dependsOn convertMtl
-    }
-}
+//project.afterEvaluate {
+//    project.tasks.findAll {
+//        it.name.startsWith('generate') && it.name.endsWith('Assets')
+//    }.each {
+//        it.dependsOn convertObj
+//        it.dependsOn convertMtl
+//    }
+//}
 

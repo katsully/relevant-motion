@@ -530,9 +530,9 @@ public class MainFragment extends BaseFragment {
         Skeleton skeleton;
         try {
             skeleton = Skeleton.from(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.skeleton_male), "UTF-8"));
-            Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_3_right_arm))));
+            Workout workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_6_full_body))));
             if (mRealTime) {
-                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_5_full_body))));
+                workout = Workout.from("Demo_config", skeleton, IOUtil.readAll(new InputStreamReader(mApplicationContext.getResources().openRawResource(R.raw.config_6_full_body))));
                 workout = workout.withMeasurementType(MeasurementType.STEADY_SKIP);
             }
             mWorkout = workout;
@@ -675,19 +675,21 @@ public class MainFragment extends BaseFragment {
     int scale = 100;
 
     // Objects
-    Object[] chestObj           = new Object[7];
-    Object[] rightUpperArmObj   = new Object[7];
+    Object[] chestObj = new Object[7];
+    Object[] rightLowerLegObj = new Object[7];
     Object[] rightForeArmObj    = new Object[7];
-    Object[] leftUpperArmObj    = new Object[7];
+    Object[] leftLowerLegObj = new Object[7];
     Object[] leftForeArmObj     = new Object[7];
-//    Object[] objects = new Object[]{ chestObj, rightUpperArmObj, rightForeArmObj, leftUpperArmObj, leftForeArmObj };
+    Object[] headObj = new Object[7];
+//    Object[] objects = new Object[]{ chestObj, rightLowerLegObj, rightForeArmObj, leftLowerLegObj, leftForeArmObj };
 
     // make some fvec3
-    fvec3 chestAngle            = new fvec3();
-    fvec3 rightShoulderAngle    = new fvec3();
+    fvec3 chestAngle = new fvec3();
+    fvec3 rightKneeAngle = new fvec3();
     fvec3 rightElbowAngle       = new fvec3();
-    fvec3 leftShoulderAngle     = new fvec3();
+    fvec3 leftKneeAngle = new fvec3();
     fvec3 leftElbowAngle        = new fvec3();
+    fvec3 neckAngle = new fvec3();
 
     Skeleton mSkeleton;
     Runnable mLogRealTimeData = new Runnable() {
@@ -718,8 +720,13 @@ public class MainFragment extends BaseFragment {
             Bone leftCollar     = mSkeleton.getBone("LeftCollar");
             Bone leftUpperArm   = mSkeleton.getBone("LeftUpperArm");
             Bone leftForeArm    = mSkeleton.getBone("LeftForeArm");
-            Bone RightLowerLeg  = mSkeleton.getBone("RightLowerLeg");
-            Bone LeftLowerLeg   = mSkeleton.getBone("LeftLowerLeg");
+            Bone rightLowerLeg  = mSkeleton.getBone("RightLowerLeg");
+            Bone rightThigh  = mSkeleton.getBone("RightThigh");
+            Bone leftLowerLeg   = mSkeleton.getBone("LeftLowerLeg");
+            Bone leftThigh  = mSkeleton.getBone("LeftThigh");
+            Bone head   = mSkeleton.getBone("Head");
+            Bone neck   = mSkeleton.getBone("Neck");
+
 
 
             // Usage: calculateRelativeAngle(Bone child, Bone parent, int frameIndex, fvec3 output)
@@ -733,14 +740,14 @@ public class MainFragment extends BaseFragment {
             chestObj[5] = chestAngle.get(1);  // y
             chestObj[6] = chestAngle.get(2);  // z
 
-            mRealTimeData.calculateRelativeAngle(rightCollar, rightUpperArm, 0, rightShoulderAngle);
-            rightUpperArmObj[0] = rightUpperArm.getName();
-            rightUpperArmObj[1] = scale * mRealTimeData.getPos( rightUpperArm, currentFrame).get(0);  // x
-            rightUpperArmObj[2] = scale * mRealTimeData.getPos( rightUpperArm, currentFrame).get(1);  // y
-            rightUpperArmObj[3] = scale * mRealTimeData.getPos( rightUpperArm, currentFrame).get(2);  // z
-            rightUpperArmObj[4] = rightShoulderAngle.get(0);  // x
-            rightUpperArmObj[5] = rightShoulderAngle.get(1);  // y
-            rightUpperArmObj[6] = rightShoulderAngle.get(2);  // z
+            mRealTimeData.calculateRelativeAngle(rightThigh, rightLowerLeg, 0, rightKneeAngle);
+            rightLowerLegObj[0] = rightLowerLeg.getName();
+            rightLowerLegObj[1] = scale * mRealTimeData.getPos( rightLowerLeg, currentFrame).get(0);  // x
+            rightLowerLegObj[2] = scale * mRealTimeData.getPos( rightLowerLeg, currentFrame).get(1);  // y
+            rightLowerLegObj[3] = scale * mRealTimeData.getPos( rightLowerLeg, currentFrame).get(2);  // z
+            rightLowerLegObj[4] = rightKneeAngle.get(0);  // x
+            rightLowerLegObj[5] = rightKneeAngle.get(1);  // y
+            rightLowerLegObj[6] = rightKneeAngle.get(2);  // z
 
             mRealTimeData.calculateRelativeAngle(rightUpperArm, rightForeArm, 0, rightElbowAngle);
             rightForeArmObj[0] = rightForeArm.getName();
@@ -751,14 +758,14 @@ public class MainFragment extends BaseFragment {
             rightForeArmObj[5] = rightElbowAngle.get(1);  // y
             rightForeArmObj[6] = rightElbowAngle.get(2);  // z
 
-            mRealTimeData.calculateRelativeAngle(leftCollar, leftUpperArm, 0, leftShoulderAngle);
-            leftUpperArmObj[0] = leftUpperArm.getName();
-            leftUpperArmObj[1] = scale * mRealTimeData.getPos( leftUpperArm, currentFrame).get(0);  // x
-            leftUpperArmObj[2] = scale * mRealTimeData.getPos( leftUpperArm, currentFrame).get(1);  // y
-            leftUpperArmObj[3] = scale * mRealTimeData.getPos( leftUpperArm, currentFrame).get(2);  // z
-            leftUpperArmObj[4] = leftShoulderAngle.get(0);  // x
-            leftUpperArmObj[5] = leftShoulderAngle.get(1);  // y
-            leftUpperArmObj[6] = leftShoulderAngle.get(2);  // z
+            mRealTimeData.calculateRelativeAngle(leftThigh, leftLowerLeg, 0, leftKneeAngle);
+            leftLowerLegObj[0] = leftLowerLeg.getName();
+            leftLowerLegObj[1] = scale * mRealTimeData.getPos( leftLowerLeg, currentFrame).get(0);  // x
+            leftLowerLegObj[2] = scale * mRealTimeData.getPos( leftLowerLeg, currentFrame).get(1);  // y
+            leftLowerLegObj[3] = scale * mRealTimeData.getPos( leftLowerLeg, currentFrame).get(2);  // z
+            leftLowerLegObj[4] = leftKneeAngle.get(0);  // x
+            leftLowerLegObj[5] = leftKneeAngle.get(1);  // y
+            leftLowerLegObj[6] = leftKneeAngle.get(2);  // z
 
             mRealTimeData.calculateRelativeAngle(leftUpperArm, leftForeArm, 0, leftElbowAngle);
             leftForeArmObj[0] = leftForeArm.getName();
@@ -768,6 +775,15 @@ public class MainFragment extends BaseFragment {
             leftForeArmObj[4] = leftElbowAngle.get(0);  // x
             leftForeArmObj[5] = leftElbowAngle.get(1);  // y
             leftForeArmObj[6] = leftElbowAngle.get(2);  // z
+
+            mRealTimeData.calculateRelativeAngle(neck, head, 0, neckAngle);
+            headObj[0] = head.getName();
+            headObj[1] = scale * mRealTimeData.getPos( head, currentFrame).get(0);  // x
+            headObj[2] = scale * mRealTimeData.getPos( head, currentFrame).get(1);  // y
+            headObj[3] = scale * mRealTimeData.getPos( head, currentFrame).get(2);  // z
+            headObj[4] = neckAngle.get(0);  // x
+            headObj[5] = neckAngle.get(1);  // y
+            headObj[6] = neckAngle.get(2);  // z
 
             mHandler.postDelayed(mLogRealTimeData, mRefreshTime);
         }
@@ -1372,7 +1388,7 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP  = "127.0.0.1"; // the IP of the computer sending OSC to...
+    private String myIP  = "192.168.1.12"; // the IP of the computer sending OSC to...
     private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
@@ -1404,11 +1420,13 @@ public class MainFragment extends BaseFragment {
                 if (oscPortOut != null) {
                     // constructs osc messages w arrays from mRealtime log function
 
-                    OSCMessage bone01Message = new OSCMessage("/notch/"+ chestObj[0] +"/all",           Arrays.asList(chestObj[1]+","+chestObj[2]+","+chestObj[3]+","+chestObj[4]+","+chestObj[5]+","+chestObj[6] ));
-                    OSCMessage bone02Message = new OSCMessage("/notch/"+ rightUpperArmObj[0] +"/all",   Arrays.asList(rightUpperArmObj[1]+","+rightUpperArmObj[2]+","+rightUpperArmObj[3]+","+rightUpperArmObj[4]+","+rightUpperArmObj[5]+","+rightUpperArmObj[6] ));
+                    // TODO: update bones
+                    OSCMessage bone01Message = new OSCMessage("/notch/"+ chestObj[0] +"/all",           Arrays.asList(chestObj[1]+","+ chestObj[2]+","+ chestObj[3]+","+ chestObj[4]+","+ chestObj[5]+","+ chestObj[6] ));
+                    OSCMessage bone02Message = new OSCMessage("/notch/"+ rightLowerLegObj[0] +"/all",   Arrays.asList(rightLowerLegObj[1]+","+ rightLowerLegObj[2]+","+ rightLowerLegObj[3]+","+ rightLowerLegObj[4]+","+ rightLowerLegObj[5]+","+ rightLowerLegObj[6] ));
                     OSCMessage bone03Message = new OSCMessage("/notch/"+ rightForeArmObj[0] +"/all",    Arrays.asList(rightForeArmObj[1]+","+rightForeArmObj[2]+","+rightForeArmObj[3]+","+rightForeArmObj[4]+","+rightForeArmObj[5]+","+rightForeArmObj[6] ));
-                    OSCMessage bone04Message = new OSCMessage("/notch/"+ leftUpperArmObj[0] +"/all",    Arrays.asList(leftUpperArmObj[1]+","+leftUpperArmObj[2]+","+leftUpperArmObj[3]+","+leftUpperArmObj[4]+","+leftUpperArmObj[5]+","+leftUpperArmObj[6] ));
+                    OSCMessage bone04Message = new OSCMessage("/notch/"+ leftLowerLegObj[0] +"/all",    Arrays.asList(leftLowerLegObj[1]+","+ leftLowerLegObj[2]+","+ leftLowerLegObj[3]+","+ leftLowerLegObj[4]+","+ leftLowerLegObj[5]+","+ leftLowerLegObj[6] ));
                     OSCMessage bone05Message = new OSCMessage("/notch/"+ leftForeArmObj[0] +"/all",     Arrays.asList(leftForeArmObj[1]+","+leftForeArmObj[2]+","+leftForeArmObj[3]+","+leftForeArmObj[4]+","+leftForeArmObj[5]+","+leftForeArmObj[6] ));
+                    OSCMessage bone06Message = new OSCMessage("/notch/"+ headObj[0] +"/all",     Arrays.asList(headObj[1]+","+ headObj[2]+","+ headObj[3]+","+ headObj[4]+","+ headObj[5]+","+ headObj[6] ));
 
                     try {
                         // make osc bundles and add osc messages to them
@@ -1428,12 +1446,15 @@ public class MainFragment extends BaseFragment {
                         OSCBundle bone05AllBundle = new OSCBundle();
                         bone05AllBundle.addPacket(bone05Message);
 
+                        OSCBundle bone06AllBundle = new OSCBundle();
+                        bone06AllBundle.addPacket(bone06Message);
+
                         oscPortOut.send(bone01AllBundle);
                         oscPortOut.send(bone02AllBundle);
                         oscPortOut.send(bone03AllBundle);
                         oscPortOut.send(bone04AllBundle);
                         oscPortOut.send(bone05AllBundle);
-
+                        oscPortOut.send(bone06AllBundle);
 
                         // pause so it's not sending LOADS of OSC
                         sleep(OSCdelay);
@@ -1478,9 +1499,9 @@ public class MainFragment extends BaseFragment {
 //                    // constructs osc messages w arrays from mRealtime log function
 //
 //                    OSCMessage bone01Message = new OSCMessage("/notch/"+ chestObj[0] +"/all",           Arrays.asList(chestObj[1]+","+chestObj[2]+","+chestObj[3]+","+chestObj[4]+","+chestObj[5]+","+chestObj[6] ));
-//                    OSCMessage bone02Message = new OSCMessage("/notch/"+ rightUpperArmObj[0] +"/all",   Arrays.asList(rightUpperArmObj[1]+","+rightUpperArmObj[2]+","+rightUpperArmObj[3]+","+rightUpperArmObj[4]+","+rightUpperArmObj[5]+","+rightUpperArmObj[6] ));
+//                    OSCMessage bone02Message = new OSCMessage("/notch/"+ rightLowerLegObj[0] +"/all",   Arrays.asList(rightLowerLegObj[1]+","+rightLowerLegObj[2]+","+rightLowerLegObj[3]+","+rightLowerLegObj[4]+","+rightLowerLegObj[5]+","+rightLowerLegObj[6] ));
 //                    OSCMessage bone03Message = new OSCMessage("/notch/"+ rightForeArmObj[0] +"/all",    Arrays.asList(rightForeArmObj[1]+","+rightForeArmObj[2]+","+rightForeArmObj[3]+","+rightForeArmObj[4]+","+rightForeArmObj[5]+","+rightForeArmObj[6] ));
-//                    OSCMessage bone04Message = new OSCMessage("/notch/"+ leftUpperArmObj[0] +"/all",    Arrays.asList(leftUpperArmObj[1]+","+leftUpperArmObj[2]+","+leftUpperArmObj[3]+","+leftUpperArmObj[4]+","+leftUpperArmObj[5]+","+leftUpperArmObj[6] ));
+//                    OSCMessage bone04Message = new OSCMessage("/notch/"+ leftLowerLegObj[0] +"/all",    Arrays.asList(leftLowerLegObj[1]+","+leftLowerLegObj[2]+","+leftLowerLegObj[3]+","+leftLowerLegObj[4]+","+leftLowerLegObj[5]+","+leftLowerLegObj[6] ));
 //                    OSCMessage bone05Message = new OSCMessage("/notch/"+ leftForeArmObj[0] +"/all",     Arrays.asList(leftForeArmObj[1]+","+leftForeArmObj[2]+","+leftForeArmObj[3]+","+leftForeArmObj[4]+","+leftForeArmObj[5]+","+leftForeArmObj[6] ));
 //
 //                    try {
