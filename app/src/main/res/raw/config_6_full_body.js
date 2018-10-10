@@ -55,6 +55,12 @@
             "target": "ChestTop",
             "source": "Hip",
             "f": -0.42
+        },
+        {
+            "type": "INTERP",
+            "target": "Hip",
+            "source": "ChestBottom",
+            "f": 0.75
         }
     ]
 }

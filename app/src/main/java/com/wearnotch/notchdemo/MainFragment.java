@@ -1388,8 +1388,8 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP  = "10.0.0.2"; // the IP of the computer sending OSC to...
-    private int myPort = 9000;
+    private String myIP  = "192.168.1.8"; // the IP of the computer sending OSC to...
+    private int myPort = 8000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
 
