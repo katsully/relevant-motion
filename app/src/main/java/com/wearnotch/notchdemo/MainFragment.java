@@ -1388,8 +1388,8 @@ public class MainFragment extends BaseFragment {
      * These two variables hold the IP address and port number.
      * You should change them to the appropriate address and port.
      */
-    private String myIP  = "192.168.1.12"; // the IP of the computer sending OSC to...
-    private int myPort = 8000;
+    private String myIP  = "10.0.0.2"; // the IP of the computer sending OSC to...
+    private int myPort = 9000;
     public OSCPortOut oscPortOut;  // This is used to send messages
     private int OSCdelay = 40; // interval for sending OSC data
 
@@ -1420,7 +1420,6 @@ public class MainFragment extends BaseFragment {
                 if (oscPortOut != null) {
                     // constructs osc messages w arrays from mRealtime log function
 
-                    // TODO: update bones
                     OSCMessage bone01Message = new OSCMessage("/notch/"+ chestObj[0] +"/all",           Arrays.asList(chestObj[1]+","+ chestObj[2]+","+ chestObj[3]+","+ chestObj[4]+","+ chestObj[5]+","+ chestObj[6] ));
                     OSCMessage bone02Message = new OSCMessage("/notch/"+ rightLowerLegObj[0] +"/all",   Arrays.asList(rightLowerLegObj[1]+","+ rightLowerLegObj[2]+","+ rightLowerLegObj[3]+","+ rightLowerLegObj[4]+","+ rightLowerLegObj[5]+","+ rightLowerLegObj[6] ));
                     OSCMessage bone03Message = new OSCMessage("/notch/"+ rightForeArmObj[0] +"/all",    Arrays.asList(rightForeArmObj[1]+","+rightForeArmObj[2]+","+rightForeArmObj[3]+","+rightForeArmObj[4]+","+rightForeArmObj[5]+","+rightForeArmObj[6] ));
