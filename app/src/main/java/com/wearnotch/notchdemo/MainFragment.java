@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
@@ -77,6 +78,18 @@ import butterknife.OnClick;
 import java.net.*;
 import java.util.*;
 import com.illposed.osc.*;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+
+//local db imports
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.Context;
+import android.content.DialogInterface;
 
 public class MainFragment extends BaseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
@@ -89,6 +102,7 @@ public class MainFragment extends BaseFragment {
     private static final int REQUEST_ALL_PERMISSION = 1;
     private static String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION };
 
+    static String current_IP = "192.168.1.1";
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -120,7 +134,10 @@ public class MainFragment extends BaseFragment {
     TextView mNewTitle;
 
     @BindView(R.id.current_IP)
-    TextView mCurrentIP;
+    EditText mCurrentIP;
+
+    @BindView(R.id.buttonIPSet)
+    Button mbuttonIPSet;
 
     @BindView(R.id.device_list)
     TextView mDeviceList;
@@ -246,10 +263,11 @@ public class MainFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         bindNotchService();
     }
-
+    Context mContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.mContext = getContext();
         mApplicationContext = getActivity().getApplicationContext();
         mActivity = getBaseActivity();
         mDB = NotchDataBase.getInst();
@@ -258,6 +276,9 @@ public class MainFragment extends BaseFragment {
         if(!hasPermissions(mActivity, PERMISSIONS)){
             requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION);
         }
+
+
+        //loadCredentials(mContext);
 
         // Start the thread that sends messages
 //        oscThread.start();
@@ -269,7 +290,9 @@ public class MainFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, root);
-
+        MainActivity activity = (MainActivity) getActivity();
+        current_IP = activity.loadCredentials();
+        activity.setIPText(current_IP);
         // Set typefaces
         Typeface tfLight = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Light.ttf");
         Typeface tfBold = Typeface.createFromAsset(mApplicationContext.getAssets(), "fonts/Lato-Bold.ttf");
@@ -581,6 +604,12 @@ public class MainFragment extends BaseFragment {
         mCountDown.start();
     }
 
+
+    @OnClick(R.id.btn_set_IP)
+    void set_IP(){
+
+    }
+
     @OnClick(R.id.btn_get_steady)
     void getSteadyData() {
         inProgress();
@@ -592,6 +621,11 @@ public class MainFragment extends BaseFragment {
         initSteady();
     }
 
+    @OnClick(R.id.buttonIPSet)
+    void setClickedButtonIP(){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.saveCredentials(current_IP);
+    }
 
     @OnClick(R.id.btn_configure_capture)
     void configureCapture() {

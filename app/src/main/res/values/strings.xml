@@ -15,7 +15,7 @@
     <string name="error_io">IO Error</string>
     <string name="error_skeleton">Error while loading skeleton!</string>
     <string name="error_meas_list">Error while loading measurement list!</string>
-    
+    <string name="mprUsrKeyStr">keykey</string>
     <string name="open">Open</string>
     <string name="pin_to_centre">Root bone in centre</string>
     <string name="highlight_bones">Highlight bones</string>
